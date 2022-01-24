@@ -1,0 +1,1 @@
+add_library(mlx mlx_init_loop.m mlx_int_str_to_wordtab.c mlx_mouse.m mlx_new_image.m mlx_new_window.h mlx_opengl.m mlx_png.c mlx_shaders.c mlx_xpm.c)

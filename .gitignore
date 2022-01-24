@@ -1,6 +1,4 @@
-CMakeLists.txt
 cmake-build-debug
 *.o
 raytracer
 .idea
-geotrace

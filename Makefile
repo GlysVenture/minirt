@@ -7,12 +7,18 @@ MAKEFLAGS += --no-print-directory
 
 NAME = raytracer
 
-INC_FLAGS := -Igeotrace
+INC_FLAGS := -Igeotrace -Imlx -Ilibft
 LIB := geotrace/libgeotrace.a
+MLX_LIB := mlx/libmlx.a
+LIBFT_LIB := libft/libft.a
 
-LIBS := -Lgeotrace -lgeotrace -lm
+GEO = geotrace
+MLX = mlx
+LIBFT = libft
 
-SRCS = main.c
+LIBS = -Lgeotrace -Lmlx -Llibft -lgeotrace -lm -lmlx -lft
+
+SRCS = main.c object.c camera.c
 OBJS = ${SRCS:%=%.o}
 
 %.c.o: %.c
@@ -22,25 +28,37 @@ OBJS = ${SRCS:%=%.o}
 all:	library
 	@$(MAKE) $(NAME)
 
-$(NAME):	$(LIB) $(OBJS)
+$(NAME):	$(LIB) $(MLX_LIB) $(LIBFT_LIB) $(OBJS)
 	@echo Linking $@
-	@$(CC) $(CFLAGS) $(INC_FLAGS) $(OBJS) $(LIBS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(INC_FLAGS) -framework OpenGL -framework AppKit $(OBJS) $(LIBS) -o $(NAME)
 
 library:
-	@$(MAKE) -C geotrace
+	@$(MAKE) -C ${LIBFT} bonus
+	@$(MAKE) -C ${GEO}
+	@$(MAKE) -C ${MLX}
 
 $(LIB):
-	@$(MAKE) -C geotrace
+	@$(MAKE) -C ${GEO}
+
+$(MLX_LIB):
+	@$(MAKE) -C ${MLX}
+
+$(LIBFT_LIB):
+	@$(MAKE) -C ${LIBFT} bonus
 
 clean:
 	@rm -rf $(OBJS)
-	@$(MAKE) -C geotrace clean
+	@$(MAKE) -C ${GEO} clean
+	@$(MAKE) -C ${MLX} clean
+	@$(MAKE) -C ${LIBFT} clean
 	@echo Clean done
 
 fclean:
 	@rm -rf $(OBJS)
 	@rm -f $(NAME)
-	@$(MAKE) -C geotrace fclean
+	@$(MAKE) -C ${GEO} fclean
+	@$(MAKE) -C ${MLX} clean
+	@$(MAKE) -C ${LIBFT} fclean
 	@echo Fclean done
 
 re:		fclean all
