@@ -15,7 +15,7 @@ LIBFT_LIB := ft
 
 #dirs
 GEO = geotrace
-LIBFT = libft
+LIBFT = libft/
 BUILD_DIR ?= ./build
 SRC_DIRS ?= ./src
 
