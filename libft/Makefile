@@ -28,7 +28,7 @@ all:		${NAME}
 .c.o:
 			@${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
-${NAME}:	${OBJS}
+${NAME}:	${OBJS} ${OBJSBONUS}
 			@echo Linking "libft"
 			@ar rcs ${NAME} ${OBJS} ${OBJSBONUS}
 

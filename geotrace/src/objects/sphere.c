@@ -4,6 +4,7 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include <float.h>
 
 #include "geotrace.h"
 
@@ -43,16 +44,16 @@ double	sphere_intersect(t_sphere *sphere, t_line ray)
 	quad[0] = dot_prod(ray.point, ray.point) - pow(sphere->radius, 2);
 	quad[1] = dot_prod(ray.point, ray.direction) * 2;
 	delta = pow(quad[1], 2) - 4 * quad[0] * 1;
-	if (delta < 0)
+	if (isless(delta, FLT_EPSILON))
 		return (-1);
-	if (delta == 0)
+	if (fabs(delta) <= FLT_EPSILON)
 		res[0] = - quad[1] / 2;
 	else
 	{
 		res[0] = (sqrt(delta) - quad[1]) / 2;
 		res[1] = - (sqrt(delta) + quad[1]) / 2;
-		if (res[1] >= 0 && res[0] >= 0 && res[1] < res[0])
+		if (isgreaterequal(res[1], FLT_EPSILON) && isgreaterequal(res[0], FLT_EPSILON) && isless(res[1], res[0]))
 			res[0] = res[1];
 	}
-	return (res[0] / vec_norm(ray.direction));
+	return (res[0]);
 }
