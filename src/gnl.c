@@ -11,7 +11,13 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-
+#include <limits.h>
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1
+# endif
+# ifndef FD_SIZE
+#  define FD_SIZE 1
+# endif
 static char	*return_next_line(char **s)
 {
 	char	*out;

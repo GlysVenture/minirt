@@ -47,7 +47,7 @@ all:	library
 
 $(NAME):	$(GEO)/lib$(GEO_LIB).a $(MLX)/lib$(MLX_LIB).a $(LIBFT)/lib$(LIBFT_LIB).a $(OBJS)
 	@echo Linking $@
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -g3 -o $(NAME)
 
 library:
 	@$(MAKE) -C ${LIBFT}
