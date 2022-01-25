@@ -80,7 +80,8 @@ static void	fill_image(t_data *img, int x, int y, t_list **obj)
 static int	key_handler(int keycode, void *t)
 {
 	(void) t;
-	if (keycode == 53)
+	printf("debug: key pressed: %d\n", keycode);
+	if (keycode == 53 || keycode == 65307)
 	{
 		exit(0); //todo free all mem
 	}

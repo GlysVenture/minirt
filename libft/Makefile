@@ -30,7 +30,7 @@ all:		${NAME}
 
 ${NAME}:	${OBJS}
 			@echo Linking "libft"
-			@ar rcs ${NAME} ${OBJS}
+			@ar rcs ${NAME} ${OBJS} ${OBJSBONUS}
 
 bonus:		${OBJS} ${OBJSBONUS}
 			@ar rcs ${NAME} ${OBJS} ${OBJSBONUS}
