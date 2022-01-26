@@ -8,8 +8,10 @@
 
 #include "ray.h"
 #include "minirt.h"
+#include "vec_utils.h"
 
-/*double	shadow_ray(t_vec3d start, t_vars *v, t_vec3d n)
+
+int	shadow_ray(t_vec3d start, t_light light, t_list *obj)
 {
 	double	dist;
 	double	t;
@@ -18,7 +20,7 @@
 
 	ray.point = start;
 	vec_subtract(light.pos, start, &ray.direction);
-	dist = -1;
+	dist = vec_norm(ray.direction);
 	while(obj)
 	{
 		t = -2;
@@ -28,10 +30,17 @@
 		if (obj_type == 'p')
 			t = plane_intersect(((t_object *)obj->content)->structure, ray);
 		if (isgreater(t, FLT_EPSILON) && (isless(dist, 0) || isless(t, dist)))
-			dist = t;
+			return (-1);
 		obj = obj->next;
 	}
-	if (isgreater(dist, 0) && isless(dist, vec_norm(ray.direction)))
-		return (-1);
-	return (get_angle(ray.direction, n));
+	return (1);
+}
+
+/*int	diffuse_shade(t_object *intersect, t_vec3d hit, t_line *ray, t_vars *v)
+{
+	double	angle;
+	t_vec3d	normal;
+
+	vec_get_normal(intersect->type, intersect->structure, hit, &normal); // todo once
+	angle = get_angle();
 }*/

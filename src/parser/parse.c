@@ -21,7 +21,7 @@ int	parse_sphere(char *line, t_vars *v)
 		free(mem);
 		return (0);
 	}
-	ft_lstadd_front(v->obj, new);
+	ft_lstadd_front(&v->obj, new);
 	return (1);
 }
 
@@ -40,7 +40,7 @@ int	parse_plane(char *line, t_vars *v)
 		free(mem);
 		return (0);
 	}
-	ft_lstadd_front(v->obj, new);
+	ft_lstadd_front(&v->obj, new);
 	return (1);
 }
 
@@ -58,6 +58,6 @@ int	parse_light(char *line, t_vars *v)
 		free(mem);
 		return (0);
 	}
-	ft_lstadd_front(v->obj, new);
+	ft_lstadd_front(&v->obj, new);
 	return (1);
 }

@@ -37,7 +37,8 @@ double	intersect_objects(t_line *ray, t_list *obj, t_object **found)
 		if (isgreater(t, FLT_EPSILON) && (dist < 0 || isless(t, dist)))
 		{
 			dist = t;
-			*found = (t_object *)obj->content;
+			if (found)
+				*found = (t_object *)obj->content;
 		}
 		obj = obj->next;
 	}
@@ -51,43 +52,40 @@ int	send_ray(t_line *ray, t_vars *v)
 	double	dist;
 
 	intersect = NULL;
-	dist = intersect_objects(ray, *v->obj, &intersect);
+	dist = intersect_objects(ray, v->obj, &intersect);
 	if (isless(dist, 0))
 		return (0);
 	return (shade(intersect, dist, ray, v));
-/*	t = shadow_ray(temp, light, start, normal);
-	if (isless(t, 0))
-		return (0);
-	else
-		return (shift_color2(color,(t / M_PI_2 - 1)));*/
 }
 
 static int shade(t_object *intersect, double d, t_line *ray, t_vars *v)
 {
-	int 	color;
-	(void)d;
-	(void)ray;
-//	int		is_diffuse;
-//	t_vec3d	hit;
+	int	color;
+	double	sum;
+//	t_list	*pos;
+	t_vec3d	hit;
 
-	color = shift_color2(intersect->color,v->ambient.ratio);
-/*
 	unit_vector2(ray->direction, &hit);
 	scalar_mult2(hit, d, &hit);
 	vec_sum(hit, ray->point, &hit);
 
-	is_diffuse = diffuse_shade();
-	color += kd * is_diffuse; //todo shifts
-	if (is_diffuse > 0)
-		color += ks * specular_shade();*/
+	sum = 0;
+	color = intersect->color;
+	color = shift_color2(color, v->ambient.color, v->ambient.ratio * 0.2);
+//	color *= 0.2 * v->ambient.ratio * ((double)v->ambient.color) / 255;
+	sum += 0.2;
+
+//	pos = v->lights;
+//	while (pos)
+//	{
+//		if (shadow_ray(hit, *(t_light *)pos->content, v->obj)) //todo multiple?
+//		{
+//			color += diffuse_shade();
+//			color += specular_shade();
+//			sum += 0.7 + 0.4;
+//		}
+//	}
+
+	color = color / sum;
 	return (color);
 }
-
-/*int	diffuse_shade(t_object *intersect, t_vec3d hit, t_line *ray, t_vars *v)
-{
-	double	angle;
-	t_vec3d	normal;
-
-	vec_get_normal(intersect->type, intersect->structure, hit, &normal); // todo once
-	angle = shadow_ray(hit, v, normal); //todo all goes trough v
-}*/
