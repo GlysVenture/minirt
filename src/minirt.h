@@ -25,8 +25,8 @@ typedef	struct s_mlx_utils
 
 typedef struct s_vars
 {
-	t_amb_light		*ambient;
-	t_adv_camera	*cam;
+	t_amb_light		ambient;
+	t_adv_camera	cam;
 	t_list			**obj;
 	t_list			**lights;
 	t_mlx_utils		*mu;

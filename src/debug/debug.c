@@ -39,6 +39,7 @@ void	print_objlst(t_list *obj)
 		{
 			printf("unknown: %c\n", ((t_object *)obj->content)->type);
 		}
+		printf("color: %x\n", ((t_object *)obj->content)->color);
 		obj = obj->next;
 	}
 }
