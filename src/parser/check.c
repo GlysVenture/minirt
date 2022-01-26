@@ -4,11 +4,10 @@
 #include "libft.h"
 #include "../object.h"
 #include "mrt.h"
-t_vec3d	get_center(char *line)
+void	get_center(char *line, double radius, t_sphere *sphere)
 {
 	char	**ret;
 	int	i;
-	t_vec3d	r;
 	i = 0;
 	ret = ft_split(line, ',');
 	while (ret[i])
@@ -18,10 +17,9 @@ t_vec3d	get_center(char *line)
 		printf("Error cord\n");
 		exit (1);
 	}
-	r.x = ft_atod(ret[0]);
-	r.y = ft_atod(ret[1]);
-	r.z = ft_atod(ret[2]);
-	return (r);
+
+	sphere = init_sphere(radius, ft_atod(ret[0]), ft_atod(ret[1]), ft_atod(ret[2]));
+	return;
 }
 
 long unsigned int  hexcolor(char *line)
@@ -35,30 +33,41 @@ long unsigned int  hexcolor(char *line)
 	b = ft_atoi(ret[2]);
     	return (r<<16) | (g<<8) | b;
 }
-void	*check_plane(char *arg, long unsigned int *color)
+t_plane	*check_plane(char *arg, long unsigned int *color)
 {
 	char **ret;
-	t_plane	pl;
-	void	*ptr;
+	char **mem;
+	t_plane	*pl;
+	t_vec3d n;
+	t_vec3d p;
+	
 	ret = ft_split(arg, ' ');
-	pl.normal = get_center(ret[1]);
-	pl.point = get_center(ret[2]);
+	mem = ft_split(ret[1], ',');
+	n.x =  ft_atod(mem[0]);
+	n.y = ft_atod(mem[1]);
+	n.z = ft_atod(mem[2]);
+	free (mem);
+	mem = NULL;
+	mem = ft_split(ret[2], ',');
+	p.x = ft_atod(mem[0]);
+	p.y = ft_atod(mem[1]);
+	p.z = ft_atod(mem[2]);
+	free (mem);
+	pl = init_plane(n,p);
 	*color = hexcolor(ret[3]);
-	free (ret);
-	ptr = &pl;
-	return (ptr);
+	return (pl);
 }
 
-void	*check_sphere(char *arg, long unsigned int *color)
+t_sphere	*check_sphere(char *arg, long unsigned int *color)
 {
+	char **tes;
 	char **ret;
-	void	*ptr;
-	t_sphere	sphere;
-	ret = ft_split(arg,' ');
-	sphere.center = get_center(ret[1]);
-	sphere.radius = ft_atod(ret[2]);
-	*color = hexcolor(ret[3]);
-	free(ret);
-	ptr = &sphere;
-	return (ptr);
+	t_sphere	*sphere;
+
+
+	tes = ft_split(arg,' ');
+	ret = ft_split(tes[1], ',');
+	sphere = init_sphere(ft_atod(tes[2]), ft_atod(ret[0]), ft_atod(ret[1]), ft_atod(ret[2]));
+	*color = hexcolor(tes[3]);
+	return (sphere);
 }	

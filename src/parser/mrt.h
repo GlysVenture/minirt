@@ -12,10 +12,10 @@
 typedef struct s_alight
 {
 	float	ratio;
-	int 	colors[3];
+	long unsigned int color;
 } t_alight;
-void *check_sphere(char *arg, long unsigned int *color);
+t_sphere *check_sphere(char *arg, long unsigned int *color);
 char	*get_arg(char	*filename);
-void	*check_plane(char *arg, long unsigned int *color);
+t_plane	*check_plane(char *arg, long unsigned int *color);
 double ft_atod(char *arr);
 #endif
