@@ -18,9 +18,9 @@ t_vec3d	get_center(char *line)
 		printf("Error cord\n");
 		exit (1);
 	}
-	r.x = ft_atof(ret[0]);
-	r.y = ft_atof(ret[1]);
-	r.z = ft_atof(ret[2]);
+	r.x = ft_atod(ret[0]);
+	r.y = ft_atod(ret[1]);
+	r.z = ft_atod(ret[2]);
 	return (r);
 }
 
@@ -56,7 +56,7 @@ void	*check_sphere(char *arg, long unsigned int *color)
 	t_sphere	sphere;
 	ret = ft_split(arg,' ');
 	sphere.center = get_center(ret[1]);
-	sphere.radius = ft_atof(ret[2]);
+	sphere.radius = ft_atod(ret[2]);
 	*color = hexcolor(ret[3]);
 	free(ret);
 	ptr = &sphere;

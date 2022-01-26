@@ -17,5 +17,5 @@ typedef struct s_alight
 void *check_sphere(char *arg, long unsigned int *color);
 char	*get_arg(char	*filename);
 void	*check_plane(char *arg, long unsigned int *color);
-float ft_atof(char *arr);
+double ft_atod(char *arr);
 #endif

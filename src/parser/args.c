@@ -3,9 +3,9 @@
 #include "gnl/get_next_line.h"
 #include "minirt.h"
 
-float ft_atof(char *arr){
+double ft_atod(char *arr){
     int i,j,flag;
-    float val;
+    double val;
     i=0;
     j=0;
     val=0;
@@ -57,7 +57,7 @@ int check_light(char *arg)
 	t_alight a;
  
 	args = ft_split(arg, ' ');
-	a.ratio = ft_atof(args[1]);
+	a.ratio = ft_atod(args[1]);
 	if (a.ratio >= 1.0 || a.ratio <= 0.0)
 	{
 		printf("Error not in the correct range\n");
@@ -84,7 +84,7 @@ int	check_arg(char *arg, t_list **objects)
 		mem = (check_plane(arg, &color));
 	else
 		return (1);
-	printf("%lX\n",color);
+	printf("%p\n",mem);
 	ft_lstadd_front(objects,ft_lstnew(init_obj(arg[0],mem,color)));
 	return (1);
 }
