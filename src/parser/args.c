@@ -3,6 +3,8 @@
 #include "gnl/get_next_line.h"
 #include "minirt.h"
 
+#include "debug/debug.h"
+
 double ft_atod(char *arr){
     int i,j,flag;
     double val;
@@ -106,6 +108,7 @@ char *get_arg(char *filename)
 		check_arg(ret, &objects);
 		ret = get_next_line(fd);
 	}
+	print_objlst(objects);
 	launch_window(&objects);
 	ft_lstclear(&objects, (void (*)(void *))destroy_obj);
 	return (NULL);
