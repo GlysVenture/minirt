@@ -23,7 +23,19 @@ t_vec3d	get_center(char *line)
 	r.z = ft_atof(ret[2]);
 	return (r);
 }
-void	*check_plane(char *arg)
+
+long unsigned int  hexcolor(char *line)
+{
+	int r, g, b;
+	char **ret;
+
+	ret = ft_split(line,',');
+	r = ft_atoi(ret[0]);
+	g = ft_atoi(ret[1]);
+	b = ft_atoi(ret[2]);
+    	return (r<<16) | (g<<8) | b;
+}
+void	*check_plane(char *arg, long unsigned int *color)
 {
 	char **ret;
 	t_plane	pl;
@@ -31,11 +43,13 @@ void	*check_plane(char *arg)
 	ret = ft_split(arg, ' ');
 	pl.normal = get_center(ret[1]);
 	pl.point = get_center(ret[2]);
+	*color = hexcolor(ret[3]);
 	free (ret);
 	ptr = &pl;
 	return (ptr);
 }
-void	*check_sphere(char *arg)
+
+void	*check_sphere(char *arg, long unsigned int *color)
 {
 	char **ret;
 	void	*ptr;
@@ -43,6 +57,7 @@ void	*check_sphere(char *arg)
 	ret = ft_split(arg,' ');
 	sphere.center = get_center(ret[1]);
 	sphere.radius = ft_atof(ret[2]);
+	*color = hexcolor(ret[3]);
 	free(ret);
 	ptr = &sphere;
 	return (ptr);

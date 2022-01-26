@@ -74,16 +74,18 @@ int check_light(char *arg)
 int	check_arg(char *arg, t_list **objects)
 {
 	void	*mem;
+	long unsigned int color;
 
 	if (arg[0] == '\n')
 		return (1);
 	else if (arg[0] == 's')
-		mem = (check_sphere(arg));
+		mem = (check_sphere(arg, &color));
 	else if (arg[0] == 'p')
-		mem = (check_plane(arg));
+		mem = (check_plane(arg, &color));
 	else
 		return (1);
-	ft_lstadd_front(objects,ft_lstnew(init_obj(arg[0],mem,0xFF001A)));
+	printf("%lX\n",color);
+	ft_lstadd_front(objects,ft_lstnew(init_obj(arg[0],mem,color)));
 	return (1);
 }
 char *get_arg(char *filename)

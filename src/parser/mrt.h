@@ -14,8 +14,8 @@ typedef struct s_alight
 	float	ratio;
 	int 	colors[3];
 } t_alight;
-void *check_sphere(char *arg);
+void *check_sphere(char *arg, long unsigned int *color);
 char	*get_arg(char	*filename);
-void	*check_plane(char *arg);
+void	*check_plane(char *arg, long unsigned int *color);
 float ft_atof(char *arr);
 #endif
