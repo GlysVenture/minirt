@@ -55,13 +55,14 @@ static void	fill_image(t_data *img, int x, int y, t_vars *v)
 	free(cam_adv);
 }
 
-static int	key_handler(int keycode, void *t)
+static int	key_handler(int keycode, t_vars *v)
 {
-	(void) t;
 	printf("debug: key pressed: %d\n", keycode);
 	if (keycode == key_esc)
 	{
-		exit(0); //todo free all mem
+		ft_lstclear(&v->obj, (void (*)(void *))destroy_obj);
+		ft_lstclear(&v->lights, (void (*)(void *))destroy_obj);
+		exit(0);
 	}
 	return (0);
 }
@@ -79,7 +80,7 @@ void	launch_window(t_vars *v)
 	fill_image(&mu.img, WIN_X, WIN_X, v);
 
 	mlx_put_image_to_window(mu.mlx, mu.win, mu.img.img, 0, 0);
-	mlx_key_hook(mu.win, key_handler, NULL);
+	mlx_key_hook(mu.win, key_handler, v);
 	mlx_loop(mu.mlx);
 }
 
@@ -92,13 +93,11 @@ int main(int argc, char *argv[])
 		printf("Error: arguments");
 		return (1);
 	}
-	*vars.obj = NULL;
-	*vars.lights = NULL;
 	get_arg(argv[1], &vars);
 
 	launch_window(&vars);
 
-	ft_lstclear(vars.obj, (void (*)(void *))destroy_obj);
-	ft_lstclear(vars.lights, (void (*)(void *))destroy_obj);
+	ft_lstclear(&vars.obj, (void (*)(void *))destroy_obj);
+	ft_lstclear(&vars.lights, (void (*)(void *))destroy_obj);
 	return (0); 
 }
