@@ -7,13 +7,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include "object.h"
+#include "geotrace.h"
 typedef struct s_alight
 {
 	float	ratio;
 	int 	colors[3];
 } t_alight;
 char	*get_next_line(int fd);
-int	check_sphere(char *arg);
+void *check_sphere(char *arg);
 char	*get_arg(char	*filename);
+void	*check_plane(char *arg);
 float ft_atof(char *arr);
+void	launch_window(t_list **objects);
 #endif

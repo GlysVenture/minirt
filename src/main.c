@@ -88,7 +88,7 @@ static int	key_handler(int keycode, void *t)
 	return (0);
 }
 
-static void	launch_window(t_list **objects)
+	void	launch_window(t_list **objects)
 {
 	void	*mlx;
 	void	*win;
@@ -107,8 +107,11 @@ static void	launch_window(t_list **objects)
 	mlx_loop(mlx);
 }
 
-int main(void) 
+int main(int argc, char *argv[]) 
 {
+	get_arg(argv[1]);
+	argc = 0;
+	/*
 	t_plane	plane = {{-0, 0, 1}, {6, 0, -0.1}};
 	t_sphere sphere = {{4, 0, 0}, 0.2};
 	t_sphere sphere2 = {{6, 0, 0.5}, 0.4};
@@ -123,6 +126,6 @@ int main(void)
 
 	launch_window(&objects);
 
-	ft_lstclear(&objects, (void (*)(void *))destroy_obj);
-	return (0);
+	ft_lstclear(&objects, (void (*)(void *))destroy_obj); */
+	return (0); 
 }
