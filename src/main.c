@@ -92,11 +92,8 @@ int main(int argc, char *argv[])
 		printf("Error: arguments");
 		return (1);
 	}
-	*vars.obj = NULL;
-	*vars.lights = NULL;
-	get_arg(argv[1], &vars);
-
-	launch_window(&vars);
+	if (get_arg(argv[1], &vars) != 0)
+		launch_window(&vars);
 
 	ft_lstclear(vars.obj, (void (*)(void *))destroy_obj);
 	ft_lstclear(vars.lights, (void (*)(void *))destroy_obj);

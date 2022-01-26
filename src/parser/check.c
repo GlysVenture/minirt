@@ -63,15 +63,40 @@ t_plane	*check_plane(char *arg, int *color)
 
 t_sphere	*check_sphere(char *arg, int *color)
 {
-	char **tes;
-	char **ret;
+	int i;
+	int j;
+	double vals[4];
 	t_sphere	*sphere;
 
-
-	tes = ft_split(arg,' ');
-	ret = ft_split(tes[1], ',');
-	sphere = init_sphere(ft_atod(tes[2]), ft_atod(ret[0]), ft_atod(ret[1]), ft_atod(ret[2]));
-	*color = hexcolor(tes[3]);
+	i = 0;
+	j = 1;
+	while (arg[i] != ' ')
+		i++;
+	i++;
+	vals[0] = ft_atod(arg + i);
+	while (arg[i])
+	{
+		if (arg[i] == ',')
+		{
+			vals[j] = ft_atod(arg + i + 1);
+			j++;
+		}
+		else if (arg[i] == ' ')
+		{
+			i++;
+			vals[j] = ft_atod(arg + (i));
+			j++;
+			break;
+		}
+		i++;
+	}
+	while (arg[i])
+	{
+		if (arg[i] == ' ')
+			*color = hexcolor(arg + i + 1);
+		i++;
+	}
+	sphere = init_sphere(vals[3], vals[0], vals[1], vals[2]);
 	return (sphere);
 }
 
