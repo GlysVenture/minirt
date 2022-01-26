@@ -73,28 +73,28 @@ static int	ft_free_lines(char **line)
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[FOPEN_MAX][BUFFER_SIZE + 1];
+	static char	buffer[BUFFER_SIZE + 1];
 	char		*line;
 	int			i;
 
-	if (0 > read(fd, buffer[fd], 0))
+	if (0 > read(fd, buffer, 0))
 		return (NULL);
 	line = malloc(sizeof(char));
 	if (!line)
 		return (NULL);
 	line[0] = 0;
-	if (ft_update_buffer(&line, buffer[fd]))
+	if (ft_update_buffer(&line, buffer))
 		return (line);
-	while (read(fd, buffer[fd], BUFFER_SIZE) == BUFFER_SIZE)
+	while (read(fd, buffer, BUFFER_SIZE) == BUFFER_SIZE)
 	{
-		buffer[fd][BUFFER_SIZE] = 0;
+		buffer[BUFFER_SIZE] = 0;
 		i = 0;
-		while (i < BUFFER_SIZE && buffer[fd][i] != '\n')
+		while (i < BUFFER_SIZE && buffer[i] != '\n')
 			i++;
-		if (ft_update_buffer(&line, buffer[fd]))
+		if (ft_update_buffer(&line, buffer))
 			return (line);
 	}
-	ft_update_buffer(&line, buffer[fd]);
+	ft_update_buffer(&line, buffer);
 	if (ft_free_lines(&line))
 		return (NULL);
 	return (line);

@@ -4,6 +4,9 @@
 #include "libft.h"
 #include "../object.h"
 #include "mrt.h"
+#include "light/light.h"
+
+//a supprimer? tk
 void	get_center(char *line, double radius, t_sphere *sphere)
 {
 	char	**ret;
@@ -22,7 +25,7 @@ void	get_center(char *line, double radius, t_sphere *sphere)
 	return;
 }
 
-long unsigned int  hexcolor(char *line)
+int  hexcolor(char *line)
 {
 	int r, g, b;
 	char **ret;
@@ -33,7 +36,7 @@ long unsigned int  hexcolor(char *line)
 	b = ft_atoi(ret[2]);
     	return (r<<16) | (g<<8) | b;
 }
-t_plane	*check_plane(char *arg, long unsigned int *color)
+t_plane	*check_plane(char *arg, int *color)
 {
 	char **ret;
 	char **mem;
@@ -58,7 +61,7 @@ t_plane	*check_plane(char *arg, long unsigned int *color)
 	return (pl);
 }
 
-t_sphere	*check_sphere(char *arg, long unsigned int *color)
+t_sphere	*check_sphere(char *arg, int *color)
 {
 	char **tes;
 	char **ret;
@@ -70,4 +73,19 @@ t_sphere	*check_sphere(char *arg, long unsigned int *color)
 	sphere = init_sphere(ft_atod(tes[2]), ft_atod(ret[0]), ft_atod(ret[1]), ft_atod(ret[2]));
 	*color = hexcolor(tes[3]);
 	return (sphere);
-}	
+}
+
+t_light	*check_light(char *line)
+{
+	char **tes;
+	char **ret;
+	t_light *light;
+	t_vec3d temp;
+
+	tes = ft_split(line,' ');
+	ret = ft_split(tes[1], ',');
+	set_vec(&temp, ft_atod(ret[0]), ft_atod(ret[1]), ft_atod(ret[2]));
+	light = init_light(temp, hexcolor(tes[3]));
+	return (light);
+}
+

@@ -7,7 +7,9 @@
 
 #include "libft.h"
 #include "geotrace.h"
+#include "minirt.h"
 
-int	send_ray(t_line *ray, t_list *obj);
+int		send_ray(t_line *ray, t_vars *v);
+double	shadow_ray(t_vec3d start, t_vars *v, t_vec3d n);
 
 #endif //RAY_H

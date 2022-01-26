@@ -22,7 +22,7 @@ t_adv_camera	*set_advanced_camera(t_camera *cam, int x, int y, t_line *ray)
 	tmp = new->horizontal.x;
 	new->horizontal.x = -new->horizontal.y;
 	new->horizontal.y = tmp;
-	tmp = vec_norm(cam->direction) * cos(cam->angle);
+	tmp = vec_norm(cam->direction) * cos(cam->angle / 2);
 	unit_vector2(new->horizontal, &new->horizontal);
 	scalar_mult2(new->horizontal, tmp / (x - 1), &new->horizontal);
 	vec_prod2(cam->direction, new->horizontal, &new->vertical);

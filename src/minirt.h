@@ -32,6 +32,6 @@ typedef struct s_vars
 	t_mlx_utils		*mu;
 }	t_vars;
 
-void	launch_window(t_list **objects);
+void	launch_window(t_vars *v);
 
 #endif //MINIRT_H

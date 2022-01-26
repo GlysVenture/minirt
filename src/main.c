@@ -27,12 +27,12 @@ static void	ft_mlx_putpixel(t_data *img, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-static void	fill_image(t_data *img, int x, int y, t_list **obj)
+static void	fill_image(t_data *img, int x, int y, t_vars *v)
 {
 	int			i;
 	int			j;
 	t_line		ray;
-	t_camera	cam = {{0, 0.5, 2}, {1, -0.1, -0.3}, M_2_PI};
+	t_camera	cam = {{0, 0.2, 1}, {1, 0, 0}, M_PI_2};
 	t_adv_camera	*cam_adv;
 	t_vec3d		temp;
 
@@ -45,7 +45,7 @@ static void	fill_image(t_data *img, int x, int y, t_list **obj)
 		while (i < x)
 		{
 			vec_sum(ray.direction, cam_adv->horizontal, &ray.direction);
-			ft_mlx_putpixel(img, i, j, send_ray(&ray, *obj));
+			ft_mlx_putpixel(img, i, j, send_ray(&ray, v));
 			i++;
 		}
 		vec_sum(temp, cam_adv->vertical, &ray.direction);
@@ -66,28 +66,39 @@ static int	key_handler(int keycode, void *t)
 	return (0);
 }
 
-	void	launch_window(t_list **objects)
+void	launch_window(t_vars *v)
 {
-	void	*mlx;
-	void	*win;
-	t_data	img;
+	t_mlx_utils	mu;
 
-	mlx = mlx_init();
-	win = mlx_new_window(mlx, WIN_X, WIN_X, "raytracer");
-	img.img = mlx_new_image(mlx, WIN_X, WIN_X);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
-		&img.endian);
+	mu.mlx = mlx_init();
+	mu.win = mlx_new_window(mu.mlx, WIN_X, WIN_X, "raytracer");
+	mu.img.img = mlx_new_image(mu.mlx, WIN_X, WIN_X);
+	mu.img.addr = mlx_get_data_addr(mu.img.img, &mu.img.bits_per_pixel, &mu.img.line_length,
+		&mu.img.endian);
 
-	fill_image(&img, WIN_X, WIN_X, objects);
+	fill_image(&mu.img, WIN_X, WIN_X, v);
 
-	mlx_put_image_to_window(mlx, win, img.img, 0, 0);
-	mlx_key_hook(win, key_handler, NULL);
-	mlx_loop(mlx);
+	mlx_put_image_to_window(mu.mlx, mu.win, mu.img.img, 0, 0);
+	mlx_key_hook(mu.win, key_handler, NULL);
+	mlx_loop(mu.mlx);
 }
 
 int main(int argc, char *argv[]) 
 {
-	get_arg(argv[1]);
-	argc = 0;
+	t_vars	vars;
+
+	if (argc != 2)
+	{
+		printf("Error: arguments");
+		return (1);
+	}
+	*vars.obj = NULL;
+	*vars.lights = NULL;
+	get_arg(argv[1], &vars);
+
+	launch_window(&vars);
+
+	ft_lstclear(vars.obj, (void (*)(void *))destroy_obj);
+	ft_lstclear(vars.lights, (void (*)(void *))destroy_obj);
 	return (0); 
 }

@@ -4,6 +4,7 @@
 
 #include <math.h>
 #include <float.h>
+#include <stdio.h>
 
 #include "ray.h"
 #include "geotrace.h"
@@ -12,20 +13,18 @@
 #include "../object.h"
 #include "../colors/colors.h"
 #include "vec_utils.h"
+#include "minirt.h"
 
-int	send_ray(t_line *ray, t_list *obj)
+#include "debug/debug.h"
+
+static int shade(t_object *intersect, double d, t_line *ray, t_vars *v);
+
+double	intersect_objects(t_line *ray, t_list *obj, t_object **found)
 {
 	double	dist;
 	double	t;
-	int		color;
-	t_light	light = {{2, -2, 3}, 0x00FFFFFF};
-	t_vec3d temp;
-	t_list	*start_obj;
-	t_vec3d	normal;
 	char	obj_type;
-	//t_list	found;
 
-	start_obj = obj;
 	dist = -1;
 	while(obj)
 	{
@@ -38,20 +37,57 @@ int	send_ray(t_line *ray, t_list *obj)
 		if (isgreater(t, FLT_EPSILON) && (dist < 0 || isless(t, dist)))
 		{
 			dist = t;
-			unit_vector2(ray->direction, &temp);
-			scalar_mult2(temp, dist, &temp);
-			vec_sum(temp, ray->point, &temp);
-			vec_get_normal(obj_type, ((t_object *)obj->content)->structure, temp, &normal); //todo find better sol for normal
-			color = ((t_object *)obj->content)->color;
+			*found = (t_object *)obj->content;
 		}
 		obj = obj->next;
 	}
+	return (dist);
+}
+
+int	send_ray(t_line *ray, t_vars *v)
+{
+//	t_light	light = {{3, -2, 4}, 0x00FFFFFF};
+	t_object	*intersect;
+	double	dist;
+
+	intersect = NULL;
+	dist = intersect_objects(ray, *v->obj, &intersect);
 	if (isless(dist, 0))
-		return (0x00000000);
-	t = shadow_ray(temp, light, start_obj, normal);
+		return (0);
+	return (shade(intersect, dist, ray, v));
+/*	t = shadow_ray(temp, light, start, normal);
 	if (isless(t, 0))
-		color = 0;
+		return (0);
 	else
-		color = shift_color2(color,(t / M_PI_2 - 1));
+		return (shift_color2(color,(t / M_PI_2 - 1)));*/
+}
+
+static int shade(t_object *intersect, double d, t_line *ray, t_vars *v)
+{
+	int 	color;
+	(void)d;
+	(void)ray;
+//	int		is_diffuse;
+//	t_vec3d	hit;
+
+	color = shift_color2(intersect->color,v->ambient.ratio);
+/*
+	unit_vector2(ray->direction, &hit);
+	scalar_mult2(hit, d, &hit);
+	vec_sum(hit, ray->point, &hit);
+
+	is_diffuse = diffuse_shade();
+	color += kd * is_diffuse; //todo shifts
+	if (is_diffuse > 0)
+		color += ks * specular_shade();*/
 	return (color);
 }
+
+/*int	diffuse_shade(t_object *intersect, t_vec3d hit, t_line *ray, t_vars *v)
+{
+	double	angle;
+	t_vec3d	normal;
+
+	vec_get_normal(intersect->type, intersect->structure, hit, &normal); // todo once
+	angle = shadow_ray(hit, v, normal); //todo all goes trough v
+}*/

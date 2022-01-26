@@ -20,6 +20,6 @@ typedef struct s_amb_light
 	int		color;
 }	t_amb_light;
 
-double	shadow_ray(t_vec3d start, t_light light, t_list *obj, t_vec3d n);
+t_light	*init_light(t_vec3d pos, int color);
 
 #endif //LIGHT_H
