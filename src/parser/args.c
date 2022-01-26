@@ -7,33 +7,41 @@
 #include "debug/debug.h"
 int  hexcolor(char *line);
 
-double ft_atod(char *arr){
-    int i,j,flag;
-    double val;
-    i=0;
-    j=0;
-    val=0;
-    flag=0;
-    while (arr[i] !='\0')
-    {
-        if (arr[i] !='.')
+double below_zero(double val,const char *str, char sign)
+{
+	int j;
+
+	j = 0;
+	while (str[j])
 	{
-            val =(val*10) + (arr[i] - '0');
-            if (flag == 1)
-                --j;
-        }
-        if (arr[i] == '.')
-	{ 
-		if (flag == 1) 
-			return 0; 
-		flag=1;
+		val *= 10;
+		val += str[j] - 48;
+		j++;
 	}
-        i++;
-    }
-    val = val*pow(10,j);
-    return (atof(arr)); //todo ??????????????????
+	val = val*pow(10, j * -1);
+	if (sign == '-')
+		val *= -1;
+	return (val);
 }
 
+double ft_atod(const char *arr){
+    int i;
+    double val;
+
+    i=0;
+    val=0;
+    if (arr[0] == '+' || arr[0] == '-')
+	    i++;
+    while (arr[i] != '\0')
+    {
+        if (arr[i] != '.')
+            val = (val*10) + (arr[i] - 48);
+	else
+		return (val = below_zero(val, arr + (i + 1), arr[0]));
+        i++;
+    }
+    return (val);
+}
 t_amb_light check_alight(char *arg)
 {
 	char **args;
@@ -43,7 +51,7 @@ t_amb_light check_alight(char *arg)
 	a.ratio = ft_atod(args[1]);
 	if (a.ratio >= 1.0 || a.ratio <= 0.0)
 	{
-		printf("Error not in the correct range\n");
+		printf("Error not in the correct range %f\n", a.ratio);
 			exit (1); //todo err return
 	}
 	a.color = hexcolor(args[2]);

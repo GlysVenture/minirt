@@ -15,6 +15,6 @@
 t_sphere *check_sphere(char *arg,  int *color);
 char	*get_arg(char *filename, t_vars *v);
 t_plane	*check_plane(char *arg,  int *color);
-double ft_atod(char *arr);
+double ft_atod(const char *arr);
 t_light	*check_light(char *line);
 #endif
