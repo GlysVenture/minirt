@@ -17,7 +17,7 @@ double ft_atod(char *arr){
     {
         if (arr[i] !='.')
 	{
-            val =(val*10)+ (arr[i] - '0');
+            val =(val*10) + (arr[i] - '0');
             if (flag == 1)
                 --j;
         }
@@ -27,10 +27,10 @@ double ft_atod(char *arr){
 			return 0; 
 		flag=1;
 	}
-        ++i;
+        i++;
     }
     val = val*pow(10,j);
-    return (val);
+    return (atof(arr));
 }
 
 t_alight check_light(char *arg)
