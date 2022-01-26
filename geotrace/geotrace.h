@@ -71,6 +71,8 @@ void	vec_sum(t_vec3d v, t_vec3d u, t_vec3d *new);
 
 void	vec_subtract(t_vec3d v, t_vec3d u, t_vec3d *new);
 
+double	get_angle(t_vec3d v, t_vec3d u);
+
 //Sphere funcs
 
 t_sphere	*init_sphere(double radius, double cx, double cy, double cz);

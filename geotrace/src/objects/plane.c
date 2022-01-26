@@ -30,6 +30,7 @@ double	plane_intersect(t_plane *plane, t_line ray)
 {
 	double	angle;
 
+	unit_vector2(ray.direction, &ray.direction);
 	angle = dot_prod(plane->normal, ray.direction);
 	if (angle == 0)
 		return (-1);

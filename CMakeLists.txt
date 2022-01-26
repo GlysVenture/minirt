@@ -18,5 +18,5 @@ add_subdirectory(libft)
 add_subdirectory(geotrace)
 SET(EXTRA_LIBS ${EXTRA_LIBS} mlx geotrace libft)
 
-add_executable(raytracer src/main.c src/camera.c src/camera.h src/object.c src/object.h)
+add_executable(raytracer src/main.c src/camera.c src/camera.h src/object.c src/object.h src/key_handler.h src/light/light.c src/light/light.h src/debug/debug.c src/debug/debug.h src/colors/color_shift.c src/minirt.h src/rays/ray.c src/rays/ray.h src/rays/vec_utils.c src/rays/vec_utils.h)
 target_link_libraries(raytracer ${EXTRA_LIBS})

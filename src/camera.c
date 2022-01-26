@@ -18,16 +18,18 @@ t_adv_camera	*set_advanced_camera(t_camera *cam, int x, int y, t_line *ray)
 	if(!new)
 		return (NULL);
 	new->horizontal = cam->direction;
+	new->horizontal.z = 0;
 	tmp = new->horizontal.x;
 	new->horizontal.x = -new->horizontal.y;
 	new->horizontal.y = tmp;
 	tmp = vec_norm(cam->direction) * cos(cam->angle);
 	unit_vector2(new->horizontal, &new->horizontal);
-	scalar_mult2(new->horizontal, (-tmp) / (x - 1), &new->horizontal);
+	scalar_mult2(new->horizontal, tmp / (x - 1), &new->horizontal);
 	vec_prod2(cam->direction, new->horizontal, &new->vertical);
 	unit_vector2(new->vertical, &new->vertical);
-	scalar_mult2(new->vertical, tmp / (y - 1), &new->vertical);
+	scalar_mult2(new->vertical, -tmp / (y - 1), &new->vertical);
 	new->cam = *cam;
+	ray->point = cam->origin;
 	scalar_mult2(new->horizontal, (double)(x - 1) / -2, &v);
 	vec_sum(cam->direction, v, &ray->direction);
 	scalar_mult2(new->vertical, (double)(y - 1) / -2, &v);
