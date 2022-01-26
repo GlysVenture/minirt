@@ -8,9 +8,9 @@
 
 #include "light.h"
 #include "libft.h"
-#include "object.h"
+#include "../object.h"
 
-#include "debug/debug.h"
+#include "../debug/debug.h"
 
 double	shadow_ray(t_vec3d start, t_light light, t_list *obj, t_vec3d n)
 {

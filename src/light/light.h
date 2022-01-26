@@ -14,6 +14,12 @@ typedef struct s_light
 	int		color;
 }	t_light;
 
+typedef struct s_amb_light
+{
+	double	ratio;
+	int		color;
+}	t_amb_light;
+
 double	shadow_ray(t_vec3d start, t_light light, t_list *obj, t_vec3d n);
 
 #endif //LIGHT_H

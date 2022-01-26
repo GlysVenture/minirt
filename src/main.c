@@ -9,18 +9,14 @@
 #include "camera.h"
 #include "libft.h"
 #include "object.h"
-#include "light.h"
+#include "light/light.h"
 #include "colors/colors.h"
+#include "minirt.h"
+#include "rays/ray.h"
 
 #include "debug/debug.h"
 
-typedef struct s_data {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}	t_data;
+#define WIN_X 1000
 
 static void	ft_mlx_putpixel(t_data *img, int x, int y, int color)
 {
@@ -28,56 +24,6 @@ static void	ft_mlx_putpixel(t_data *img, int x, int y, int color)
 
 	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
-}
-
-static void	vec_get_normal(char type, void *s, t_vec3d temp,t_vec3d *normal)
-{
-	if (type == 's')
-		vec_subtract(((t_sphere *)s)->center, temp, normal);
-	if (type == 'p')
-		*normal = ((t_plane *)s)->normal;
-}
-
-static int	send_ray(t_line *ray, t_list *obj)
-{
-	double	dist;
-	double	t;
-	int		color;
-	t_light	light = {{2, -2, 3}, 0x00FFFFFF};
-	t_vec3d temp;
-	t_list	*start_obj;
-	t_vec3d	normal;
-	char	obj_type;
-
-	start_obj = obj;
-	dist = -1;
-	while(obj)
-	{
-		t = -2;
-		obj_type = ((t_object *)obj->content)->type;
-		if (obj_type == 's')
-			t = sphere_intersect(((t_object *)obj->content)->structure, *ray);
-		if (obj_type == 'p')
-			t = plane_intersect(((t_object *)obj->content)->structure, *ray);
-		if (isgreater(t, FLT_EPSILON) && (dist < 0 || isless(t, dist)))
-		{
-			dist = t;
-			unit_vector2(ray->direction, &temp);
-			scalar_mult2(temp, dist, &temp);
-			vec_sum(temp, ray->point, &temp);
-			vec_get_normal(obj_type, ((t_object *)obj->content)->structure, temp, &normal); //todo find better sol for normal
-			color = ((t_object *)obj->content)->color;
-		}
-		obj = obj->next;
-	}
-	if (isless(dist, 0))
-		return (0x00000000);
-	t = shadow_ray(temp, light, start_obj, normal);
-	if (isless(t, 0))
-		color = 0;
-	else
-		color = shift_color2(color,(t / M_PI_2 - 1));
-	return (color);
 }
 
 static void	fill_image(t_data *img, int x, int y, t_list **obj)
@@ -126,12 +72,12 @@ static void	launch_window(t_list **objects)
 	t_data	img;
 
 	mlx = mlx_init();
-	win = mlx_new_window(mlx, 700, 700, "raytracer");
-	img.img = mlx_new_image(mlx, 700, 700);
+	win = mlx_new_window(mlx, WIN_X, WIN_X, "raytracer");
+	img.img = mlx_new_image(mlx, WIN_X, WIN_X);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 		&img.endian);
 
-	fill_image(&img, 700, 700, objects);
+	fill_image(&img, WIN_X, WIN_X, objects);
 
 	mlx_put_image_to_window(mlx, win, img.img, 0, 0);
 	mlx_key_hook(win, key_handler, NULL);
@@ -139,6 +85,14 @@ static void	launch_window(t_list **objects)
 }
 
 int main() {
+	t_vars	vars;
+
+
+	//vars.ambient.color = 0x00FFFFFF;
+	//vars.ambient.ratio = 0.2;
+
+	(void)vars;
+
 	t_plane	plane = {{-0, 0, -1}, {6, 0, -0.1}};
 	t_sphere sphere = {{4, 0, 0}, 0.2};
 	t_sphere sphere2 = {{6, 0, 0.5}, 0.4};
@@ -156,3 +110,12 @@ int main() {
 	ft_lstclear(&objects, (void (*)(void *))destroy_obj);
 	return (0);
 }
+
+/*t_vars	vars;
+
+//t_light	light = {{2, -2, 3}, 0x00FFFFFF};
+vars.ambient.color = 0x00FFFFFF;
+vars.ambient.ratio = 0.2;
+
+//t_camera	cam = {{0, 0.5, 2}, {1, -0.1, -0.3}, M_2_PI};
+//vars.cam.cam = cam;*/
