@@ -9,6 +9,7 @@
 #include "camera.h"
 #include "libft.h"
 #include "object.h"
+#include "mrt.h"
 #include "light/light.h"
 #include "colors/colors.h"
 #include "minirt.h"
@@ -65,7 +66,7 @@ static int	key_handler(int keycode, void *t)
 	return (0);
 }
 
-static void	launch_window(t_list **objects)
+	void	launch_window(t_list **objects)
 {
 	void	*mlx;
 	void	*win;
@@ -84,38 +85,9 @@ static void	launch_window(t_list **objects)
 	mlx_loop(mlx);
 }
 
-int main() {
-	t_vars	vars;
-
-
-	//vars.ambient.color = 0x00FFFFFF;
-	//vars.ambient.ratio = 0.2;
-
-	(void)vars;
-
-	t_plane	plane = {{-0, 0, -1}, {6, 0, -0.1}};
-	t_sphere sphere = {{4, 0, 0}, 0.2};
-	t_sphere sphere2 = {{6, 0, 0.5}, 0.4};
-	t_sphere sphere3 = {{4, 0.2, 1}, 0.13};
-
-	t_list *objects;
-
-	ft_lstadd_front(&objects, ft_lstnew(init_obj('s', &sphere, 0x00FFF000)));
-	ft_lstadd_front(&objects, ft_lstnew(init_obj('s', &sphere2, 0x00FF0000)));
-	ft_lstadd_front(&objects, ft_lstnew(init_obj('s', &sphere3, 0x0000FF1A)));
-	ft_lstadd_front(&objects, ft_lstnew(init_obj('p', &plane, 0x0000FFF0)));
-
-	launch_window(&objects);
-
-	ft_lstclear(&objects, (void (*)(void *))destroy_obj);
-	return (0);
+int main(int argc, char *argv[]) 
+{
+	get_arg(argv[1]);
+	argc = 0;
+	return (0); 
 }
-
-/*t_vars	vars;
-
-//t_light	light = {{2, -2, 3}, 0x00FFFFFF};
-vars.ambient.color = 0x00FFFFFF;
-vars.ambient.ratio = 0.2;
-
-//t_camera	cam = {{0, 0.5, 2}, {1, -0.1, -0.3}, M_2_PI};
-//vars.cam.cam = cam;*/

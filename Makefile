@@ -1,5 +1,5 @@
 CFLAGS := ${CFLAGS}
-CFLAGS += -Wall -Wextra -Werror
+CFLAGS += -fsanitize=address -g3 -Wall -Wextra -Werror
 
 CC     ?= gcc
 
@@ -15,7 +15,7 @@ LIBFT_LIB := ft
 
 #dirs
 GEO = geotrace
-LIBFT = libft
+LIBFT = libft/
 BUILD_DIR ?= ./build
 SRC_DIRS ?= ./src
 
@@ -47,7 +47,7 @@ all:	library
 
 $(NAME):	$(GEO)/lib$(GEO_LIB).a $(MLX)/lib$(MLX_LIB).a $(LIBFT)/lib$(LIBFT_LIB).a $(OBJS)
 	@echo Linking $@
-	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -g3 -o $(NAME)
 
 library:
 	@$(MAKE) -C ${LIBFT}
