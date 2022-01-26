@@ -9,7 +9,7 @@
 #include "camera.h"
 #include "libft.h"
 #include "object.h"
-#include "mrt.h"
+#include "parser/mrt.h"
 #include "light/light.h"
 #include "colors/colors.h"
 #include "minirt.h"

@@ -1,6 +1,7 @@
 #include "mrt.h"
 #include "geotrace.h"
-#include "colors.h"
+#include "gnl/get_next_line.h"
+#include "minirt.h"
 
 float ft_atof(char *arr){
     int i,j,flag;
@@ -70,26 +71,20 @@ int check_light(char *arg)
 	return (1);
 }
 
-int	create_color(int t, int r, int g, int b)
-{
-	return (t << 24 | r << 16 | g << 8 | b);
-}
-
-t_list *check_arg(char *arg, t_list *objects)
+int	check_arg(char *arg, t_list **objects)
 {
 	void	*mem;
-	int color;
 
 	if (arg[0] == '\n')
-		return (objects);
+		return (1);
 	else if (arg[0] == 's')
 		mem = (check_sphere(arg));
 	else if (arg[0] == 'p')
 		mem = (check_plane(arg));
 	else
-		return (objects);
-	ft_lstadd_front(&objects,ft_lstnew(init_obj(arg[0],mem,0xFF001A)));
-	return (objects);
+		return (1);
+	ft_lstadd_front(objects,ft_lstnew(init_obj(arg[0],mem,0xFF001A)));
+	return (1);
 }
 char *get_arg(char *filename)
 {
@@ -106,7 +101,7 @@ char *get_arg(char *filename)
 	ret = get_next_line(fd);
 	while (ret != NULL)
 	{
-		objects = check_arg(ret, objects);
+		check_arg(ret, &objects);
 		ret = get_next_line(fd);
 	}
 	launch_window(&objects);

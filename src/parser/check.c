@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include "geotrace.h"
-#include "camera.h"
+#include "../camera.h"
 #include "libft.h"
-#include "object.h"
+#include "../object.h"
 #include "mrt.h"
 t_vec3d	get_center(char *line)
 {
@@ -23,7 +23,7 @@ t_vec3d	get_center(char *line)
 	r.z = ft_atof(ret[2]);
 	return (r);
 }
-void	*check_plane(char *arg, int color)
+void	*check_plane(char *arg)
 {
 	char **ret;
 	t_plane	pl;
@@ -35,7 +35,7 @@ void	*check_plane(char *arg, int color)
 	ptr = &pl;
 	return (ptr);
 }
-void	*check_sphere(char *arg, int color)
+void	*check_sphere(char *arg)
 {
 	char **ret;
 	void	*ptr;

@@ -32,7 +32,7 @@ else
 	LIBS += -framework OpenGL -framework AppKit
 endif
 
-INC_FLAGS := -I${GEO} -I${LIBFT} -I${MLX} -I/usr/include
+INC_FLAGS := -I${GEO} -I${LIBFT} -I${MLX} -I/usr/include -Isrc
 
 SRCS := $(shell find $(SRC_DIRS) -name '*.c')
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
