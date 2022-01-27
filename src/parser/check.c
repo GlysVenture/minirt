@@ -6,25 +6,6 @@
 #include "mrt.h"
 #include "light/light.h"
 
-//a supprimer? tk
-void	get_center(char *line, double radius, t_sphere *sphere)
-{
-	char	**ret;
-	int	i;
-	i = 0;
-	ret = ft_split(line, ',');
-	while (ret[i])
-		i++;
-	if (i != 3)
-	{
-		printf("Error cord\n");
-		exit (1);
-	}
-
-	sphere = init_sphere(radius, ft_atod(ret[0]), ft_atod(ret[1]), ft_atod(ret[2]));
-	return;
-}
-
 int  hexcolor(char *line)
 {
 	int r, g, b;
@@ -34,6 +15,7 @@ int  hexcolor(char *line)
 	r = ft_atoi(ret[0]);
 	g = ft_atoi(ret[1]);
 	b = ft_atoi(ret[2]);
+	free_tab(ret);
     	return (r<<16) | (g<<8) | b;
 }
 t_plane	*check_plane(char *arg, int *color)
@@ -49,15 +31,16 @@ t_plane	*check_plane(char *arg, int *color)
 	n.x =  ft_atod(mem[0]);
 	n.y = ft_atod(mem[1]);
 	n.z = ft_atod(mem[2]);
-	free (mem);
+	free_tab (mem);
 	mem = NULL;
 	mem = ft_split(ret[2], ',');
 	p.x = ft_atod(mem[0]);
 	p.y = ft_atod(mem[1]);
 	p.z = ft_atod(mem[2]);
-	free (mem);
+	free_tab (mem);
 	pl = init_plane(n,p);
 	*color = hexcolor(ret[3]);
+	free_tab(ret);
 	return (pl);
 }
 
@@ -102,10 +85,8 @@ t_sphere	*check_sphere(char *arg, int *color)
 
 double get_coordinates(char **line, int *i)
 {
-	int j;
 	double ret;
 
-	j = 1;
 	*i = 1;
 	if (**line == ',')
 		*line += 1;

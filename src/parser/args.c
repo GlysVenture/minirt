@@ -40,10 +40,10 @@ double ft_atod(const char *arr){
     {
 	if (ft_isdigit(arr[i]) == 0 && arr[i] != '.')
 		break;
-        else if (arr[i] != '.')
+        else if (arr[i] != '.') //??????????????????????????????????
             val = (val*10) + (arr[i] - 48);
 	else
-		return (val = below_zero(val, arr + (i + 1), arr[0]));
+		return (val = below_zero(val, arr + (i + 1), arr[0])); //???????????
         i++;
     }
     if (arr[0] == '-')
@@ -62,6 +62,7 @@ int check_alight(char *arg, t_amb_light *a)
 			return (0); //todo err return
 	}
 	a->color = hexcolor(args[2]);
+	free_tab(args);
 	return (1);
 }
 
@@ -81,8 +82,8 @@ int	check_arg(char *arg, t_vars *v)
 		return (parse_sphere(arg, v));
 	else if (arg[0] == 'p')
 		return (parse_plane(arg, v));
-	else if (arg[0] == 'c')
-		return (parse_cylinder(arg, v));
+//	else if (arg[0] == 'c')
+//		return (parse_cylinder(arg, v));
 	return (1);
 }
 int	get_arg(char *filename, t_vars *v)
@@ -101,6 +102,7 @@ int	get_arg(char *filename, t_vars *v)
 	{
 		if (check_arg(ret, v) == 0)
 			return (0);
+		free(ret);
 		ret = get_next_line(fd);
 	}
 	return (1);

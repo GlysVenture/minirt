@@ -45,7 +45,8 @@ int	parse_plane(char *line, t_vars *v)
 	ft_lstadd_front(&v->obj, new);
 	return (1);
 }
-int	parse_cylinder(char *line, t_vars *v)
+
+/*int	parse_cylinder(char *line, t_vars *v)
 {
 	double coor[3];
 	double orienta[3];
@@ -65,7 +66,7 @@ int	parse_cylinder(char *line, t_vars *v)
 	while (++b < 3)
 		orienta[b] = get_coordinates(&line, &i);
 	return (1);
-}
+}*/
 int	parse_light(char *line, t_vars *v)
 {
 	void	*mem;

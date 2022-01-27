@@ -18,4 +18,7 @@ t_plane	*check_plane(char *arg,  int *color);
 double ft_atod(const char *arr);
 t_light	*check_light(char *line);
 double get_coordinates(char **line, int *i);
+
+void	free_tab(char **tab);
+
 #endif

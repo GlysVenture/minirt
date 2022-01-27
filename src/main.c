@@ -61,8 +61,8 @@ static int	key_handler(int keycode, t_vars *v)
 	(void)v;
 	if (keycode == key_esc)
 	{
-//		ft_lstclear(&v->obj, (void (*)(void *))destroy_obj);
-//		ft_lstclear(&v->lights, (void (*)(void *))destroy_obj);
+		ft_lstclear(&v->obj, (void (*)(void *)) destroy_obj);
+		ft_lstclear(&v->lights, free);
 		exit(0);
 	}
 	return (0);
@@ -106,7 +106,5 @@ int main(int argc, char *argv[])
 	print_lights(vars.lights);
 
 	launch_window(&vars);
-	//ft_lstclear(&vars.obj, (void (*)(void *))destroy_obj);
-	//ft_lstclear(&vars.lights, (void (*)(void *))destroy_obj);
 	return (0); 
 }

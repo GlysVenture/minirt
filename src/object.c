@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 #include "object.h"
+#include "debug/debug.h"
 
 t_object	*init_obj(char c, void *struc, int color)
 {
@@ -28,6 +29,7 @@ void	set_obj(t_object *obj, char c, void *struc, int color)
 
 void	destroy_obj(t_object *obj)
 {
-	free(obj->structure); //todo csg destroy?
+	if (obj->structure != NULL)
+		free(obj->structure); //todo csg destroy?
 	free(obj);
 }
