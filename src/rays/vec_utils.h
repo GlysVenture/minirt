@@ -6,7 +6,8 @@
 # define VEC_UTILS_H
 
 #include "geotrace.h"
+#include "ray.h"
 
-void	vec_get_normal(char type, void *s, t_vec3d temp,t_vec3d *normal);
+void	vec_get_normal(t_intersect *intersect);
 
 #endif //VEC_UTILS_H

@@ -30,29 +30,33 @@ int	shadow_ray(t_line *ray, t_list *obj)
 		if (obj_type == 'p')
 			t = plane_intersect(((t_object *)obj->content)->structure, *ray);
 		if (isgreater(t, FLT_EPSILON) && (isless(dist, 0) || isless(t, dist)))
+		{
+			if (obj_type == 'p')
+				printf("t");
 			return (-1);
+		}
 		obj = obj->next;
 	}
 	return (1);
 }
 
-double	diffuse_shade(t_intersect *intersect, t_line *ray)
+double	diffuse_shade(t_intersect *intersect, t_line ray)
 {
 	double	angle;
 
-	angle = get_angle(intersect->normal, ray->direction);
+	angle = get_angle(intersect->normal, ray.direction);
 	angle = (1 - (angle / M_PI_2));
 	if (isless(angle, 0))
 		return (0);
 	return (angle);
 }
 
-double	specular_shade(t_intersect *intersect, t_line *ray)
+double	specular_shade(t_intersect *intersect, t_line ray)
 {
 	double	angle;
 	t_vec3d	mid;
 
-	vec_subtract(ray->direction, intersect->in_ray.direction, &mid);
+	vec_subtract(ray.direction, intersect->in_ray.direction, &mid);
 	angle = get_angle(intersect->normal, mid);
 	angle = (1 - angle / M_PI_2);
 	if (isless(angle, 0))

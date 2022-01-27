@@ -57,6 +57,7 @@ void	print_lights(t_list *lights)
 		printf("light:\norigin ");
 		print_point(((t_light *)lights->content)->pos);
 		printf("color: %x\n", ((t_light *)lights->content)->color);
+		printf("ratio: %f\n", ((t_light *)lights->content)->ratio);
 		lights = lights->next;
 	}
 }

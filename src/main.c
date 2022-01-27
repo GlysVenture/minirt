@@ -91,10 +91,6 @@ static void	init_vars(t_vars *v)
 	v->obj = NULL;
 }
 
-//static void magic(t_list __attribute__((unused)) *lights)
-//{
-//}
-
 int main(int argc, char *argv[]) 
 {
 	t_vars	vars;
@@ -106,9 +102,9 @@ int main(int argc, char *argv[])
 	}
 	init_vars(&vars);
 	get_arg(argv[1], &vars);
-//	print_lights(vars.lights);
-//	magic(vars.lights);
-//
+	print_objlst(vars.obj);
+	print_lights(vars.lights);
+
 	launch_window(&vars);
 	//ft_lstclear(&vars.obj, (void (*)(void *))destroy_obj);
 	//ft_lstclear(&vars.lights, (void (*)(void *))destroy_obj);

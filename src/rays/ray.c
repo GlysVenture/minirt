@@ -95,7 +95,7 @@ static int shade(t_intersect *intersect, t_vars *v)
 	scalar_mult2(intersect->hit, intersect->dist, &intersect->hit);
 	vec_sum(intersect->hit, intersect->in_ray.point, &intersect->hit);
 
-	vec_get_normal(intersect->obj.type, intersect->obj.structure, intersect->hit, &intersect->normal);
+	vec_get_normal(intersect);
 
 	unpack_color(color, 0, 0);
 	unpack_color(intersect->diff_l, intersect->obj.color, 0.7);
@@ -109,12 +109,10 @@ static int shade(t_intersect *intersect, t_vars *v)
 		vec_subtract(((t_light *)pos->content)->pos, intersect->hit, &s_ray.direction);
 		if (shadow_ray(&s_ray, v->obj) > 0) //todo multiple?
 		{
-			color_sum2(ref_light, intersect->diff_l, diffuse_shade(intersect, &s_ray));
-			color_sum2(ref_light, intersect->spec_l, specular_shade(intersect, &s_ray));
-//			sum += 0.4;
-//			color = shift_color2(color, ((t_light *)pos->content)->color, 1);
+			color_sum2(ref_light, intersect->diff_l, diffuse_shade(intersect, s_ray));
+			color_sum2(ref_light, intersect->spec_l, specular_shade(intersect, s_ray));
 		}
-		color_mult2(ref_light, ((t_light *)pos->content)->color, 150 / pow(vec_norm(s_ray.direction), 2));
+		color_mult2(ref_light, ((t_light *)pos->content)->color, 150 * ((t_light *)pos->content)->ratio / pow(vec_norm(s_ray.direction), 2));
 		color_sum(color, ref_light);
 		clamp(color, 0, 1);
 		pos = pos->next;

@@ -140,12 +140,12 @@ t_light	*check_light(char *line)
 		i++;
 	}
 	i++;
-	vals[3] = ft_atod(line + i + 1); // ratio de la lumiere non ambiante, on ne l'utilise pas encore je crois, mais au cas ou elle est la
+	vals[3] = ft_atod(line + i + 1);
 	set_vec(&temp, vals[0], vals[1],vals[2]);
 	while (line[i] != ' ')
 		i++;
 	i++;
-	light = init_light(temp, hexcolor(line + i));
+	light = init_light(temp, hexcolor(line + i), vals[3]);
 	return (light);
 }
 

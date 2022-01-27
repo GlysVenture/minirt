@@ -7,7 +7,7 @@
 #include "light.h"
 #include "libft.h"
 
-t_light	*init_light(t_vec3d pos, int color)
+t_light	*init_light(t_vec3d pos, int color, double ratio)
 {
 	t_light *new;
 
@@ -16,5 +16,6 @@ t_light	*init_light(t_vec3d pos, int color)
 		return (NULL);
 	new->color = color;
 	new->pos = pos;
+	new->ratio = ratio;
 	return (new);
 }
