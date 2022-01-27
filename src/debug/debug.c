@@ -6,6 +6,7 @@
 #include "geotrace.h"
 #include "libft.h"
 #include "object.h"
+#include "light/light.h"
 #include <stdio.h>
 
 void	print_ray(t_line ray)
@@ -22,24 +23,40 @@ void	print_objlst(t_list *obj)
 {
 	while (obj)
 	{
-		if (((t_object *)obj->content)->type == 's')
-		{
-			printf("sphere:\ncenter ");
-			print_point(((t_sphere *)((t_object *)obj->content)->structure)->center);
-			printf("radius: %f\n", ((t_sphere *)((t_object *)obj->content)->structure)->radius);
-		}
-		else if (((t_object *)obj->content)->type == 'p')
-		{
-			printf("plane:\nnormal ");
-			print_point(((t_plane *)((t_object *)obj->content)->structure)->normal);
-			printf("any ");
-			print_point(((t_plane *)((t_object *)obj->content)->structure)->point);
-		}
-		else
-		{
-			printf("unknown: %c\n", ((t_object *)obj->content)->type);
-		}
-		printf("color: %x\n", ((t_object *)obj->content)->color);
+		print_obj((t_object *)obj->content);
 		obj = obj->next;
+	}
+}
+
+void	print_obj(t_object *obj)
+{
+	if (obj->type == 's')
+	{
+		printf("sphere:\ncenter ");
+		print_point(((t_sphere *)obj->structure)->center);
+		printf("radius: %f\n", ((t_sphere *)obj->structure)->radius);
+	}
+	else if (obj->type == 'p')
+	{
+		printf("plane:\nnormal ");
+		print_point(((t_plane *)obj->structure)->normal);
+		printf("any ");
+		print_point(((t_plane *)obj->structure)->point);
+	}
+	else
+	{
+		printf("unknown: %c\n", obj->type);
+	}
+	printf("color: %x\n", obj->color);
+}
+
+void	print_lights(t_list *lights)
+{
+	while (lights)
+	{
+		printf("light:\norigin ");
+		print_point(((t_light *)lights->content)->pos);
+		printf("color: %x\n", ((t_light *)lights->content)->color);
+		lights = lights->next;
 	}
 }

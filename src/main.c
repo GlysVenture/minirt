@@ -58,10 +58,11 @@ static void	fill_image(t_data *img, int x, int y, t_vars *v)
 static int	key_handler(int keycode, t_vars *v)
 {
 	printf("debug: key pressed: %d\n", keycode);
+	(void)v;
 	if (keycode == key_esc)
 	{
-		ft_lstclear(&v->obj, (void (*)(void *))destroy_obj);
-		ft_lstclear(&v->lights, (void (*)(void *))destroy_obj);
+//		ft_lstclear(&v->obj, (void (*)(void *))destroy_obj);
+//		ft_lstclear(&v->lights, (void (*)(void *))destroy_obj);
 		exit(0);
 	}
 	return (0);
@@ -84,6 +85,16 @@ void	launch_window(t_vars *v)
 	mlx_loop(mu.mlx);
 }
 
+static void	init_vars(t_vars *v)
+{
+	v->lights = NULL;
+	v->obj = NULL;
+}
+
+//static void magic(t_list __attribute__((unused)) *lights)
+//{
+//}
+
 int main(int argc, char *argv[]) 
 {
 	t_vars	vars;
@@ -93,9 +104,9 @@ int main(int argc, char *argv[])
 		printf("Error: arguments");
 		return (1);
 	}
+	init_vars(&vars);
 	get_arg(argv[1], &vars);
-	//print_objlst(vars.obj);
-	//launch_window(&vars);
+	launch_window(&vars);
 
 	//ft_lstclear(&vars.obj, (void (*)(void *))destroy_obj);
 	//ft_lstclear(&vars.lights, (void (*)(void *))destroy_obj);

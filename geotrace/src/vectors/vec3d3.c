@@ -38,6 +38,6 @@ double	get_angle(const t_vec3d v, const t_vec3d u)
 	double	a;
 
 	a = dot_prod(v, u);
-	a /= vec_norm(v) * vec_norm(u);
+	a /= (vec_norm(v) * vec_norm(u));
 	return (acos(a));
 }

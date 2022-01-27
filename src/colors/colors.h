@@ -25,6 +25,7 @@ int		get_green(int color);
 int		get_blue(int color);
 int		shift_color(int c, int c2, double shift);
 int		shift_color2(int c, int c2, double shift);
+int		shift_black(int c, double shift);
 //void	set_colors(int *colors, int iter, int seed);
 
 #endif //COLORS_H
