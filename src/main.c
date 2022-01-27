@@ -94,6 +94,7 @@ int main(int argc, char *argv[])
 		return (1);
 	}
 	get_arg(argv[1], &vars);
+	//print_objlst(vars.obj);
 	//launch_window(&vars);
 
 	//ft_lstclear(&vars.obj, (void (*)(void *))destroy_obj);
