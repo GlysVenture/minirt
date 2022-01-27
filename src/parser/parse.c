@@ -6,6 +6,8 @@
 #include "mrt.h"
 #include "minirt.h"
 
+#include "debug/debug.h"
+
 int	parse_sphere(char *line, t_vars *v)
 {
 	int		color;
@@ -58,6 +60,6 @@ int	parse_light(char *line, t_vars *v)
 		free(mem);
 		return (0);
 	}
-	ft_lstadd_front(&v->obj, new);
+	ft_lstadd_front(&v->lights, new);
 	return (1);
 }

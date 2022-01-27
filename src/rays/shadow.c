@@ -2,33 +2,33 @@
 // Created by Tadeusz Kondracki on 1/26/22.
 //
 
-#include "object.h"
 #include <math.h>
 #include <float.h>
+#include <stdio.h>
 
 #include "ray.h"
+#include "object.h"
 #include "minirt.h"
 #include "vec_utils.h"
+#include "colors/colors.h"
 
+#include "debug/debug.h"
 
-int	shadow_ray(t_vec3d start, t_light light, t_list *obj)
+int	shadow_ray(t_line *ray, t_list *obj)
 {
 	double	dist;
 	double	t;
-	t_line	ray;
 	char	obj_type;
 
-	ray.point = start;
-	vec_subtract(light.pos, start, &ray.direction);
-	dist = vec_norm(ray.direction);
+	dist = vec_norm(ray->direction);
 	while(obj)
 	{
 		t = -2;
 		obj_type = ((t_object *)obj->content)->type;
 		if (obj_type == 's')
-			t = sphere_intersect(((t_object *)obj->content)->structure, ray);
+			t = sphere_intersect(((t_object *)obj->content)->structure, *ray);
 		if (obj_type == 'p')
-			t = plane_intersect(((t_object *)obj->content)->structure, ray);
+			t = plane_intersect(((t_object *)obj->content)->structure, *ray);
 		if (isgreater(t, FLT_EPSILON) && (isless(dist, 0) || isless(t, dist)))
 			return (-1);
 		obj = obj->next;
@@ -36,11 +36,31 @@ int	shadow_ray(t_vec3d start, t_light light, t_list *obj)
 	return (1);
 }
 
-/*int	diffuse_shade(t_object *intersect, t_vec3d hit, t_line *ray, t_vars *v)
+double	diffuse_shade(t_object *intersect, t_vec3d hit, t_line *ray)
 {
 	double	angle;
 	t_vec3d	normal;
 
-	vec_get_normal(intersect->type, intersect->structure, hit, &normal); // todo once
-	angle = get_angle();
-}*/
+	vec_get_normal(intersect->type, intersect->structure, hit, &normal); // todo once?
+	angle = get_angle(normal, ray->direction);
+	angle = (1 - (angle / M_PI_2));
+	if (isless(angle, 0))
+		return (0);
+	return (angle);
+}
+
+double	specular_shade(t_object *intersect, t_vec3d hit, t_line *ray, t_vars *v)
+{
+	double	angle;
+	t_vec3d	mid;
+	t_vec3d normal;
+
+	vec_subtract(hit, v->cam.cam.origin, &mid);
+	vec_subtract(ray->direction, mid, &mid);
+	vec_get_normal(intersect->type, intersect->structure, hit, &normal); // todo once?
+	angle = get_angle(normal, mid);
+	angle = (1 - angle / M_PI_2);
+	if (isless(angle, 0))
+		angle = 0;
+	return ((double)pow(angle, 10));
+}

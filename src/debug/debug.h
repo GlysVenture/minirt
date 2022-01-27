@@ -11,5 +11,6 @@
 void	print_ray(t_line ray);
 void	print_point(t_vec3d point);
 void	print_objlst(t_list *obj);
+void	print_lights(t_list *lights);
 
 #endif //DEBUG_H

@@ -6,6 +6,7 @@
 #include "geotrace.h"
 #include "libft.h"
 #include "object.h"
+#include "light/light.h"
 #include <stdio.h>
 
 void	print_ray(t_line ray)
@@ -41,5 +42,16 @@ void	print_objlst(t_list *obj)
 		}
 		printf("color: %x\n", ((t_object *)obj->content)->color);
 		obj = obj->next;
+	}
+}
+
+void	print_lights(t_list *lights)
+{
+	while (lights)
+	{
+		printf("light:\norigin ");
+		print_point(((t_light *)lights->content)->pos);
+		printf("color: %x\n", ((t_light *)lights->content)->color);
+		lights = lights->next;
 	}
 }

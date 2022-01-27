@@ -58,10 +58,11 @@ static void	fill_image(t_data *img, int x, int y, t_vars *v)
 static int	key_handler(int keycode, t_vars *v)
 {
 	printf("debug: key pressed: %d\n", keycode);
+	(void)v;
 	if (keycode == key_esc)
 	{
-		ft_lstclear(&v->obj, (void (*)(void *))destroy_obj);
-		ft_lstclear(&v->lights, (void (*)(void *))destroy_obj);
+//		ft_lstclear(&v->obj, (void (*)(void *))destroy_obj);
+//		ft_lstclear(&v->lights, (void (*)(void *))destroy_obj);
 		exit(0);
 	}
 	return (0);
@@ -94,6 +95,8 @@ int main(int argc, char *argv[])
 		return (1);
 	}
 	get_arg(argv[1], &vars);
+
+	print_lights(vars.lights);
 
 	launch_window(&vars);
 
