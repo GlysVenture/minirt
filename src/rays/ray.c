@@ -17,9 +17,9 @@
 
 #include "debug/debug.h"
 
-static int shade(t_object *intersect, double d, t_line *ray, t_vars *v);
+static int shade(t_intersect *intersect, t_vars *v);
 
-double	intersect_objects(t_line *ray, t_list *obj, t_object **found)
+double	intersect_objects(t_line *ray, t_list *obj, t_object *found)
 {
 	double	dist;
 	double	t;
@@ -37,8 +37,7 @@ double	intersect_objects(t_line *ray, t_list *obj, t_object **found)
 		if (isgreater(t, FLT_EPSILON) && (dist < 0 || isless(t, dist)))
 		{
 			dist = t;
-			if (found)
-				*found = (t_object *)obj->content;
+			*found = *(t_object *)obj->content;
 		}
 		obj = obj->next;
 	}
@@ -47,41 +46,36 @@ double	intersect_objects(t_line *ray, t_list *obj, t_object **found)
 
 int	send_ray(t_line *ray, t_vars *v)
 {
-//	t_light	light = {{3, -2, 4}, 0x00FFFFFF};
-	t_object	*intersect;
-	double	dist;
+	t_intersect	intersect;
 
-	intersect = NULL;
-	dist = intersect_objects(ray, v->obj, &intersect);
-	if (isless(dist, 0))
+	intersect.in_ray = *ray;
+	intersect.dist = intersect_objects(ray, v->obj, &(intersect.obj));
+	if (isless(intersect.dist, 0))
 		return (0);
-	return (shade(intersect, dist, ray, v));
+	return (shade(&intersect, v));
 }
 
-static int shade(t_object *intersect, double d, t_line *ray, t_vars *v)
+static int shade(t_intersect *intersect, t_vars *v)
 {
-	int	color;
+	int		color;
 	t_list	*pos;
-	t_vec3d	hit;
 	t_line	s_ray;
 
-	unit_vector2(ray->direction, &hit);
-	scalar_mult2(hit, d, &hit);
-	vec_sum(hit, ray->point, &hit);
-
+	unit_vector2(intersect->in_ray.direction, &intersect->hit);
+	scalar_mult2(intersect->hit, intersect->dist, &intersect->hit);
+	vec_sum(intersect->hit, intersect->in_ray.point, &intersect->hit);
+	vec_get_normal(intersect->obj.type, intersect->obj.structure, intersect->hit, &intersect->normal);
 
 	pos = v->lights;
 	while (pos)
 	{
-		color = shift_color2(intersect->color, v->ambient.color, v->ambient.ratio);
-		s_ray.point = hit;
-		vec_subtract(((t_light *)pos->content)->pos, hit, &s_ray.direction);
+		color = shift_color2(intersect->obj.color, v->ambient.color, v->ambient.ratio);
+		s_ray.point = intersect->hit;
+		vec_subtract(((t_light *)pos->content)->pos, intersect->hit, &s_ray.direction);
 		if (shadow_ray(&s_ray, v->obj) > 0) //todo multiple?
 		{
-
-
-			color = shift_color(color, intersect->color, diffuse_shade(intersect, hit, &s_ray));
-			color = shift_color(color, ((t_light *)pos->content)->color, specular_shade(intersect, hit, &s_ray, v));
+			color = shift_color(color, intersect->obj.color, diffuse_shade(intersect, &s_ray));
+			color = shift_color(color, ((t_light *)pos->content)->color, specular_shade(intersect, &s_ray));
 //			sum += 0.4;
 //			color = shift_color2(color, ((t_light *)pos->content)->color, 1);
 		}

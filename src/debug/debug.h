@@ -6,11 +6,13 @@
 # define DEBUG_H
 
 # include "geotrace.h"
-#include "libft.h"
+# include "libft.h"
+# include "object.h"
 
 void	print_ray(t_line ray);
 void	print_point(t_vec3d point);
 void	print_objlst(t_list *obj);
 void	print_lights(t_list *lights);
+void	print_obj(t_object *obj);
 
 #endif //DEBUG_H

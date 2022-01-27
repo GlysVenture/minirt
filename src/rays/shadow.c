@@ -36,29 +36,24 @@ int	shadow_ray(t_line *ray, t_list *obj)
 	return (1);
 }
 
-double	diffuse_shade(t_object *intersect, t_vec3d hit, t_line *ray)
+double	diffuse_shade(t_intersect *intersect, t_line *ray)
 {
 	double	angle;
-	t_vec3d	normal;
 
-	vec_get_normal(intersect->type, intersect->structure, hit, &normal); // todo once?
-	angle = get_angle(normal, ray->direction);
+	angle = get_angle(intersect->normal, ray->direction);
 	angle = (1 - (angle / M_PI_2));
 	if (isless(angle, 0))
 		return (0);
 	return (angle);
 }
 
-double	specular_shade(t_object *intersect, t_vec3d hit, t_line *ray, t_vars *v)
+double	specular_shade(t_intersect *intersect, t_line *ray)
 {
 	double	angle;
 	t_vec3d	mid;
-	t_vec3d normal;
 
-	vec_subtract(hit, v->cam.cam.origin, &mid);
-	vec_subtract(ray->direction, mid, &mid);
-	vec_get_normal(intersect->type, intersect->structure, hit, &normal); // todo once?
-	angle = get_angle(normal, mid);
+	vec_subtract(ray->direction, intersect->in_ray.direction, &mid);
+	angle = get_angle(intersect->normal, mid);
 	angle = (1 - angle / M_PI_2);
 	if (isless(angle, 0))
 		angle = 0;

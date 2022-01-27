@@ -85,6 +85,16 @@ void	launch_window(t_vars *v)
 	mlx_loop(mu.mlx);
 }
 
+static void	init_vars(t_vars *v)
+{
+	v->lights = NULL;
+	v->obj = NULL;
+}
+
+//static void magic(t_list __attribute__((unused)) *lights)
+//{
+//}
+
 int main(int argc, char *argv[]) 
 {
 	t_vars	vars;
@@ -94,8 +104,11 @@ int main(int argc, char *argv[])
 		printf("Error: arguments");
 		return (1);
 	}
+	init_vars(&vars);
 	get_arg(argv[1], &vars);
 
+//	print_lights(vars.lights);
+//	magic(vars.lights);
 	launch_window(&vars);
 
 	ft_lstclear(&vars.obj, (void (*)(void *))destroy_obj);
