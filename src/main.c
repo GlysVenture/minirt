@@ -96,8 +96,6 @@ int main(int argc, char *argv[])
 	}
 	get_arg(argv[1], &vars);
 
-	print_lights(vars.lights);
-
 	launch_window(&vars);
 
 	ft_lstclear(&vars.obj, (void (*)(void *))destroy_obj);

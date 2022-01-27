@@ -12,10 +12,12 @@ double below_zero(double val,const char *str, char sign)
 	int j;
 
 	j = 0;
-	while (str[j])
+	while (str[j] <= '9' && str[j] >= '0')
 	{
 		val *= 10;
 		val += str[j] - 48;
+		if (ft_isdigit(str[j]) == 0)
+			break;
 		j++;
 	}
 	val = val*pow(10, j * -1);
@@ -34,7 +36,9 @@ double ft_atod(const char *arr){
 	    i++;
     while (arr[i] != '\0')
     {
-        if (arr[i] != '.')
+	if (ft_isdigit(arr[i]) == 0 && arr[i] != '.')
+		break;
+        else if (arr[i] != '.')
             val = (val*10) + (arr[i] - 48);
 	else
 		return (val = below_zero(val, arr + (i + 1), arr[0]));
@@ -42,20 +46,19 @@ double ft_atod(const char *arr){
     }
     return (val);
 }
-t_amb_light check_alight(char *arg)
+int check_alight(char *arg, t_amb_light *a)
 {
 	char **args;
-	t_amb_light a;
 
 	args = ft_split(arg, ' ');
-	a.ratio = ft_atod(args[1]);
-	if (a.ratio >= 1.0 || a.ratio <= 0.0)
+	a->ratio = ft_atod(args[1]);
+	if (a->ratio >= 1.0 || a->ratio <= 0.0)
 	{
-		printf("Error not in the correct range %f\n", a.ratio);
-			exit (1); //todo err return
+		printf("Error not in the correct range\n");
+			return (0); //todo err return
 	}
-	a.color = hexcolor(args[2]);
-	return (a);
+	a->color = hexcolor(args[2]);
+	return (1);
 }
 
 int	check_arg(char *arg, t_vars *v)
@@ -64,7 +67,8 @@ int	check_arg(char *arg, t_vars *v)
 		return (1);
 	else if (arg[0] == 'A')
 	{
-		v->ambient = check_alight(arg);
+		if (check_alight(arg, &v->ambient) == 0)
+			return (0);
 		return (1);
 	}
 	else if (arg[0] == 'L')
@@ -75,7 +79,7 @@ int	check_arg(char *arg, t_vars *v)
 		return (parse_plane(arg, v));
 	return (1);
 }
-char *get_arg(char *filename, t_vars *v)
+int	get_arg(char *filename, t_vars *v)
 {
 	int fd;
 	char *ret;
@@ -84,13 +88,14 @@ char *get_arg(char *filename, t_vars *v)
 	if (fd <= 0)
 	{
 		printf("ERROR can't open file\n");
-		exit(1);
+		return (1);
 	}
 	ret = get_next_line(fd);
 	while (ret != NULL)
 	{
-		check_arg(ret, v);
+		if (check_arg(ret, v) == 0)
+			return (0);
 		ret = get_next_line(fd);
 	}
-	return (NULL);
+	return (1);
 }
