@@ -22,7 +22,10 @@ double below_zero(double val,const char *str, char sign)
 	}
 	val = val*pow(10, j * -1);
 	if (sign == '-')
+	{
+		printf("%f\n", val);
 		val *= -1;
+	}
 	return (val);
 }
 

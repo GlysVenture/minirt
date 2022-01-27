@@ -102,13 +102,18 @@ t_sphere	*check_sphere(char *arg, int *color)
 
 t_light	*check_light(char *line)
 {
-	char **tes;
+	int i;
 	char **ret;
+	char **tes;
 	t_light *light;
 	t_vec3d temp;
-
+	
+	i = 0;
+	while (line[i] != ' ')
+		i++;
 	tes = ft_split(line,' ');
 	ret = ft_split(tes[1], ',');
+	printf("new %f old %f\n",ft_atod(line + i + 1), ft_atod(ret[0]));
 	set_vec(&temp, ft_atod(ret[0]), ft_atod(ret[1]), ft_atod(ret[2]));
 	light = init_light(temp, hexcolor(tes[3]));
 	return (light);
