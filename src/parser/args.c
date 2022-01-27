@@ -32,6 +32,8 @@ double ft_atod(const char *arr){
 
     i=0;
     val=0;
+    if (arr[0] == '0' && arr[1] != '.')
+	    return (0.0);
     if (arr[0] == '+' || arr[0] == '-')
 	    i++;
     while (arr[i] != '\0')
@@ -44,6 +46,8 @@ double ft_atod(const char *arr){
 		return (val = below_zero(val, arr + (i + 1), arr[0]));
         i++;
     }
+    if (arr[0] == '-')
+	    val *= -1;
     return (val);
 }
 int check_alight(char *arg, t_amb_light *a)
@@ -77,6 +81,8 @@ int	check_arg(char *arg, t_vars *v)
 		return (parse_sphere(arg, v));
 	else if (arg[0] == 'p')
 		return (parse_plane(arg, v));
+	else if (arg[0] == 'c')
+		return (parse_cylinder(arg, v));
 	return (1);
 }
 int	get_arg(char *filename, t_vars *v)

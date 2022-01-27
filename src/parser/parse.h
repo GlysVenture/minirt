@@ -10,5 +10,5 @@
 int	parse_sphere(char *line, t_vars *v);
 int	parse_plane(char *line, t_vars *v);
 int	parse_light(char *line, t_vars *v);
-
+int 	parse_cylinder(char *line, t_vars *v);
 #endif //PARSE_H

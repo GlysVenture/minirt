@@ -100,17 +100,52 @@ t_sphere	*check_sphere(char *arg, int *color)
 	return (sphere);
 }
 
+double get_coordinates(char **line, int *i)
+{
+	int j;
+	double ret;
+
+	j = 1;
+	*i = 1;
+	if (**line == ',')
+		*line += 1;
+	ret = ft_atod(*line);
+	while (**line != ',')
+		*line += 1;
+	//printf("%s\n", *line);
+	return (ret);
+}
+
 t_light	*check_light(char *line)
 {
-	char **tes;
-	char **ret;
+	int i;
+	int j;
 	t_light *light;
 	t_vec3d temp;
+	double vals[4];
 
-	tes = ft_split(line,' ');
-	ret = ft_split(tes[1], ',');
-	set_vec(&temp, ft_atod(ret[0]), ft_atod(ret[1]), ft_atod(ret[2]));
-	light = init_light(temp, hexcolor(tes[3]));
+	i = 0;
+	j = 1;
+	while (line[i] != ' ')
+		i++;
+	vals[0] = ft_atod(line + i + 1);
+	i++;
+	while (line[i] != ' ')
+	{
+		if (line[i] == ',')
+		{
+			vals[j] = ft_atod(line + i + 1);
+			j++;
+		}
+		i++;
+	}
+	i++;
+	vals[3] = ft_atod(line + i + 1); // ratio de la lumiere non ambiante, on ne l'utilise pas encore je crois, mais au cas ou elle est la
+	set_vec(&temp, vals[0], vals[1],vals[2]);
+	while (line[i] != ' ')
+		i++;
+	i++;
+	light = init_light(temp, hexcolor(line + i));
 	return (light);
 }
 
