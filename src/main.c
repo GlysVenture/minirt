@@ -94,9 +94,9 @@ int main(int argc, char *argv[])
 		return (1);
 	}
 	get_arg(argv[1], &vars);
-	launch_window(&vars);
+	//launch_window(&vars);
 
-	ft_lstclear(&vars.obj, (void (*)(void *))destroy_obj);
-	ft_lstclear(&vars.lights, (void (*)(void *))destroy_obj);
+	//ft_lstclear(&vars.obj, (void (*)(void *))destroy_obj);
+	//ft_lstclear(&vars.lights, (void (*)(void *))destroy_obj);
 	return (0); 
 }
