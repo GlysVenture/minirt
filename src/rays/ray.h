@@ -17,7 +17,9 @@ typedef struct s_intersect
 	t_line		in_ray;
 	t_vec3d		hit;
 	t_vec3d		normal;
-	int			rgb[3];
+	double		amb_l[3];
+	double		diff_l[3];
+	double		spec_l[3];
 }	t_intersect;
 
 int		send_ray(t_line *ray, t_vars *v);
