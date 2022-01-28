@@ -7,7 +7,7 @@
 #include "minirt.h"
 
 #include "debug/debug.h"
-
+int hexcolor(char *line);
 int	parse_sphere(char *line, t_vars *v)
 {
 	int		color;
@@ -46,27 +46,31 @@ int	parse_plane(char *line, t_vars *v)
 	return (1);
 }
 
-/*int	parse_cylinder(char *line, t_vars *v)
+int	parse_cylinder(char *line, t_vars *v)
 {
 	double coor[3];
 	double orienta[3];
-	int i;
+	int color;
 	int b;
+	double dimensions[2];
 
 	b = -1;
-	i = 0;
 	(void)v;
 	while (*line != ' ')
 		line++;
 	line++;
 	while (++b < 3)
-		coor[b] = get_coordinates(&line,&i);
+		coor[b] = get_coordinates(&line);
 	b = -1;
 	line--;
 	while (++b < 3)
-		orienta[b] = get_coordinates(&line, &i);
+		orienta[b] = get_coordinates(&line);
+	b = -1;
+	while (++b < 2)
+		dimensions[b] = get_coordinates(&line);
+	color = hexcolor(line);
 	return (1);
-}*/
+}
 int	parse_light(char *line, t_vars *v)
 {
 	void	*mem;

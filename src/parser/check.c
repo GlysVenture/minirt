@@ -15,6 +15,11 @@ int  hexcolor(char *line)
 	r = ft_atoi(ret[0]);
 	g = ft_atoi(ret[1]);
 	b = ft_atoi(ret[2]);
+	if (r > 255 || g > 255 || b > 255)
+	{
+		printf("Error invalid colors\n");
+		return (-1);
+	}
 	free_tab(ret);
     	return (r<<16) | (g<<8) | b;
 }
@@ -83,16 +88,22 @@ t_sphere	*check_sphere(char *arg, int *color)
 	return (sphere);
 }
 
-double get_coordinates(char **line, int *i)
+double get_coordinates(char **line)
 {
 	double ret;
 
-	*i = 1;
 	if (**line == ',')
 		*line += 1;
 	ret = ft_atod(*line);
 	while (**line != ',')
+	{
 		*line += 1;
+		if (**line == ' ')
+		{
+			*line += 1;
+			break;
+		}
+	}
 	//printf("%s\n", *line);
 	return (ret);
 }

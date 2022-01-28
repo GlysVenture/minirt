@@ -101,10 +101,11 @@ int main(int argc, char *argv[])
 		return (1);
 	}
 	init_vars(&vars);
-	get_arg(argv[1], &vars);
-	print_objlst(vars.obj);
-	print_lights(vars.lights);
+	if (get_arg(argv[1], &vars) == 0)
+		return (0);
+//	print_objlst(vars.obj);
+//	print_lights(vars.lights);
 
-	launch_window(&vars);
+//	launch_window(&vars);
 	return (0); 
 }
