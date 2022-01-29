@@ -103,9 +103,7 @@ int main(int argc, char *argv[])
 	init_vars(&vars);
 	if (get_arg(argv[1], &vars) == 0)
 		return (0);
-//	print_objlst(vars.obj);
-//	print_lights(vars.lights);
 
-//	launch_window(&vars);
+	launch_window(&vars);
 	return (0); 
 }
