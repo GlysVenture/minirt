@@ -40,10 +40,10 @@ double ft_atod(const char *arr){
     {
 	if (ft_isdigit(arr[i]) == 0 && arr[i] != '.')
 		break;
-        else if (arr[i] != '.') //??????????????????????????????????
+        else if (arr[i] != '.') // je gere cela comme un atoi en gros, je regarde que je suis sur un chiffre et pas sur un point, et si je suis sur un point j'appele une autre fonction qui s'occupe de faire la puissance sinon c'est trop long pour la norminette
             val = (val*10) + (arr[i] - 48);
 	else
-		return (val = below_zero(val, arr + (i + 1), arr[0])); //???????????
+		return (val = below_zero(val, arr + (i + 1), arr[0]));
         i++;
     }
     if (arr[0] == '-')
@@ -82,8 +82,8 @@ int	check_arg(char *arg, t_vars *v)
 		return (parse_sphere(arg, v));
 	else if (arg[0] == 'p')
 		return (parse_plane(arg, v));
-//	else if (arg[0] == 'c')
-//		return (parse_cylinder(arg, v));
+	else if (arg[0] == 'c')
+		return (parse_cylinder(arg, v));
 	return (1);
 }
 int	get_arg(char *filename, t_vars *v)
@@ -95,7 +95,7 @@ int	get_arg(char *filename, t_vars *v)
 	if (fd <= 0)
 	{
 		printf("ERROR can't open file\n");
-		return (1);
+		return (0);
 	}
 	ret = get_next_line(fd);
 	while (ret != NULL)
