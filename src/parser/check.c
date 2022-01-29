@@ -28,15 +28,15 @@ t_plane	*check_plane(char *arg, int *color)
 	
 	ret = ft_split(arg, ' ');
 	mem = ft_split(ret[1], ',');
-	n.x =  ft_atod(mem[0]);
-	n.y = ft_atod(mem[1]);
-	n.z = ft_atod(mem[2]);
+	n[0] =  ft_atod(mem[0]);
+	n[1] = ft_atod(mem[1]);
+	n[2] = ft_atod(mem[2]);
 	free_tab (mem);
 	mem = NULL;
 	mem = ft_split(ret[2], ',');
-	p.x = ft_atod(mem[0]);
-	p.y = ft_atod(mem[1]);
-	p.z = ft_atod(mem[2]);
+	p[0] = ft_atod(mem[0]);
+	p[1] = ft_atod(mem[1]);
+	p[2] = ft_atod(mem[2]);
 	free_tab (mem);
 	pl = init_plane(n,p);
 	*color = hexcolor(ret[3]);
@@ -122,7 +122,7 @@ t_light	*check_light(char *line)
 	}
 	i++;
 	vals[3] = ft_atod(line + i + 1);
-	set_vec(&temp, vals[0], vals[1],vals[2]);
+	set_vec(temp, vals[0], vals[1],vals[2]);
 	while (line[i] != ' ')
 		i++;
 	i++;

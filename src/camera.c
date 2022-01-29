@@ -17,22 +17,22 @@ t_adv_camera	*set_advanced_camera(t_camera *cam, int x, int y, t_line *ray)
 	new = malloc(sizeof(t_adv_camera));
 	if(!new)
 		return (NULL);
-	new->horizontal = cam->direction;
-	new->horizontal.z = 0;
-	tmp = new->horizontal.x;
-	new->horizontal.x = -new->horizontal.y;
-	new->horizontal.y = tmp;
+	set_vec2(new->horizontal, cam->direction);
+	new->horizontal[2] = 0;
+	tmp = new->horizontal[0];
+	new->horizontal[0] = -new->horizontal[1];
+	new->horizontal[1] = tmp;
 	tmp = vec_norm(cam->direction) * cos(cam->angle / 2);
-	unit_vector2(new->horizontal, &new->horizontal);
-	scalar_mult2(new->horizontal, tmp / (x - 1), &new->horizontal);
-	vec_prod2(cam->direction, new->horizontal, &new->vertical);
-	unit_vector2(new->vertical, &new->vertical);
-	scalar_mult2(new->vertical, -tmp / (y - 1), &new->vertical);
+	unit_vector(new->horizontal, new->horizontal);
+	scalar_mult(new->horizontal, tmp / (x - 1), new->horizontal);
+	vec_prod(cam->direction, new->horizontal, new->vertical);
+	unit_vector(new->vertical, new->vertical);
+	scalar_mult(new->vertical, -tmp / (y - 1), new->vertical);
 	new->cam = *cam;
-	ray->point = cam->origin;
-	scalar_mult2(new->horizontal, (double)(x - 1) / -2, &v);
-	vec_sum(cam->direction, v, &ray->direction);
-	scalar_mult2(new->vertical, (double)(y - 1) / -2, &v);
-	vec_sum(ray->direction, v, &ray->direction);
+	set_vec2(ray->point, cam->origin);
+	scalar_mult(new->horizontal, (double)(x - 1) / -2, v);
+	vec_sum(cam->direction, v, ray->direction);
+	scalar_mult(new->vertical, (double)(y - 1) / -2, v);
+	vec_sum(ray->direction, v, ray->direction);
 	return (new);
 }

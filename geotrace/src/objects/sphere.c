@@ -21,9 +21,9 @@ t_sphere	*init_sphere(double radius, double cx, double cy, double cz)
 	new = malloc(sizeof(t_sphere));
 	if (!new)
 		return (NULL);
-	new->center.x = cx;
-	new->center.y = cy;
-	new->center.z = cz;
+	new->center[0] = cx;
+	new->center[1] = cy;
+	new->center[2] = cz;
 	new->radius = radius;
 	return (new);
 }
@@ -39,8 +39,8 @@ double	sphere_intersect(t_sphere *sphere, t_line ray)
 	double	quad[2];
 	double	delta;
 
-	vec_subtract(ray.point, sphere->center, &ray.point);
-	unit_vector2(ray.direction, &ray.direction); // todo all rays have unit vectors better sol
+	vec_subtract(ray.point, sphere->center, ray.point);
+	unit_vector(ray.direction, ray.direction); // todo all rays have unit vectors better sol
 	quad[0] = dot_prod(ray.point, ray.point) - pow(sphere->radius, 2);
 	quad[1] = dot_prod(ray.point, ray.direction) * 2;
 	delta = pow(quad[1], 2) - 4 * quad[0] * 1;

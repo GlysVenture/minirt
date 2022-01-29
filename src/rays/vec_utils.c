@@ -12,11 +12,11 @@
 void	vec_get_normal(t_intersect *intersect)
 {
 	if (intersect->obj.type == 's')
-		vec_subtract(intersect->hit, ((t_sphere *)intersect->obj.structure)->center, &intersect->normal);
+		vec_subtract(intersect->hit, ((t_sphere *)intersect->obj.structure)->center, intersect->normal);
 	if (intersect->obj.type == 'p')
 	{
-		intersect->normal = ((t_plane *)intersect->obj.structure)->normal;
+		set_vec2(intersect->normal, ((t_plane *)intersect->obj.structure)->normal);
 		if (isless(get_angle(intersect->normal, intersect->in_ray.direction), M_PI_2))
-			scalar_mult2(intersect->normal, -1, &intersect->normal);
+			scalar_mult(intersect->normal, -1, intersect->normal);
 	}
 }

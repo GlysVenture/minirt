@@ -17,8 +17,8 @@ t_plane	*init_plane(t_vec3d normal, t_vec3d p)
 	new = malloc(sizeof(t_plane));
 	if (!new)
 		return (NULL);
-	set_vec(&(new->normal), normal.x, normal.y, normal.z);
-	set_vec(&(new->point), p.x, p.y, p.z);
+	set_vec(new->normal, normal[0], normal[1], normal[2]);
+	set_vec(new->point, p[0], p[1], p[2]);
 	return (new);
 }
 
@@ -30,8 +30,8 @@ double	plane_intersect(t_plane *plane, t_line ray)
 {
 	double	angle;
 
-	vec_subtract(plane->point, ray.point, &ray.point);
-	unit_vector2(ray.direction, &ray.direction);
+	vec_subtract(plane->point, ray.point, ray.point);
+	unit_vector(ray.direction, ray.direction);
 	angle = dot_prod(plane->normal, ray.direction);
 	if (angle == 0)
 		return (-1);

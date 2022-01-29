@@ -41,14 +41,14 @@ static void	fill_image(t_data *img, int x, int y, t_vars *v)
 	j = 0;
 	while(j < y)
 	{
-		temp = ray.direction;
+		set_vec2(temp, ray.direction);
 		while (i < x)
 		{
-			vec_sum(ray.direction, cam_adv->horizontal, &ray.direction);
+			vec_sum(ray.direction, cam_adv->horizontal, ray.direction);
 			ft_mlx_putpixel(img, i, j, send_ray(&ray, v));
 			i++;
 		}
-		vec_sum(temp, cam_adv->vertical, &ray.direction);
+		vec_sum(temp, cam_adv->vertical, ray.direction);
 		i = 0;
 		j++;
 	}

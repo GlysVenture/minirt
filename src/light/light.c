@@ -15,7 +15,7 @@ t_light	*init_light(t_vec3d pos, int color, double ratio)
 	if (!new)
 		return (NULL);
 	new->color = color;
-	new->pos = pos;
+	set_vec2(new->pos, pos);
 	new->ratio = ratio;
 	return (new);
 }

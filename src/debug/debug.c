@@ -11,12 +11,12 @@
 
 void	print_ray(t_line ray)
 {
-	printf("vector:\npoint\n%f\n%f\n%f\ndir\n%f\n%f\n%f\n", ray.point.x, ray.point.y, ray.point.z, ray.direction.x, ray.direction.y, ray.direction.z);
+	printf("vector:\npoint\n%f\n%f\n%f\ndir\n%f\n%f\n%f\n", ray.point[0], ray.point[1], ray.point[2], ray.direction[0], ray.direction[1], ray.direction[2]);
 }
 
 void	print_point(t_vec3d point)
 {
-	printf("point\n%f\n%f\n%f\n", point.x, point.y, point.z);
+	printf("point\n%f\n%f\n%f\n", point[0], point[1], point[2]);
 }
 
 void	print_objlst(t_list *obj)

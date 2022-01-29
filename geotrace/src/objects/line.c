@@ -18,7 +18,7 @@ t_line	*init_line(const t_vec3d dir, const t_vec3d p)
 	new = malloc(sizeof(t_line));
 	if (!new)
 		return (NULL);
-	set_vec(&(new->direction), dir.x, dir.y, dir.z);
-	set_vec(&(new->point), p.x, p.y, p.z);
+	set_vec(new->direction, dir[0], dir[1], dir[2]);
+	set_vec(new->point, p[0], p[1], p[2]);
 	return (new);
 }

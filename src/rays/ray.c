@@ -48,7 +48,7 @@ int	send_ray(t_line *ray, t_vars *v)
 {
 	t_intersect	intersect;
 
-	intersect.in_ray = *ray;
+	intersect.in_ray = *ray; //todo set to unit ?
 	intersect.dist = intersect_objects(ray, v->obj, &(intersect.obj));
 	if (isless(intersect.dist, 0))
 		return (0);
@@ -91,9 +91,9 @@ static int shade(t_intersect *intersect, t_vars *v)
 	double	color[3];
 	double	ref_light[3];
 
-	unit_vector2(intersect->in_ray.direction, &intersect->hit);
-	scalar_mult2(intersect->hit, intersect->dist, &intersect->hit);
-	vec_sum(intersect->hit, intersect->in_ray.point, &intersect->hit);
+	unit_vector(intersect->in_ray.direction, intersect->hit);
+	scalar_mult(intersect->hit, intersect->dist, intersect->hit);
+	vec_sum(intersect->hit, intersect->in_ray.point, intersect->hit);
 
 	vec_get_normal(intersect);
 
@@ -105,8 +105,8 @@ static int shade(t_intersect *intersect, t_vars *v)
 	{
 		unpack_color(ref_light, intersect->obj.color, 0.1);
 
-		s_ray.point = intersect->hit;
-		vec_subtract(((t_light *)pos->content)->pos, intersect->hit, &s_ray.direction);
+		set_vec2(s_ray.point, intersect->hit);
+		vec_subtract(((t_light *)pos->content)->pos, intersect->hit, s_ray.direction);
 		if (shadow_ray(&s_ray, v->obj) > 0) //todo multiple?
 		{
 			color_sum2(ref_light, intersect->diff_l, diffuse_shade(intersect, s_ray));

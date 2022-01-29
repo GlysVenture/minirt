@@ -56,7 +56,7 @@ double	specular_shade(t_intersect *intersect, t_line ray)
 	double	angle;
 	t_vec3d	mid;
 
-	vec_subtract(ray.direction, intersect->in_ray.direction, &mid);
+	vec_subtract(ray.direction, intersect->in_ray.direction, mid);
 	angle = get_angle(intersect->normal, mid);
 	angle = (1 - angle / M_PI_2);
 	if (isless(angle, 0))
