@@ -69,6 +69,10 @@ int	parse_cylinder(char *line, t_vars *v)
 	while (++b < 2)
 		dimensions[b] = get_coordinates(&line);
 	color = hexcolor(line);
+	(void) color;
+	(void) dimensions;
+	(void) coor;
+	(void) orienta;
 	return (1);
 }
 int	parse_light(char *line, t_vars *v)
