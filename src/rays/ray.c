@@ -17,9 +17,9 @@
 
 #include "debug/debug.h"
 
-//static int shade(t_intersect *intersect, t_vars *v);
+static int shade(t_intersect *intersect, t_vars *v);
 
-double	intersect_objects(t_line ray, t_list *obj, t_intersect *intersect, t_matrix c)
+double	intersect_objects(t_line ray, t_list *obj, t_intersect *intersect)
 {
 	double	dist;
 	double	t;
@@ -31,7 +31,7 @@ double	intersect_objects(t_line ray, t_list *obj, t_intersect *intersect, t_matr
 		t = -2;
 		obj_type = ((t_object *)obj->content)->type;
 		if (obj_type == 's')
-			t = sphere_intersect(((t_object *)obj->content)->structure, ray, c);
+			t = sphere_intersect(((t_object *)obj->content)->structure, ray);
 		if (obj_type == 'p')
 			t = plane_intersect(((t_object *)obj->content)->structure, ray);
 		if (isgreater(t, FLT_EPSILON) && (dist < 0 || isless(t, dist)))
@@ -55,7 +55,7 @@ int	send_ray(t_line *ray, t_vars *v)
 
 	intersect.in_ray = *ray;
 	unit_vector(intersect.in_ray.direction, intersect.in_ray.direction);
-	intersect.dist = intersect_objects(intersect.in_ray, v->obj, &intersect, c);
+	intersect.dist = intersect_objects(intersect.in_ray, v->obj, &intersect);
 	if (isless(intersect.dist, 0))
 		return (0);
 
@@ -65,17 +65,17 @@ int	send_ray(t_line *ray, t_vars *v)
 	vec_get_normal(&intersect);
 
 	//return to world
-	if (intersect.obj.type == 's')
-	{
-		matrix_vect_prod(a, intersect.hit, intersect.hit);
-		matrix_vect_prod(b, intersect.normal, intersect.normal);
-	}
+//	if (intersect.obj.type == 's')
+//	{
+//		matrix_vect_prod(a, intersect.hit, intersect.hit);
+//		matrix_vect_prod(b, intersect.normal, intersect.normal);
+//	}
 
-	return (intersect.obj.color);
-//	return (shade(&intersect, v));
+//	return (intersect.obj.color);
+	return (shade(&intersect, v));
 }
 
-/*static int shade(t_intersect *intersect, t_vars *v)
+static int shade(t_intersect *intersect, t_vars *v)
 {
 	t_list	*pos;
 	t_line	s_ray;
@@ -103,4 +103,4 @@ int	send_ray(t_line *ray, t_vars *v)
 		pos = pos->next;
 	}
 	return (create_color(0, (int)(255 * color[0]), (int)(255 * color[1]), (int)(255 * color[2])));
-}*/
+}
