@@ -38,13 +38,13 @@ double ft_atod(const char *arr){
 	    i++;
     while (arr[i] != '\0')
     {
-	if (ft_isdigit(arr[i]) == 0 && arr[i] != '.')
-		break;
-        else if (arr[i] != '.') // je gere cela comme un atoi en gros, je regarde que je suis sur un chiffre et pas sur un point, et si je suis sur un point j'appele une autre fonction qui s'occupe de faire la puissance sinon c'est trop long pour la norminette
-            val = (val*10) + (arr[i] - 48);
-	else
-		return (val = below_zero(val, arr + (i + 1), arr[0]));
-        i++;
+	    if (ft_isdigit(arr[i]) == 0 && arr[i] != '.')
+		    break;
+	    else if (arr[i] != '.') // je gere cela comme un atoi en gros, je regarde que je suis sur un chiffre et pas sur un point, et si je suis sur un point j'appele une autre fonction qui s'occupe de faire la puissance sinon c'est trop long pour la norminette
+		    val = (val*10) + (arr[i] - 48);
+	    else
+		    return (val = below_zero(val, arr + (i + 1), arr[0]));
+	    i++;
     }
     if (arr[0] == '-')
 	    val *= -1;
@@ -59,7 +59,7 @@ int check_alight(char *arg, t_amb_light *a)
 	if (a->ratio >= 1.0 || a->ratio <= 0.0)
 	{
 		printf("Error not in the correct range\n");
-			return (0); //todo err return
+		return (0); //todo err return
 	}
 	a->color = hexcolor(args[2]);
 	free_tab(args);
@@ -82,8 +82,8 @@ int	check_arg(char *arg, t_vars *v)
 		return (parse_sphere(arg, v));
 	else if (arg[0] == 'p')
 		return (parse_plane(arg, v));
-	else if (arg[0] == 'c')
-		return (parse_cylinder(arg, v));
+//	else if (arg[0] == 'c')
+//		return (parse_cylinder(arg, v));
 	return (1);
 }
 int	get_arg(char *filename, t_vars *v)

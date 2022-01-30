@@ -51,93 +51,53 @@ t_plane	*check_plane(char *arg, int *color)
 
 t_sphere	*check_sphere(char *arg, int *color)
 {
-	int i;
-	int j;
-	double vals[4];
-	t_sphere	*sphere;
+	char **ret;
+	char **coor;
 
-	i = 0;
-	j = 1;
-	while (arg[i] != ' ')
-		i++;
-	i++;
-	vals[0] = ft_atod(arg + i);
-	while (arg[i])
-	{
-		if (arg[i] == ',')
-		{
-			vals[j] = ft_atod(arg + i + 1);
-			j++;
-		}
-		else if (arg[i] == ' ')
-		{
-			i++;
-			vals[j] = ft_atod(arg + (i));
-			j++;
-			break;
-		}
-		i++;
-	}
-	while (arg[i])
-	{
-		if (arg[i] == ' ')
-			*color = hexcolor(arg + i + 1);
-		i++;
-	}
-	sphere = init_sphere(vals[3], vals[0], vals[1], vals[2]);
+	t_sphere	*sphere;
+	ret = ft_split(arg,' ');
+	coor = ft_split(ret[1],',');
+	*color = hexcolor(ret[3]);
+	sphere = init_sphere(ft_atod(ret[2]),ft_atod(coor[0]),ft_atod(coor[1]), ft_atod(coor[2]));
+	free_tab(ret);
+	free_tab(coor);
 	return (sphere);
 }
-
-double get_coordinates(char **line)
+/*t_cylinder	*check_cylinder(char *arg, int *color)
 {
-	double ret;
+	char **ret;
+	char **coor;
+	char **orienta;
+	t_vec3d or;
+	t_cylinder *cylinder;
 
-	if (**line == ',')
-		*line += 1;
-	ret = ft_atod(*line);
-	while (**line != ',')
-	{
-		*line += 1;
-		if (**line == ' ')
-		{
-			*line += 1;
-			break;
-		}
-	}
-	//printf("%s\n", *line);
-	return (ret);
-}
+	ret = ft_split(arg, ' ');
+	coor = ft_split(ret[1],',');
+	*color = hexcolor(ret[5]);
+	orienta = ft_split(ret[2], ',');
+	or[0] = ft_atod(orienta[0]);
+	or[1] = ft_atod(orienta[1]);
+	or[2] = ft_atod(orienta[2]);
+	cylinder = init_cylinder(ft_atod(coor[0]),ft_atod(coor[1]),ft_atod(coor[2]),or,ft_atod(ret[3]),ft_atod(ret[4]));
+	free_tab(ret);
+	free_tab(coor);
+	free_tab(orienta);
+	return (cylinder);
+} */
 
 t_light	*check_light(char *line)
 {
-	int i;
-	int j;
 	t_light *light;
 	t_vec3d temp;
-	double vals[4];
+	char **vals;
+	char **coor;
 
-	i = 0;
-	j = 1;
-	while (line[i] != ' ')
-		i++;
-	vals[0] = ft_atod(line + i + 1);
-	i++;
-	while (line[i] != ' ')
-	{
-		if (line[i] == ',')
-		{
-			vals[j] = ft_atod(line + i + 1);
-			j++;
-		}
-		i++;
-	}
-	i++;
-	vals[3] = ft_atod(line + i + 1);
-	set_vec(temp, vals[0], vals[1],vals[2]);
-	while (line[i] != ' ')
-		i++;
-	i++;
-	light = init_light(temp, hexcolor(line + i), vals[3]);
+	vals = ft_split(line, ' ');
+	coor = ft_split(vals[1], ',');
+	set_vec(temp,ft_atod(coor[0]),ft_atod(coor[1]),ft_atod(coor[2]));
+	free_tab(coor);
+	light = init_light(temp, hexcolor(vals[3]),ft_atod(vals[2]));
+	free_tab(vals);
 	return (light);
 }
 

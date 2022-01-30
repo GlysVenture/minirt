@@ -46,35 +46,24 @@ int	parse_plane(char *line, t_vars *v)
 	return (1);
 }
 
-int	parse_cylinder(char *line, t_vars *v)
+/*int	parse_cylinder(char *line, t_vars *v)
 {
-	double coor[3];
-	double orienta[3];
-	int color;
-	int b;
-	double dimensions[2];
+	void	*mem;
+	t_list	*new;
+	int	color;
 
-	b = -1;
-	(void)v;
-	while (*line != ' ')
-		line++;
-	line++;
-	while (++b < 3)
-		coor[b] = get_coordinates(&line);
-	b = -1;
-	line--;
-	while (++b < 3)
-		orienta[b] = get_coordinates(&line);
-	b = -1;
-	while (++b < 2)
-		dimensions[b] = get_coordinates(&line);
-	color = hexcolor(line);
-	(void) color;
-	(void) dimensions;
-	(void) coor;
-	(void) orienta;
+	mem = check_cylinder(line, &color);
+	if (!mem)
+		return (0);
+	new = ft_lstnew(init_obj(line[0],mem,color));
+	if (!new)
+	{
+		free(mem);
+		return (0);
+	}
+	ft_lstadd_front(&v->lights,new);
 	return (1);
-}
+} */
 int	parse_light(char *line, t_vars *v)
 {
 	void	*mem;
