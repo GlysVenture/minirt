@@ -15,7 +15,7 @@ int  hexcolor(char *line)
 	r = ft_atoi(ret[0]);
 	g = ft_atoi(ret[1]);
 	b = ft_atoi(ret[2]);
-	if (r > 255 || g > 255 || b > 255)
+	if ((r > 255 || g > 255 || b > 255) || (r < 0 || g < 0 || b < 0))
 	{
 		printf("Error invalid colors\n");
 		return (-1);
@@ -45,6 +45,8 @@ t_plane	*check_plane(char *arg, int *color)
 	free_tab (mem);
 	pl = init_plane(n,p);
 	*color = hexcolor(ret[3]);
+	if (*color == -1)
+		return (NULL);
 	free_tab(ret);
 	return (pl);
 }
@@ -58,6 +60,8 @@ t_sphere	*check_sphere(char *arg, int *color)
 	ret = ft_split(arg,' ');
 	coor = ft_split(ret[1],',');
 	*color = hexcolor(ret[3]);
+	if (*color == -1)
+		return (NULL);
 	sphere = init_sphere(ft_atod(ret[2]),ft_atod(coor[0]),ft_atod(coor[1]), ft_atod(coor[2]));
 	free_tab(ret);
 	free_tab(coor);
@@ -96,6 +100,8 @@ t_light	*check_light(char *line)
 	coor = ft_split(vals[1], ',');
 	set_vec(temp,ft_atod(coor[0]),ft_atod(coor[1]),ft_atod(coor[2]));
 	free_tab(coor);
+	if (ft_atod(vals[2]) > 1.0 || ft_atod(vals[2]) < 0.0)
+		return (NULL);
 	light = init_light(temp, hexcolor(vals[3]),ft_atod(vals[2]));
 	free_tab(vals);
 	return (light);
