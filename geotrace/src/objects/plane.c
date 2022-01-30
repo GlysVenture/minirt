@@ -31,7 +31,6 @@ double	plane_intersect(t_plane *plane, t_line ray)
 	double	angle;
 
 	vec_subtract(plane->point, ray.point, ray.point);
-	unit_vector(ray.direction, ray.direction);
 	angle = dot_prod(plane->normal, ray.direction);
 	if (angle == 0)
 		return (-1);

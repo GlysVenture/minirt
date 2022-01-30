@@ -33,14 +33,16 @@ t_sphere	*init_sphere(double radius, double cx, double cy, double cz)
 /// \param sphere
 /// \param ray
 /// \return distance to intersection or -1 for no intersection
-double	sphere_intersect(t_sphere *sphere, t_line ray)
+double	sphere_intersect(t_sphere *sphere, t_line ray, t_matrix c)
 {
 	double 	res[2];
 	double	quad[2];
 	double	delta;
 
+	matrix_vect_prod(c, ray.direction, ray.direction);
+	matrix_vect_prod(c, ray.point, ray.point);
+	unit_vector(ray.direction, ray.direction);
 	vec_subtract(ray.point, sphere->center, ray.point);
-	unit_vector(ray.direction, ray.direction); // todo all rays have unit vectors better sol
 	quad[0] = dot_prod(ray.point, ray.point) - pow(sphere->radius, 2);
 	quad[1] = dot_prod(ray.point, ray.direction) * 2;
 	delta = pow(quad[1], 2) - 4 * quad[0] * 1;

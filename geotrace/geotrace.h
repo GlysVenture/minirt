@@ -89,7 +89,7 @@ void	print_matrix(const t_matrix a);
 
 t_sphere	*init_sphere(double radius, double cx, double cy, double cz);
 
-double	sphere_intersect(t_sphere *sphere, t_line ray);
+double	sphere_intersect(t_sphere *sphere, t_line ray, t_matrix c);
 
 //Line funcs
 

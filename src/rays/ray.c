@@ -17,9 +17,9 @@
 
 #include "debug/debug.h"
 
-static int shade(t_intersect *intersect, t_vars *v);
+//static int shade(t_intersect *intersect, t_vars *v);
 
-double	intersect_objects(t_line *ray, t_list *obj, t_object *found)
+double	intersect_objects(t_line ray, t_list *obj, t_intersect *intersect, t_matrix c)
 {
 	double	dist;
 	double	t;
@@ -31,13 +31,13 @@ double	intersect_objects(t_line *ray, t_list *obj, t_object *found)
 		t = -2;
 		obj_type = ((t_object *)obj->content)->type;
 		if (obj_type == 's')
-			t = sphere_intersect(((t_object *)obj->content)->structure, *ray);
+			t = sphere_intersect(((t_object *)obj->content)->structure, ray, c);
 		if (obj_type == 'p')
-			t = plane_intersect(((t_object *)obj->content)->structure, *ray);
+			t = plane_intersect(((t_object *)obj->content)->structure, ray);
 		if (isgreater(t, FLT_EPSILON) && (dist < 0 || isless(t, dist)))
 		{
 			dist = t;
-			*found = *(t_object *)obj->content;
+			intersect->obj = *(t_object *)obj->content; //todo pass by pointer?
 		}
 		obj = obj->next;
 	}
@@ -47,55 +47,40 @@ double	intersect_objects(t_line *ray, t_list *obj, t_object *found)
 int	send_ray(t_line *ray, t_vars *v)
 {
 	t_intersect	intersect;
+	t_matrix a = {{1, 0, 0},{0, 1, 0},{0, 0, 2}};
+	t_matrix b, c;
 
-	intersect.in_ray = *ray; //todo set to unit ?
-	intersect.dist = intersect_objects(ray, v->obj, &(intersect.obj));
+	inverse_matrix(a, c);
+	matrix_transpose(c, b);
+
+	intersect.in_ray = *ray;
+	unit_vector(intersect.in_ray.direction, intersect.in_ray.direction);
+	intersect.dist = intersect_objects(intersect.in_ray, v->obj, &intersect, c);
 	if (isless(intersect.dist, 0))
 		return (0);
-	return (shade(&intersect, v));
+
+	scalar_mult(intersect.in_ray.direction, intersect.dist, intersect.hit);
+	vec_sum(intersect.hit, intersect.in_ray.point, intersect.hit);
+
+	vec_get_normal(&intersect);
+
+	//return to world
+	if (intersect.obj.type == 's')
+	{
+		matrix_vect_prod(a, intersect.hit, intersect.hit);
+		matrix_vect_prod(b, intersect.normal, intersect.normal);
+	}
+
+	return (intersect.obj.color);
+//	return (shade(&intersect, v));
 }
 
 /*static int shade(t_intersect *intersect, t_vars *v)
-{
-	int		color;
-	t_list	*pos;
-	t_line	s_ray;
-
-	unit_vector2(intersect->in_ray.direction, &intersect->hit);
-	scalar_mult2(intersect->hit, intersect->dist, &intersect->hit);
-	vec_sum(intersect->hit, intersect->in_ray.point, &intersect->hit);
-	vec_get_normal(intersect->obj.type, intersect->obj.structure, intersect->hit, &intersect->normal);
-
-	pos = v->lights;
-	while (pos)
-	{
-		color = shift_color2(intersect->obj.color, v->ambient.color, v->ambient.ratio);
-		s_ray.point = intersect->hit;
-		vec_subtract(((t_light *)pos->content)->pos, intersect->hit, &s_ray.direction);
-		if (shadow_ray(&s_ray, v->obj) > 0) //todo multiple?
-		{
-			color = shift_color(color, intersect->obj.color, diffuse_shade(intersect, &s_ray));
-			color = shift_color(color, ((t_light *)pos->content)->color, specular_shade(intersect, &s_ray));
-//			sum += 0.4;
-//			color = shift_color2(color, ((t_light *)pos->content)->color, 1);
-		}
-		pos = pos->next;
-	}
-	return (color);
-}*/
-
-static int shade(t_intersect *intersect, t_vars *v)
 {
 	t_list	*pos;
 	t_line	s_ray;
 	double	color[3];
 	double	ref_light[3];
-
-	unit_vector(intersect->in_ray.direction, intersect->hit);
-	scalar_mult(intersect->hit, intersect->dist, intersect->hit);
-	vec_sum(intersect->hit, intersect->in_ray.point, intersect->hit);
-
-	vec_get_normal(intersect);
 
 	unpack_color(color, 0, 0);
 	unpack_color(intersect->diff_l, intersect->obj.color, 0.7);
@@ -107,7 +92,7 @@ static int shade(t_intersect *intersect, t_vars *v)
 
 		set_vec2(s_ray.point, intersect->hit);
 		vec_subtract(((t_light *)pos->content)->pos, intersect->hit, s_ray.direction);
-		if (shadow_ray(&s_ray, v->obj) > 0) //todo multiple?
+		if (shadow_ray(s_ray, v->obj) > 0) //todo multiple?
 		{
 			color_sum2(ref_light, intersect->diff_l, diffuse_shade(intersect, s_ray));
 			color_sum2(ref_light, intersect->spec_l, specular_shade(intersect, s_ray));
@@ -118,4 +103,4 @@ static int shade(t_intersect *intersect, t_vars *v)
 		pos = pos->next;
 	}
 	return (create_color(0, (int)(255 * color[0]), (int)(255 * color[1]), (int)(255 * color[2])));
-}
+}*/
