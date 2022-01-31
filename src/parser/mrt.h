@@ -19,6 +19,6 @@ double ft_atod(const char *arr);
 t_light	*check_light(char *line);
 double get_coordinates(char **line);
 
-void	free_tab(char **tab);
+int	free_tab(char **tab);
 
 #endif

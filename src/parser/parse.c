@@ -92,3 +92,36 @@ int	parse_light(char *line, t_vars *v)
 	ft_lstadd_front(&v->lights, new);
 	return (1);
 }
+
+/// todo
+/// we need, parse object which gets line, splits, stores char type, finds colors args, finds matrix args. and calls appropriate funcs with those. optional are params. Must be compatible with basic input and advanced
+
+static char	get_type(char *str)
+{
+	if (!ft_strncmp("sphere", str, 7))
+		return ('s');
+	if (!ft_strncmp("cube", str, 5))
+		return ('#');
+	if (!ft_strncmp("plane", str, 6))
+		return ('p');
+	if (!ft_strncmp("cylinder", str, 9))
+		return ('c');
+	return (0);
+}
+
+int	parse_object(char *line, t_vars *v)
+{
+	t_object	*obj;
+	char		type;
+	char		**args;
+
+	args = ft_split(line, ' ');
+	if (!args)
+		return (free_tab(args));
+	type = get_type(args[0]);
+	if (!type)
+		return (free_tab(args));
+	obj = init_object(type);
+	parse_matrix(obj, args + 1);
+	parse_colors(obj, args + 1);
+}

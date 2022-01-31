@@ -47,11 +47,11 @@ double	intersect_objects(t_line ray, t_list *obj, t_intersect *intersect)
 int	send_ray(t_line *ray, t_vars *v)
 {
 	t_intersect	intersect;
-	t_matrix a = {{1, 0, 0},{0, 1, 0},{0, 0, 2}};
-	t_matrix b, c;
-
-	inverse_matrix(a, c);
-	matrix_transpose(c, b);
+//	t_matrix a = {{1, 0, 0},{0, 1, 0},{0, 0, 2}};
+//	t_matrix b, c;
+//
+//	inverse_matrix(a, c);
+//	matrix_transpose(c, b);
 
 	intersect.in_ray = *ray;
 	unit_vector(intersect.in_ray.direction, intersect.in_ray.direction);
@@ -67,8 +67,8 @@ int	send_ray(t_line *ray, t_vars *v)
 	//return to world
 //	if (intersect.obj.type == 's')
 //	{
-//		matrix_vect_prod(a, intersect.hit, intersect.hit);
-//		matrix_vect_prod(b, intersect.normal, intersect.normal);
+//		vec_sum(intersect.in_ray.point, intersect.hit, intersect.hit);
+//		matrix_vect_prod(intersect.obj.inv_transpose, intersect.normal, intersect.normal);
 //	}
 
 //	return (intersect.obj.color);
@@ -84,11 +84,11 @@ static int shade(t_intersect *intersect, t_vars *v)
 
 	unpack_color(color, 0, 0);
 	unpack_color(intersect->diff_l, intersect->obj.color, 0.7);
-	unpack_color(intersect->spec_l, 0xFFFFFF, 0.35);
+	unpack_color(intersect->spec_l, 0xFFFFFF, 0.2);
 	pos = v->lights;
 	while (pos)
 	{
-		unpack_color(ref_light, intersect->obj.color, 0.1);
+		unpack_color(ref_light, intersect->obj.color, 0.05);
 
 		set_vec2(s_ray.point, intersect->hit);
 		vec_subtract(((t_light *)pos->content)->pos, intersect->hit, s_ray.direction);
