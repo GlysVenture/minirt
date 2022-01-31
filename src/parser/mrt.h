@@ -18,7 +18,9 @@ t_plane	*check_plane(char *arg,  int *color);
 double ft_atod(const char *arr);
 t_light	*check_light(char *line);
 double get_coordinates(char **line);
-
+void	ft_sheer(char *dir, t_matrix m,double l);
+void	ft_rotate(char dir, t_matrix m, double l);
+void	ft_aggr(char dir, t_matrix m, double l);
 int	free_tab(char **tab);
 
 #endif
