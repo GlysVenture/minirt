@@ -55,9 +55,8 @@ double	specular_shade(t_intersect *intersect, t_line ray)
 
 	unit_vector(ray.direction, ray.direction);
 	vec_subtract(ray.direction, intersect->in_ray.direction, mid);
-	angle = get_angle(intersect->normal, mid);
-	angle = (1 - angle / M_PI_2);
+	angle = cos_angle(intersect->normal, mid);
 	if (isless(angle, 0))
 		angle = 0;
-	return ((double)pow(angle, 10));
+	return (pow(angle, 25));
 }

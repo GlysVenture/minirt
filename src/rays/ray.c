@@ -84,7 +84,7 @@ static int shade(t_intersect *intersect, t_vars *v)
 
 	unpack_color(color, 0, 0);
 	unpack_color(intersect->diff_l, intersect->obj.color, 0.7);
-	unpack_color(intersect->spec_l, 0xFFFFFF, 0.5);
+	unpack_color(intersect->spec_l, 0xFFFFFF, 0.35);
 	pos = v->lights;
 	while (pos)
 	{
