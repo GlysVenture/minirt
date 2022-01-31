@@ -4,7 +4,7 @@
 #include "minirt.h"
 #include "parse.h"
 
-#include "debug/debug.h"
+//#include "debug/debug.h"
 int  hexcolor(char *line);
 
 double below_zero(double val,const char *str, char sign)
@@ -50,7 +50,7 @@ double ft_atod(const char *arr){
 	    val *= -1;
     return (val);
 }
-int check_alight(char *arg, t_amb_light *a)
+/*int check_alight(char *arg, t_amb_light *a)
 {
 	char **args;
 
@@ -106,4 +106,4 @@ int	get_arg(char *filename, t_vars *v)
 		ret = get_next_line(fd);
 	}
 	return (1);
-}
+} */

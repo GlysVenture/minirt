@@ -10,6 +10,7 @@ void	sheer_xy(t_matrix a, double l)
 	b[0][1] = l;
 	b[1][1] = 1;
 	b[2][2] = 1;
+	printf("Sheer xy %f\n",l);
 	matrix_prod(a,b,a);
 }
 
@@ -22,6 +23,7 @@ void	sheer_yx(t_matrix a, double l)
 	b[1][0] = l;
 	b[1][1] = 1;
 	b[2][2] = 1;
+	printf("Sheer yx %f\n",l);
 	matrix_prod(a,b,a);
 }
 
@@ -34,6 +36,7 @@ void	sheer_xz(t_matrix a, double l)
 	b[1][1] = 1;
 	b[0][2] = l;
 	b[2][2] = 1;
+	printf("Sheer xz %f\n",l);
 	matrix_prod(a,b,a);
 }
 void	sheer_zx(t_matrix a, double l)
@@ -45,6 +48,7 @@ void	sheer_zx(t_matrix a, double l)
 	b[2][0] = l;
 	b[1][1] = 1;
 	b[2][2] = 1;
+	printf("Sheer zx %f\n",l);
 	matrix_prod(a,b,a);
 }
 void	sheer_zy(t_matrix a, double l)
@@ -56,6 +60,7 @@ void	sheer_zy(t_matrix a, double l)
 	b[1][1] = 1;
 	b[2][2] = 1;
 	b[2][1] = l;
+	printf("Sheer zy %f\n",l);
 	matrix_prod(a,b,a);
 }
 void	sheer_yz(t_matrix a, double l)
@@ -67,6 +72,7 @@ void	sheer_yz(t_matrix a, double l)
 	b[1][1] = 1;
 	b[2][2] = 1;
 	b[1][2] = l;
+	printf("Sheer yz %f\n",l);
 	matrix_prod(a,b,a);
 }
 void	rotate_x(t_matrix m, double a)
@@ -79,6 +85,7 @@ void	rotate_x(t_matrix m, double a)
 	b[1][2] = (sin(a) * -1);
 	b[2][1] = sin(a);
 	b[2][2] = cos(a);
+	printf("rotate x %f\n",a);
 	matrix_prod(m,b,m);
 }
 void	rotate_y(t_matrix m, double a)
@@ -91,6 +98,7 @@ void	rotate_y(t_matrix m, double a)
 	b[1][1] = 1;
 	b[2][0] = (sin(a) * -1);
 	b[2][2] = cos(a);
+	printf("roate y %f\n",a);
 	matrix_prod(m,b,m);
 }
 
@@ -104,6 +112,7 @@ void	rotate_z(t_matrix m, double a)
 	b[1][0] = sin(a);
 	b[1][1] = cos(a);
 	b[2][2] = 1;
+	printf("roate z %f\n",a);
 	matrix_prod(m,b,m);
 }
 void	aggr_x(t_matrix m, double a)
@@ -116,6 +125,7 @@ void	aggr_x(t_matrix m, double a)
 	b[0][0] = a;
 	b[0][1] = a;
 	b[0][2] = a;
+	printf("aggr x %f\n",a);
 	matrix_prod(m,b,m);
 }
 void	aggr_y(t_matrix m, double a)
@@ -128,6 +138,7 @@ void	aggr_y(t_matrix m, double a)
 	b[1][1] = a;
 	b[1][2] = a;
 	b[2][2] = 1;
+	printf("aggr y %f\n",a);
 	matrix_prod(m,b,m);
 }
 void	aggr_z(t_matrix m, double a)
@@ -140,6 +151,7 @@ void	aggr_z(t_matrix m, double a)
 	b[2][0] = a;
 	b[2][1] = a;
 	b[2][2] = a;
+	printf("aggr z %f\n",a);
 	matrix_prod(m,b,m);
 }
 void	ft_sheer(char *dir,t_matrix m, double l)
