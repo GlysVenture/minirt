@@ -41,8 +41,7 @@ double	diffuse_shade(t_intersect *intersect, t_line ray)
 {
 	double	angle;
 
-	angle = get_angle(intersect->normal, ray.direction);
-	angle = (1 - (angle / M_PI_2));
+	angle = cos_angle(intersect->normal, ray.direction);
 	if (isless(angle, 0))
 		return (0);
 	return (angle);
