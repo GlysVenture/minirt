@@ -57,5 +57,7 @@ double	plane_intersect2(t_object *plane, t_line ray, t_vec3d hit, t_vec3d normal
 	scalar_mult(ray.direction, - ray.point[2] / ray.direction[2], hit);
 	matrix_vect_prod(plane->transformation, hit, hit);
 	set_vec(normal, 1, 0, 0);
+	if (signbit(- ray.point[2] / ray.direction[2]))
+		return ( - vec_norm(hit));
 	return (vec_norm(hit));
 }

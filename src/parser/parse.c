@@ -5,24 +5,23 @@
 #include "parse.h"
 #include "mrt.h"
 #include "minirt.h"
+#include "geotrace.h"
 
 #include "debug/debug.h"
 int hexcolor(char *line);
-void	set_id_matrix(t_matrix matrix);
 
 int	parse_sphere(char *line, t_vars *v)
 {
-	int		color;
-	void	*mem;
+	t_object *obj;
 	t_list	*new;
 
-	mem = check_sphere(line, &color);
-	if (!mem)
+	obj = check_sphere(line);
+	if (!obj)
 		return (0);
-	new = ft_lstnew(init_obj(line[0], mem, color));
+	new = ft_lstnew(obj);
 	if (!new)
 	{
-		free(mem);
+		destroy_obj(obj);
 		return (0);
 	}
 	ft_lstadd_front(&v->obj, new);
@@ -31,24 +30,23 @@ int	parse_sphere(char *line, t_vars *v)
 
 int	parse_plane(char *line, t_vars *v)
 {
-	int		color;
-	void	*mem;
+	t_object *obj;
 	t_list	*new;
 
-	mem = check_plane(line, &color);
-	if (!mem)
+	obj = check_plane(line);
+	if (!obj)
 		return (0);
-	new = ft_lstnew(init_obj(line[0], mem, color));
+	new = ft_lstnew(obj);
 	if (!new)
 	{
-		free(mem);
+		destroy_obj(obj);
 		return (0);
 	}
 	ft_lstadd_front(&v->obj, new);
 	return (1);
 }
 
-int	parse_cylinder(char *line, t_vars *v)
+/*int	parse_cylinder(char *line, t_vars *v)
 {
 	double coor[3];
 	double o[3];
@@ -79,7 +77,8 @@ int	parse_cylinder(char *line, t_vars *v)
 	ft_rotate('y',m,(get_angle(y,o) * -1));
 	(void)v;
 	return (1);
-}
+}*/
+
 int	parse_light(char *line, t_vars *v)
 {
 	void	*mem;
@@ -114,37 +113,31 @@ static char	get_type(char *str)
 	return (0);
 }
 
-int parse_colors(t_object *obj, char **args)
+void	parse_colors(t_object *obj, char **args)
 {
-	int	i;
+	int		i;
+	char	**nargs;
 
 	i = 0;
-	while (ft_strncmp(args[i],"colors",8))
+	while (ft_strncmp(args[i],"colors",7))
 		i++;
-	obj->colors[0] = ft_atoi(args[0]);
-	obj->colors[1] = ft_atoi(args[1]);
-	return (1);
-}
-void	set_id_matrix(t_matrix matrix)
-{
-	ft_memset(matrix,0,sizeof(t_matrix));
-	matrix[0][0] = 1;
-	matrix[1][1] = 1;
-	matrix[2][2] = 1;
+	obj->colors[0] = hexcolor(args[i + 1]);
+	obj->colors[1] = hexcolor(args[i + 2]);
+	nargs = ft_split(args[i + 3], ',');
+	obj->k_ratio[0] = ft_atod(nargs[0]);
+	obj->k_ratio[1] = ft_atod(nargs[1]);
+	obj->k_ratio[2] = ft_atod(nargs[2]);
+
 }
 
-int	parse_int_matrix(t_matrix matrix,char *name, char *args)
+void	parse_int_matrix(t_matrix matrix,char *name, char *args)
 {
-	int	i;
-
-	i = 0;
 	if (name[0] == 's')
 		ft_sheer(name + 1,matrix, ft_atod(args));
 	else if (name[0] == 'r')
 		ft_rotate(name[1],matrix, ft_atod(args));
 	else if (name[0] == 'a')
 		ft_aggr(name[1],matrix, ft_atod(args));
-	return (1);
 }
 
 int parse_matrix(t_object *obj, char **args)
@@ -158,9 +151,9 @@ int parse_matrix(t_object *obj, char **args)
 	nargs = ft_split(args[i + 1],',');
 	if (!nargs)
 		return (0);
-	obj->tr_vec[0] = ft_atod(nargs[1]);
-	obj->tr_vec[1] = ft_atod(nargs[2]);
-	obj->tr_vec[2] = ft_atod(nargs[3]);
+	obj->tr_vec[0] = ft_atod(nargs[0]);
+	obj->tr_vec[1] = ft_atod(nargs[1]);
+	obj->tr_vec[2] = ft_atod(nargs[2]);
 	i += 2;
 	set_id_matrix(obj->transformation);
 	while (args[i])
@@ -168,8 +161,7 @@ int parse_matrix(t_object *obj, char **args)
 		if (!ft_strncmp(args[i], "colors",8))
 			break;
 		else
-			if (parse_int_matrix(obj->transformation,args[i],args[i + 1]) == 0)
-				return (free_tab(nargs));
+			parse_int_matrix(obj->transformation,args[i],args[i + 1]);
 		i += 2;
 	}
 	if (args[i] == NULL)
@@ -195,11 +187,18 @@ int	parse_object(char *line, t_vars *v)
 	if (!type)
 		return (free_tab(args));
 	obj = init_object(type);
-	if (parse_matrix(obj, args + 1) == 0)
+	new = ft_lstnew(obj);
+	if (!new)
+	{
+		destroy_obj(obj);
 		return (free_tab(args));
-	if (parse_colors(obj, args + 1) == 0)
-		return (free_tab(args));	
-	new = ft_lstnew(obj);	
+	}
+	if (parse_matrix(obj, args + 1) == 0)
+	{
+		destroy_obj(obj);
+		return (free_tab(args));
+	}
+	parse_colors(obj, args + 1);
 	ft_lstadd_front(&v->obj, new);
 	free_tab(args);
 	return (1);

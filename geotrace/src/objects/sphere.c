@@ -79,7 +79,7 @@ double	sphere_intersect2(t_object *sphere, t_line ray, t_vec3d hit, t_vec3d norm
 	if (isless(res[0], 0))
 		return (-1);
 	scalar_mult(ray.direction, res[0], hit);
-	set_vec2(normal, hit);
+	vec_sum(hit , ray.point, normal);
 	matrix_vect_prod(sphere->transformation, hit, hit);
 	return (vec_norm(hit));
 }

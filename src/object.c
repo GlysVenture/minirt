@@ -25,11 +25,11 @@ void	set_obj(t_object *obj, char c, void *struc, int color)
 	obj->color = color;
 	obj->type = c;
 	obj->structure = struc;
-}
+}*/
 
 void	destroy_obj(t_object *obj)
 {
-	if (obj->structure != NULL)
-		free(obj->structure);
+	if (obj->params != NULL)
+		free(obj->params);
 	free(obj);
-}*/
+}

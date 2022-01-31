@@ -24,6 +24,7 @@ double	intersect_objects(t_line ray, t_list *obj, t_intersect *intersect)
 	double	dist;
 	double	t;
 	char	obj_type;
+	t_vec3d	data[2];
 
 	dist = -1;
 	while(obj)
@@ -31,12 +32,18 @@ double	intersect_objects(t_line ray, t_list *obj, t_intersect *intersect)
 		t = -2;
 		obj_type = ((t_object *)obj->content)->type;
 		if (obj_type == 's')
-			t = sphere_intersect(((t_object *)obj->content)->structure, ray);
+			t = sphere_intersect2(((t_object *)obj->content), ray, data[0], data[1]);
 		if (obj_type == 'p')
-			t = plane_intersect(((t_object *)obj->content)->structure, ray);
+			t = plane_intersect2(((t_object *)obj->content), ray, data[0], data[1]);
+		if (obj_type == '#')
+			t = cube_intersect2(((t_object *)obj->content), ray, data[0], data[1]);
+		if (obj_type == 'c')
+			t = cylinder_intersect2(((t_object *)obj->content), ray, data[0], data[1]);
 		if (isgreater(t, FLT_EPSILON) && (dist < 0 || isless(t, dist)))
 		{
 			dist = t;
+			set_vec2(intersect->hit, data[0]);
+			set_vec2(intersect->normal, data[1]);
 			intersect->obj = *(t_object *)obj->content; //todo pass by pointer?
 		}
 		obj = obj->next;
@@ -47,31 +54,18 @@ double	intersect_objects(t_line ray, t_list *obj, t_intersect *intersect)
 int	send_ray(t_line *ray, t_vars *v)
 {
 	t_intersect	intersect;
-//	t_matrix a = {{1, 0, 0},{0, 1, 0},{0, 0, 2}};
-//	t_matrix b, c;
-//
-//	inverse_matrix(a, c);
-//	matrix_transpose(c, b);
 
 	intersect.in_ray = *ray;
 	unit_vector(intersect.in_ray.direction, intersect.in_ray.direction);
 	intersect.dist = intersect_objects(intersect.in_ray, v->obj, &intersect);
 	if (isless(intersect.dist, 0))
 		return (0);
-
-	scalar_mult(intersect.in_ray.direction, intersect.dist, intersect.hit);
 	vec_sum(intersect.hit, intersect.in_ray.point, intersect.hit);
+	matrix_vect_prod(intersect.obj.inv_transp, intersect.normal, intersect.normal);
 
-	vec_get_normal(&intersect);
-
-	//return to world
-//	if (intersect.obj.type == 's')
-//	{
-//		vec_sum(intersect.in_ray.point, intersect.hit, intersect.hit);
-//		matrix_vect_prod(intersect.obj.inv_transpose, intersect.normal, intersect.normal);
-//	}
-
-//	return (intersect.obj.color);
+	if (isless(get_angle(intersect.normal, intersect.in_ray.direction), M_PI_2))
+		scalar_mult(intersect.normal, -1, intersect.normal);
+//	return (intersect.obj.colors[0]);
 	return (shade(&intersect, v));
 }
 
@@ -83,13 +77,12 @@ static int shade(t_intersect *intersect, t_vars *v)
 	double	ref_light[3];
 
 	unpack_color(color, 0, 0);
-	unpack_color(intersect->diff_l, intersect->obj.color, 0.7);
-	unpack_color(intersect->spec_l, 0xFFFFFF, 0.2);
+	unpack_color(intersect->diff_l, intersect->obj.colors[0], intersect->obj.k_ratio[1]);
+	unpack_color(intersect->spec_l, intersect->obj.colors[1], intersect->obj.k_ratio[2]);
 	pos = v->lights;
 	while (pos)
 	{
-		unpack_color(ref_light, intersect->obj.color, 0.05);
-
+		unpack_color(ref_light, intersect->obj.colors[0], intersect->obj.k_ratio[0]);
 		set_vec2(s_ray.point, intersect->hit);
 		vec_subtract(((t_light *)pos->content)->pos, intersect->hit, s_ray.direction);
 		if (shadow_ray(s_ray, v->obj) > 0) //todo multiple?

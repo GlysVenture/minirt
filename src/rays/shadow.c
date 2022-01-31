@@ -19,17 +19,22 @@ int	shadow_ray(t_line ray, t_list *obj)
 	double	dist;
 	double	t;
 	char	obj_type;
+	t_vec3d	h, n;
 
 	dist = vec_norm(ray.direction);
 	unit_vector(ray.direction, ray.direction);
 	while(obj)
 	{
 		t = -2;
-		obj_type = ((t_object *)obj->content)->type;
+		obj_type = ((t_object *)obj->content)->type; //todo add other types
 		if (obj_type == 's')
-			t = sphere_intersect(((t_object *)obj->content)->structure, ray);
+			t = sphere_intersect2((t_object *)obj->content, ray, h, n); // todo fix with other intersect
 		if (obj_type == 'p')
-			t = plane_intersect(((t_object *)obj->content)->structure, ray);
+			t = plane_intersect2((t_object *)obj->content, ray, h, n);
+		if (obj_type == '#')
+			t = cube_intersect2((t_object *)obj->content, ray, h, n);
+		if (obj_type == 'c')
+			t = cylinder_intersect2((t_object *)obj->content, ray, h, n);
 		if (isgreater(t, FLT_EPSILON) && (isless(dist, 0) || isless(t, dist)))
 			return (-1);
 		obj = obj->next;

@@ -98,6 +98,8 @@ double	**cofactor_matrix(const t_matrix a, t_matrix c);
 
 void	print_matrix(const t_matrix a);
 
+void	set_id_matrix(t_matrix matrix);
+
 //Sphere funcs
 
 t_sphere	*init_sphere(double radius, double cx, double cy, double cz);
@@ -126,12 +128,20 @@ double	plane_intersect2(t_object *plane, t_line ray, t_vec3d hit, t_vec3d normal
 
 double	cylinder_intersect2(t_object *cyl, t_line ray, t_vec3d hit, t_vec3d normal);
 
-// objects
+//cube funcs
 
-t_object	*init_object(char type);
+double	cube_intersect2(t_object *cube, t_line ray, t_vec3d hit, t_vec3d normal);
 
 //math utilities
 
 void	solve_quad(const double quad[], double res[]);
+
+void	swap(double *a, double *b);
+
+double	radians(double deg);
+
+// object funcs
+
+t_object	*init_object(char type);
 
 #endif //GEOTRACE_H

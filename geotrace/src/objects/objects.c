@@ -13,6 +13,7 @@ t_object	*init_object(char type)
 	new = malloc(sizeof(t_object));
 	if (!new)
 		return (NULL);
+	new->params = NULL;
 	new->type = type;
 	return (new);
 }

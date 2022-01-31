@@ -57,7 +57,7 @@ double	cylinder_intersect2(t_object *cyl, t_line ray, t_vec3d hit, t_vec3d norma
 	if (isless(yc[0], 0) && isgreater(yc[1], 0))
 		return plane_int0(cyl, ray, hit, normal);
 	scalar_mult(ray.direction, res[0], hit);
-	set_vec2(normal, hit);
+	vec_sum(hit , ray.point, normal);
 	normal[2] = 0;
 	matrix_vect_prod(cyl->transformation, hit, hit);
 	return (vec_norm(hit));

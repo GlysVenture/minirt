@@ -7,7 +7,12 @@
 
 #include <stdio.h>
 
-static void	swap(double *a, double *b)
+double	radians(double deg)
+{
+	return (deg * M_PI * 2 / 360);
+}
+
+void	swap(double *a, double *b)
 {
 	double t;
 

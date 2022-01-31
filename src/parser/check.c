@@ -5,6 +5,8 @@
 #include "../object.h"
 #include "mrt.h"
 #include "light/light.h"
+#include "debug/debug.h"
+#include <float.h>
 
 int  hexcolor(char *line)
 {
@@ -12,7 +14,7 @@ int  hexcolor(char *line)
 	char **ret;
 
 	ret = ft_split(line,',');
-	r = ft_atoi(ret[0]);
+	r = ft_atoi(ret[0]); //todo check valid
 	g = ft_atoi(ret[1]);
 	b = ft_atoi(ret[2]);
 	if (r > 255 || g > 255 || b > 255)
@@ -23,14 +25,15 @@ int  hexcolor(char *line)
 	free_tab(ret);
     	return (r<<16) | (g<<8) | b;
 }
-t_plane	*check_plane(char *arg, int *color)
+t_object	*check_plane(char *arg)
 {
 	char **ret;
 	char **mem;
-	t_plane	*pl;
+	t_object	*plane;
 	t_vec3d n;
 	t_vec3d p;
-	
+	t_vec3d temp;
+
 	ret = ft_split(arg, ' ');
 	mem = ft_split(ret[1], ',');
 	n[0] =  ft_atod(mem[0]);
@@ -43,69 +46,58 @@ t_plane	*check_plane(char *arg, int *color)
 	p[1] = ft_atod(mem[1]);
 	p[2] = ft_atod(mem[2]);
 	free_tab (mem);
-	pl = init_plane(n,p);
-	*color = hexcolor(ret[3]);
+
+	plane = init_object('p');
+	set_vec(plane->tr_vec, p[0], p[1], p[2]);
+	set_id_matrix(plane->transformation);
+	if (fabs(n[0]) > FLT_EPSILON || fabs(n[1]) > FLT_EPSILON)
+	{
+		set_vec2(temp, n);
+		temp[2] = 0;
+		set_vec(p, 0, 1, 0);
+		ft_rotate('z', plane->transformation, (get_angle(temp,p) * -1));
+	}
+	set_vec(p, 0, 0, 1);
+	ft_rotate('y',plane->transformation,(get_angle(n,p) * -1));
+	plane->colors[0] = hexcolor(ret[3]);
+	plane->colors[1] = 0xFFFFFF;
+	plane->k_ratio[0] = 0.1;
+	plane->k_ratio[1] = 0.7;
+	plane->k_ratio[2] = 0.2;
+
+	printf("---------\n");
+	print_matrix(plane->transformation);
+
+	inverse_matrix(plane->transformation, plane->inv);
+	matrix_transpose(plane->inv, plane->inv_transp);
 	free_tab(ret);
-	return (pl);
+	return (plane);
 }
 
-t_sphere	*check_sphere(char *arg, int *color)
+t_object	*check_sphere(char *arg)
 {
-	int i;
-	int j;
-	double vals[4];
-	t_sphere	*sphere;
+	char **args;
+	char **nargs;
+	t_object	*sphere;
 
-	i = 0;
-	j = 1;
-	while (arg[i] != ' ')
-		i++;
-	i++;
-	vals[0] = ft_atod(arg + i);
-	while (arg[i])
-	{
-		if (arg[i] == ',')
-		{
-			vals[j] = ft_atod(arg + i + 1);
-			j++;
-		}
-		else if (arg[i] == ' ')
-		{
-			i++;
-			vals[j] = ft_atod(arg + (i));
-			j++;
-			break;
-		}
-		i++;
-	}
-	while (arg[i])
-	{
-		if (arg[i] == ' ')
-			*color = hexcolor(arg + i + 1);
-		i++;
-	}
-	sphere = init_sphere(vals[3], vals[0], vals[1], vals[2]);
+
+	args = ft_split(arg, ' ');
+	nargs = ft_split(args[1], ',');
+	//
+	sphere = init_object('s');
+	set_vec(sphere->tr_vec, ft_atod(nargs[0]), ft_atod(nargs[1]), ft_atod(nargs[2]));
+	set_id_matrix(sphere->transformation);
+	matrix_scalar_mult(sphere->transformation, ft_atod(args[2]), sphere->transformation);
+	sphere->colors[0] = hexcolor(args[3]);
+	sphere->colors[1] = 0xFFFFFF;
+	sphere->k_ratio[0] = 0.1;
+	sphere->k_ratio[1] = 0.7;
+	sphere->k_ratio[2] = 0.2;
+	inverse_matrix(sphere->transformation, sphere->inv);
+	matrix_transpose(sphere->inv, sphere->inv_transp);
+	free_tab(args);
+	free_tab(nargs);
 	return (sphere);
-}
-
-double get_coordinates(char **line)
-{
-	double ret;
-
-	if (**line == ',')
-		*line += 1;
-	ret = ft_atod(*line);
-	while (**line != ',')
-	{
-		*line += 1;
-		if (**line == ' ')
-		{
-			*line += 1;
-			break;
-		}
-	}
-	//printf("%s\n", *line);
-	return (ret);
 }
 
 t_light	*check_light(char *line)
