@@ -17,7 +17,7 @@ int  hexcolor(char *line)
 	r = ft_atoi(ret[0]); //todo check valid
 	g = ft_atoi(ret[1]);
 	b = ft_atoi(ret[2]);
-	if (r > 255 || g > 255 || b > 255)
+	if ((r > 255 || g > 255 || b > 255) || (r < 0 || g < 0 || b < 0))
 	{
 		printf("Error invalid colors\n");
 		return (-1);

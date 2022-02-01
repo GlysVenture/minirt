@@ -23,6 +23,8 @@ double below_zero(double val,const char *str, char sign)
 	val = val*pow(10, j * -1);
 	if (sign == '-')
 		val *= -1;
+	if (val > 255.000 || val < 0.000)
+		return (-1);
 	return (val);
 }
 
@@ -48,6 +50,8 @@ double ft_atod(const char *arr){
     }
     if (arr[0] == '-')
 	    val *= -1;
+    if (val > 255.0000 || val < 0.00000)
+	    return (-1);
     return (val);
 }
 int check_alight(char *arg, t_amb_light *a)
@@ -59,7 +63,7 @@ int check_alight(char *arg, t_amb_light *a)
 	if (a->ratio >= 1.0 || a->ratio <= 0.0)
 	{
 		printf("Error not in the correct range\n");
-			return (0); //todo err return
+		return (0); //todo err return
 	}
 	a->color = hexcolor(args[2]);
 	free_tab(args);
@@ -108,5 +112,6 @@ int	get_arg(char *filename, t_vars *v)
 		free(ret);
 		ret = get_next_line(fd);
 	}
+	close (fd);
 	return (1);
 }
