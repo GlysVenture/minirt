@@ -46,38 +46,36 @@ int	parse_plane(char *line, t_vars *v)
 	return (1);
 }
 
-/*int	parse_cylinder(char *line, t_vars *v)
+int	parse_cylinder(char *line, t_vars *v)
 {
-	double coor[3];
-	double o[3];
-	int color;
-	int b;
-	double dimensions[2];
-	t_matrix	m;
-	b = -1;
-	t_vec3d y;
+	char **args;
+	char **nargs;
 
-	y[0] = 0;
-	y[1] = 0;
-	y[2] = 1;
-	while (*line != ' ')
-		line++;
-	line++;
-	while (++b < 3)
-		coor[b] = get_coordinates(&line);
-	b = -1;
-	line--;
-	while (++b < 3)
-		o[b] = get_coordinates(&line);
-	b = -1;
-	while (++b < 2)
-		dimensions[b] = get_coordinates(&line);
-	color = hexcolor(line);
-	set_id_matrix(m);
-	ft_rotate('y',m,(get_angle(y,o) * -1));
-	(void)v;
+	args = ft_split(line,' ');
+	//free(line);
+	//line = NULL;
+	line = ft_strjoin("cylinder matrix ",args[1]);
+	line = ft_strjoin(line," az ");
+	line = ft_strjoin(line,args[4]);
+	line = ft_strjoin(line," ax ");
+	line = ft_strjoin(line,args[3]);
+	line = ft_strjoin(line, " ay ");
+	line = ft_strjoin(line,args[3]);
+	nargs = ft_split(args[2],',');
+	line = ft_strjoin(line," rx ");
+	line = ft_strjoin(line,nargs[0]);
+	line = ft_strjoin(line," ry ");
+	line = ft_strjoin(line,nargs[1]);
+	line = ft_strjoin(line," rz ");
+	line = ft_strjoin(line,nargs[2]);
+	line = ft_strjoin(line," colors ");
+	line = ft_strjoin(line,args[5]);
+	line = ft_strjoin(line, " 255,255,255 0.2,0.7,0.35");
+	//printf("%s\n",line);
+//	(void)v;
+	parse_object(line,v);
 	return (1);
-}*/
+}
 
 int	parse_light(char *line, t_vars *v)
 {
@@ -133,11 +131,7 @@ void	parse_colors(t_object *obj, char **args)
 void	parse_int_matrix(t_matrix matrix,char *name, char *args)
 {
 	if (name[0] == 's')
-	{
-		printf("to atod: %s\n", args);
 		ft_sheer(name + 1,matrix, ft_atod(args));
-	}
-
 	else if (name[0] == 'r')
 		ft_rotate(name[1],matrix, ft_atod(args));
 	else if (name[0] == 'a')
@@ -203,6 +197,11 @@ int	parse_object(char *line, t_vars *v)
 		return (free_tab(args));
 	}
 	parse_colors(obj, args + 1);
+	if (obj->colors[0] == -1 || obj->colors[1] == -1)
+	{
+		destroy_obj(obj);
+		return (free_tab(args));
+	}
 	ft_lstadd_front(&v->obj, new);
 	free_tab(args);
 	return (1);

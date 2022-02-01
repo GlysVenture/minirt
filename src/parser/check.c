@@ -17,12 +17,12 @@ int  hexcolor(char *line)
 	r = ft_atoi(ret[0]); //todo check valid
 	g = ft_atoi(ret[1]);
 	b = ft_atoi(ret[2]);
+	free_tab(ret);
 	if ((r > 255 || g > 255 || b > 255) || (r < 0 || g < 0 || b < 0))
 	{
 		printf("Error invalid colors\n");
 		return (-1);
 	}
-	free_tab(ret);
     	return (r<<16) | (g<<8) | b;
 }
 t_object	*check_plane(char *arg)
@@ -45,8 +45,14 @@ t_object	*check_plane(char *arg)
 	p[0] = ft_atod(mem[0]);
 	p[1] = ft_atod(mem[1]);
 	p[2] = ft_atod(mem[2]);
+	if (isless(p[0],-1) || isgreater(p[0],1.0) || isless(p[1],-1) || 
+			isgreater(p[1],1.0) || isless(p[2],-1) || isgreater(p[2],1.0))
+	{
+		free_tab(mem);
+		free_tab(ret);
+		return (NULL);
+	}
 	free_tab (mem);
-
 	plane = init_object('p');
 	set_vec(plane->tr_vec, p[0], p[1], p[2]);
 	set_id_matrix(plane->transformation);
@@ -60,11 +66,15 @@ t_object	*check_plane(char *arg)
 	set_vec(p, 0, 0, 1);
 	ft_rotate('y',plane->transformation,(get_angle(n,p) * -1));
 	plane->colors[0] = hexcolor(ret[3]);
+	if (plane->colors[0] == -1)
+	{
+		free_tab(ret);
+		return (NULL);
+	}
 	plane->colors[1] = 0xFFFFFF;
 	plane->k_ratio[0] = 0.1;
 	plane->k_ratio[1] = 0.7;
 	plane->k_ratio[2] = 0.2;
-
 	inverse_matrix(plane->transformation, plane->inv);
 	matrix_transpose(plane->inv, plane->inv_transp);
 	free_tab(ret);
@@ -79,7 +89,17 @@ t_object	*check_sphere(char *arg)
 
 
 	args = ft_split(arg, ' ');
+	if (isless(ft_atod(args[2]),0.1) || hexcolor(args[3]) == -1 || args == NULL)
+	{
+		free_tab(args);
+		return (NULL);
+	}
 	nargs = ft_split(args[1], ',');
+	if (!nargs)
+	{
+		free_tab(args);
+		return (NULL);
+	}
 	sphere = init_object('s');
 	set_vec(sphere->tr_vec, ft_atod(nargs[0]), ft_atod(nargs[1]), ft_atod(nargs[2]));
 	set_id_matrix(sphere->transformation);
@@ -95,7 +115,6 @@ t_object	*check_sphere(char *arg)
 	free_tab(nargs);
 	return (sphere);
 }
-
 t_light	*check_light(char *line)
 {
 	char **args;
@@ -104,9 +123,24 @@ t_light	*check_light(char *line)
 	t_vec3d temp;
 
 	args = ft_split(line, ' ');
+	if (!args)
+		return (NULL);
 	nargs = ft_split(args[1], ',');
+	if (!nargs)
+	{
+		free_tab(args);
+		return (NULL);
+	}
 	set_vec(temp, ft_atod(nargs[0]), ft_atod(nargs[1]), ft_atod(nargs[2]));
 	free_tab(nargs);
+	if (isgreater(ft_atod(args[2]),1.0) || isless(ft_atod(args[2]),0.1) ||
+			hexcolor(args[3]) == -1)
+	{
+		free_tab(args);
+		if (hexcolor(args[3]) != -1)
+			printf("Error incorrect light value\n");
+		return (NULL);
+	}
 	light = init_light(temp, hexcolor(args[3]), ft_atod(args[2]));
 	return (light);
 }

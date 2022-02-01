@@ -23,8 +23,6 @@ double below_zero(double val,const char *str, char sign)
 	val = val*pow(10, j * -1);
 	if (sign == '-')
 		val *= -1;
-	if (val > 255.000 || val < 0.000)
-		return (-1);
 	return (val);
 }
 
@@ -50,8 +48,6 @@ double ft_atod(const char *arr){
     }
     if (arr[0] == '-')
 	    val *= -1;
-    if (val > 255.0000 || val < 0.00000)
-	    return (-1);
     return (val);
 }
 int check_alight(char *arg, t_amb_light *a)
@@ -88,8 +84,8 @@ int	check_arg(char *arg, t_vars *v)
 		return (parse_plane(arg, v));
 	else if (!ft_strncmp("C ", arg, 2))
 		return (1);
-//	else if (!ft_strncmp("cy ", arg, 3))
-//		return (parse_cylinder(arg, v));
+	else if (!ft_strncmp("cy ", arg, 3))
+		return (parse_cylinder(arg, v));
 	else
 		return (parse_object(arg, v));
 }
