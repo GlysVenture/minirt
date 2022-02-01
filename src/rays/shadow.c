@@ -26,7 +26,7 @@ int	shadow_ray(t_line ray, t_list *obj)
 	while(obj)
 	{
 		t = -2;
-		obj_type = ((t_object *)obj->content)->type; //todo add other types
+		obj_type = ((t_object *)obj->content)->type;
 		if (obj_type == 's')
 			t = sphere_intersect2((t_object *)obj->content, ray, h, n); // todo fix with other intersect
 		if (obj_type == 'p')
@@ -62,5 +62,5 @@ double	specular_shade(t_intersect *intersect, t_line ray)
 	angle = cos_angle(intersect->normal, mid);
 	if (isless(angle, 0))
 		angle = 0;
-	return (pow(angle, 25));
+	return (pow(angle, 20));
 }

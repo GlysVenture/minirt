@@ -63,8 +63,6 @@ int	send_ray(t_line *ray, t_vars *v)
 	vec_sum(intersect.hit, intersect.in_ray.point, intersect.hit);
 	matrix_vect_prod(intersect.obj.inv_transp, intersect.normal, intersect.normal);
 
-	if (isless(get_angle(intersect.normal, intersect.in_ray.direction), M_PI_2))
-		scalar_mult(intersect.normal, -1, intersect.normal);
 //	return (intersect.obj.colors[0]);
 	return (shade(&intersect, v));
 }

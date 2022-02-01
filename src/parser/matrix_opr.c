@@ -154,7 +154,7 @@ void	ft_sheer(char *dir,t_matrix m, double l)
 void	ft_rotate(char dir,t_matrix m, double l)
 {
 	if (dir == 'x')
-		rotate_x(m,radians(l));
+		rotate_x(m, radians(l));
 	else if (dir == 'y')
 		rotate_y(m, radians(l));
 	else if (dir == 'z')

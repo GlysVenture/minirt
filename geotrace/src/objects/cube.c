@@ -134,5 +134,7 @@ double	cube_intersect2(t_object *cube, t_line ray, t_vec3d hit, t_vec3d normal)
 	vec_sum(hit, ray.point, temp);
 	get_cube_normal(temp, normal);
 	matrix_vect_prod(cube->transformation, hit, hit);
+	if (isless(get_angle(normal, ray.direction), M_PI_2))
+		scalar_mult(normal, -1, normal);
 	return (vec_norm(hit));
 }

@@ -83,7 +83,6 @@ t_object	*check_sphere(char *arg)
 
 	args = ft_split(arg, ' ');
 	nargs = ft_split(args[1], ',');
-	//
 	sphere = init_object('s');
 	set_vec(sphere->tr_vec, ft_atod(nargs[0]), ft_atod(nargs[1]), ft_atod(nargs[2]));
 	set_id_matrix(sphere->transformation);
@@ -102,34 +101,16 @@ t_object	*check_sphere(char *arg)
 
 t_light	*check_light(char *line)
 {
-	int i;
-	int j;
+	char **args;
+	char **nargs;
 	t_light *light;
 	t_vec3d temp;
-	double vals[4];
 
-	i = 0;
-	j = 1;
-	while (line[i] != ' ')
-		i++;
-	vals[0] = ft_atod(line + i + 1);
-	i++;
-	while (line[i] != ' ')
-	{
-		if (line[i] == ',')
-		{
-			vals[j] = ft_atod(line + i + 1);
-			j++;
-		}
-		i++;
-	}
-	i++;
-	vals[3] = ft_atod(line + i + 1);
-	set_vec(temp, vals[0], vals[1],vals[2]);
-	while (line[i] != ' ')
-		i++;
-	i++;
-	light = init_light(temp, hexcolor(line + i), vals[3]);
+	args = ft_split(line, ' ');
+	nargs = ft_split(args[1], ',');
+	set_vec(temp, ft_atod(nargs[0]), ft_atod(nargs[1]), ft_atod(nargs[2]));
+	free_tab(nargs);
+	light = init_light(temp, hexcolor(args[3]), ft_atod(args[2]));
 	return (light);
 }
 

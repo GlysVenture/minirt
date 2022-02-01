@@ -78,6 +78,8 @@ double	*vec_subtract(const t_vec3d v, const t_vec3d u, t_vec3d new);
 
 double	get_angle(const t_vec3d v, const t_vec3d u);
 
+void	print_point(t_vec3d point);
+
 //Matrix funcs
 
 double	**set_matrix(t_matrix a, const t_vec3d x, const t_vec3d y, const t_vec3d z);
