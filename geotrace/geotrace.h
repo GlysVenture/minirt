@@ -43,6 +43,19 @@ typedef struct s_sphere
 	double	radius;
 }	t_sphere;
 
+/// object abstract
+typedef struct s_object
+{
+	char		type;
+	t_matrix	transformation;
+	t_matrix	inv;
+	t_matrix	inv_transp;
+	t_vec3d		tr_vec;
+	int			colors[2];
+	double		k_ratio[3];
+	void		*params;
+}	t_object;
+
 //Vector funcs
 
 double	*scalar_mult(const t_vec3d v, double a, t_vec3d w);
@@ -65,6 +78,8 @@ double	*vec_subtract(const t_vec3d v, const t_vec3d u, t_vec3d new);
 
 double	get_angle(const t_vec3d v, const t_vec3d u);
 
+void	print_point(t_vec3d point);
+
 //Matrix funcs
 
 double	**set_matrix(t_matrix a, const t_vec3d x, const t_vec3d y, const t_vec3d z);
@@ -85,20 +100,50 @@ double	**cofactor_matrix(const t_matrix a, t_matrix c);
 
 void	print_matrix(const t_matrix a);
 
+void	set_id_matrix(t_matrix matrix);
+
 //Sphere funcs
 
 t_sphere	*init_sphere(double radius, double cx, double cy, double cz);
 
 double	sphere_intersect(t_sphere *sphere, t_line ray);
 
+double	sphere_intersect2(t_object *sphere, t_line ray, t_vec3d hit, t_vec3d normal);
+
 //Line funcs
 
 t_line	*init_line(const t_vec3d dir, const t_vec3d p);
+
+void	transform_ray(const t_matrix m, const t_vec3d translation, t_line *ray);
+
+void	print_line(t_line line);
 
 //plane funcs
 
 t_plane	*init_plane(t_vec3d normal, t_vec3d p);
 
 double	plane_intersect(t_plane *plane, t_line ray);
+
+double	plane_intersect2(t_object *plane, t_line ray, t_vec3d hit, t_vec3d normal);
+
+//cylinder funcs
+
+double	cylinder_intersect2(t_object *cyl, t_line ray, t_vec3d hit, t_vec3d normal);
+
+//cube funcs
+
+double	cube_intersect2(t_object *cube, t_line ray, t_vec3d hit, t_vec3d normal);
+
+//math utilities
+
+void	solve_quad(const double quad[], double res[]);
+
+void	swap(double *a, double *b);
+
+double	radians(double deg);
+
+// object funcs
+
+t_object	*init_object(char type);
 
 #endif //GEOTRACE_H

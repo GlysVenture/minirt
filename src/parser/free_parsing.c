@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void	free_tab(char **tab)
+int	free_tab(char **tab)
 {
 	char **s;
 
@@ -13,4 +13,5 @@ void	free_tab(char **tab)
 	while (*s)
 		free(*(s++));
 	free(tab);
+	return (0);
 }

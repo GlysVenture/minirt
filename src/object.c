@@ -7,7 +7,7 @@
 #include "object.h"
 #include "debug/debug.h"
 
-t_object	*init_obj(char c, void *struc, int color)
+/*t_object	*init_obj(char c, void *struc, int color)
 {
 	t_object	*new;
 
@@ -25,11 +25,11 @@ void	set_obj(t_object *obj, char c, void *struc, int color)
 	obj->color = color;
 	obj->type = c;
 	obj->structure = struc;
-}
+}*/
 
 void	destroy_obj(t_object *obj)
 {
-	if (obj->structure != NULL)
-		free(obj->structure); //todo csg destroy?
+	if (obj->params != NULL)
+		free(obj->params);
 	free(obj);
 }

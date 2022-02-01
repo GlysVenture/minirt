@@ -23,7 +23,7 @@ typedef struct s_intersect
 }	t_intersect;
 
 int		send_ray(t_line *ray, t_vars *v);
-int		shadow_ray(t_line *ray, t_list *obj);
+int		shadow_ray(t_line ray, t_list *obj);
 
 double	diffuse_shade(t_intersect *intersect, t_line ray);
 double	specular_shade(t_intersect *intersect, t_line ray);

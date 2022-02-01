@@ -40,7 +40,6 @@ double	sphere_intersect(t_sphere *sphere, t_line ray)
 	double	delta;
 
 	vec_subtract(ray.point, sphere->center, ray.point);
-	unit_vector(ray.direction, ray.direction); // todo all rays have unit vectors better sol
 	quad[0] = dot_prod(ray.point, ray.point) - pow(sphere->radius, 2);
 	quad[1] = dot_prod(ray.point, ray.direction) * 2;
 	delta = pow(quad[1], 2) - 4 * quad[0] * 1;
@@ -56,4 +55,33 @@ double	sphere_intersect(t_sphere *sphere, t_line ray)
 			res[0] = res[1];
 	}
 	return (res[0]);
+}
+
+/// Computes if a sphere intersects a certain ray and returns the closest
+/// intersect distance. If it doesnt returns -1. sets hit and normal
+/// \warning hit and normal is not translated back yet and normal might be wrong direction.
+/// Both of those should be taken care of when intersected object
+/// is known to be the one
+/// \param sphere
+/// \param ray
+/// \param hit return hit point
+/// \param normal return normal to object hit point
+/// \return distance to intersection or -1 for no intersection
+double	sphere_intersect2(t_object *sphere, t_line ray, t_vec3d hit, t_vec3d normal)
+{
+	double 	res[2];
+	double	quad[2];
+
+	transform_ray(sphere->inv, sphere->tr_vec, &ray);
+	quad[0] = dot_prod(ray.point, ray.point) - 1;
+	quad[1] = dot_prod(ray.point, ray.direction) * 2;
+	solve_quad(quad, res);
+	if (isless(res[0], 0))
+		return (-1);
+	scalar_mult(ray.direction, res[0], hit);
+	vec_sum(hit , ray.point, normal);
+	matrix_vect_prod(sphere->transformation, hit, hit);
+	if (isless(get_angle(normal, ray.direction), M_PI_2))
+		scalar_mult(normal, -1, normal);
+	return (vec_norm(hit));
 }

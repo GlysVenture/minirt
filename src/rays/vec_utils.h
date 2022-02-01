@@ -6,8 +6,7 @@
 # define VEC_UTILS_H
 
 #include "geotrace.h"
-#include "ray.h"
 
-void	vec_get_normal(t_intersect *intersect);
+double	cos_angle(const t_vec3d u, const t_vec3d v);
 
 #endif //VEC_UTILS_H

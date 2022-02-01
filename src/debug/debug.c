@@ -5,19 +5,8 @@
 #include "debug.h"
 #include "geotrace.h"
 #include "libft.h"
-#include "object.h"
 #include "light/light.h"
 #include <stdio.h>
-
-void	print_ray(t_line ray)
-{
-	printf("vector:\npoint\n%f\n%f\n%f\ndir\n%f\n%f\n%f\n", ray.point[0], ray.point[1], ray.point[2], ray.direction[0], ray.direction[1], ray.direction[2]);
-}
-
-void	print_point(t_vec3d point)
-{
-	printf("point\n%f\n%f\n%f\n", point[0], point[1], point[2]);
-}
 
 void	print_objlst(t_list *obj)
 {
@@ -31,23 +20,16 @@ void	print_objlst(t_list *obj)
 void	print_obj(t_object *obj)
 {
 	if (obj->type == 's')
-	{
-		printf("sphere:\ncenter ");
-		print_point(((t_sphere *)obj->structure)->center);
-		printf("radius: %f\n", ((t_sphere *)obj->structure)->radius);
-	}
+		printf("--- sphere ---\n");
 	else if (obj->type == 'p')
-	{
-		printf("plane:\nnormal ");
-		print_point(((t_plane *)obj->structure)->normal);
-		printf("any ");
-		print_point(((t_plane *)obj->structure)->point);
-	}
+		printf("--- plane ---\n");
 	else
-	{
 		printf("unknown: %c\n", obj->type);
-	}
-	printf("color: %x\n", obj->color);
+	printf("translation ");
+	print_point(obj->tr_vec);
+	print_matrix(obj->transformation);
+	printf("main color:      %x\n", obj->colors[0]);
+	printf("reflexive color: %x\n", obj->colors[1]);
 }
 
 void	print_lights(t_list *lights)

@@ -4,7 +4,7 @@
 #include "minirt.h"
 #include "parse.h"
 
-#include "debug/debug.h"
+//#include "debug/debug.h"
 int  hexcolor(char *line);
 
 double below_zero(double val,const char *str, char sign)
@@ -40,13 +40,13 @@ double ft_atod(const char *arr){
 	    i++;
     while (arr[i] != '\0')
     {
-	    if (ft_isdigit(arr[i]) == 0 && arr[i] != '.')
-		    break;
-	    else if (arr[i] != '.') // je gere cela comme un atoi en gros, je regarde que je suis sur un chiffre et pas sur un point, et si je suis sur un point j'appele une autre fonction qui s'occupe de faire la puissance sinon c'est trop long pour la norminette
-		    val = (val*10) + (arr[i] - 48);
-	    else
-		    return (val = below_zero(val, arr + (i + 1), arr[0]));
-	    i++;
+		if (ft_isdigit(arr[i]) == 0 && arr[i] != '.')
+			break;
+		else if (arr[i] != '.')
+				val = (val*10) + (arr[i] - 48);
+		else
+			return (val = below_zero(val, arr + (i + 1), arr[0]));
+		i++;
     }
     if (arr[0] == '-')
 	    val *= -1;
@@ -82,13 +82,16 @@ int	check_arg(char *arg, t_vars *v)
 	}
 	else if (arg[0] == 'L')
 		return (parse_light(arg, v));
-	else if (arg[0] == 's')
+	else if (!ft_strncmp("sp ", arg, 3))
 		return (parse_sphere(arg, v));
-	else if (arg[0] == 'p')
+	else if (!ft_strncmp("pl ", arg, 3))
 		return (parse_plane(arg, v));
-//	else if (arg[0] == 'c')
+	else if (!ft_strncmp("C ", arg, 2))
+		return (1);
+//	else if (!ft_strncmp("cy ", arg, 3))
 //		return (parse_cylinder(arg, v));
-	return (1);
+	else
+		return (parse_object(arg, v));
 }
 int	get_arg(char *filename, t_vars *v)
 {

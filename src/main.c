@@ -32,7 +32,7 @@ static void	fill_image(t_data *img, int x, int y, t_vars *v)
 	int			i;
 	int			j;
 	t_line		ray;
-	t_camera	cam = {{0, 0.2, 1}, {1, 0, 0}, M_PI_2};
+	t_camera	cam = {{0, 0, 1}, {1, 0, 0}, radians(120)};
 	t_adv_camera	*cam_adv;
 	t_vec3d		temp;
 
@@ -103,6 +103,10 @@ int main(int argc, char *argv[])
 	init_vars(&vars);
 	if (get_arg(argv[1], &vars) == 0)
 		return (0);
+
+	print_lights(vars.lights);
+	print_objlst(vars.obj);
+
 
 	launch_window(&vars);
 	return (0); 

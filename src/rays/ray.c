@@ -19,11 +19,12 @@
 
 static int shade(t_intersect *intersect, t_vars *v);
 
-double	intersect_objects(t_line *ray, t_list *obj, t_object *found)
+double	intersect_objects(t_line ray, t_list *obj, t_intersect *intersect)
 {
 	double	dist;
 	double	t;
 	char	obj_type;
+	t_vec3d	data[2];
 
 	dist = -1;
 	while(obj)
@@ -31,13 +32,19 @@ double	intersect_objects(t_line *ray, t_list *obj, t_object *found)
 		t = -2;
 		obj_type = ((t_object *)obj->content)->type;
 		if (obj_type == 's')
-			t = sphere_intersect(((t_object *)obj->content)->structure, *ray);
+			t = sphere_intersect2(((t_object *)obj->content), ray, data[0], data[1]);
 		if (obj_type == 'p')
-			t = plane_intersect(((t_object *)obj->content)->structure, *ray);
+			t = plane_intersect2(((t_object *)obj->content), ray, data[0], data[1]);
+		if (obj_type == '#')
+			t = cube_intersect2(((t_object *)obj->content), ray, data[0], data[1]);
+		if (obj_type == 'c')
+			t = cylinder_intersect2(((t_object *)obj->content), ray, data[0], data[1]);
 		if (isgreater(t, FLT_EPSILON) && (dist < 0 || isless(t, dist)))
 		{
 			dist = t;
-			*found = *(t_object *)obj->content;
+			set_vec2(intersect->hit, data[0]);
+			set_vec2(intersect->normal, data[1]);
+			intersect->obj = *(t_object *)obj->content; //todo pass by pointer?
 		}
 		obj = obj->next;
 	}
@@ -48,41 +55,17 @@ int	send_ray(t_line *ray, t_vars *v)
 {
 	t_intersect	intersect;
 
-	intersect.in_ray = *ray; //todo set to unit ?
-	intersect.dist = intersect_objects(ray, v->obj, &(intersect.obj));
+	intersect.in_ray = *ray;
+	unit_vector(intersect.in_ray.direction, intersect.in_ray.direction);
+	intersect.dist = intersect_objects(intersect.in_ray, v->obj, &intersect);
 	if (isless(intersect.dist, 0))
 		return (0);
+	vec_sum(intersect.hit, intersect.in_ray.point, intersect.hit);
+	matrix_vect_prod(intersect.obj.inv_transp, intersect.normal, intersect.normal);
+
+//	return (intersect.obj.colors[0]);
 	return (shade(&intersect, v));
 }
-
-/*static int shade(t_intersect *intersect, t_vars *v)
-{
-	int		color;
-	t_list	*pos;
-	t_line	s_ray;
-
-	unit_vector2(intersect->in_ray.direction, &intersect->hit);
-	scalar_mult2(intersect->hit, intersect->dist, &intersect->hit);
-	vec_sum(intersect->hit, intersect->in_ray.point, &intersect->hit);
-	vec_get_normal(intersect->obj.type, intersect->obj.structure, intersect->hit, &intersect->normal);
-
-	pos = v->lights;
-	while (pos)
-	{
-		color = shift_color2(intersect->obj.color, v->ambient.color, v->ambient.ratio);
-		s_ray.point = intersect->hit;
-		vec_subtract(((t_light *)pos->content)->pos, intersect->hit, &s_ray.direction);
-		if (shadow_ray(&s_ray, v->obj) > 0) //todo multiple?
-		{
-			color = shift_color(color, intersect->obj.color, diffuse_shade(intersect, &s_ray));
-			color = shift_color(color, ((t_light *)pos->content)->color, specular_shade(intersect, &s_ray));
-//			sum += 0.4;
-//			color = shift_color2(color, ((t_light *)pos->content)->color, 1);
-		}
-		pos = pos->next;
-	}
-	return (color);
-}*/
 
 static int shade(t_intersect *intersect, t_vars *v)
 {
@@ -91,23 +74,16 @@ static int shade(t_intersect *intersect, t_vars *v)
 	double	color[3];
 	double	ref_light[3];
 
-	unit_vector(intersect->in_ray.direction, intersect->hit);
-	scalar_mult(intersect->hit, intersect->dist, intersect->hit);
-	vec_sum(intersect->hit, intersect->in_ray.point, intersect->hit);
-
-	vec_get_normal(intersect);
-
 	unpack_color(color, 0, 0);
-	unpack_color(intersect->diff_l, intersect->obj.color, 0.7);
-	unpack_color(intersect->spec_l, 0xFFFFFF, 0.5);
+	unpack_color(intersect->diff_l, intersect->obj.colors[0], intersect->obj.k_ratio[1]);
+	unpack_color(intersect->spec_l, intersect->obj.colors[1], intersect->obj.k_ratio[2]);
 	pos = v->lights;
 	while (pos)
 	{
-		unpack_color(ref_light, intersect->obj.color, 0.1);
-
+		unpack_color(ref_light, intersect->obj.colors[0], intersect->obj.k_ratio[0]);
 		set_vec2(s_ray.point, intersect->hit);
 		vec_subtract(((t_light *)pos->content)->pos, intersect->hit, s_ray.direction);
-		if (shadow_ray(&s_ray, v->obj) > 0) //todo multiple?
+		if (shadow_ray(s_ray, v->obj) > 0) //todo multiple?
 		{
 			color_sum2(ref_light, intersect->diff_l, diffuse_shade(intersect, s_ray));
 			color_sum2(ref_light, intersect->spec_l, specular_shade(intersect, s_ray));
