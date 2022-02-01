@@ -104,8 +104,8 @@ int main(int argc, char *argv[])
 	if (get_arg(argv[1], &vars) == 0)
 		return (0);
 
-	print_lights(vars.lights);
-	print_objlst(vars.obj);
+//	print_lights(vars.lights);
+//	print_objlst(vars.obj);
 
 
 	launch_window(&vars);

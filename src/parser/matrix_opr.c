@@ -50,6 +50,7 @@ void	sheer_zx(t_matrix a, double l)
 void	sheer_zy(t_matrix a, double l)
 {
 	t_matrix	b;
+	printf("test: %f\n", l);
 
 	ft_memset(b,0,sizeof(t_matrix));
 	b[0][0] = 1;

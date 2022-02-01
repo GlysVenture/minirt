@@ -133,7 +133,11 @@ void	parse_colors(t_object *obj, char **args)
 void	parse_int_matrix(t_matrix matrix,char *name, char *args)
 {
 	if (name[0] == 's')
+	{
+		printf("to atod: %s\n", args);
 		ft_sheer(name + 1,matrix, ft_atod(args));
+	}
+
 	else if (name[0] == 'r')
 		ft_rotate(name[1],matrix, ft_atod(args));
 	else if (name[0] == 'a')

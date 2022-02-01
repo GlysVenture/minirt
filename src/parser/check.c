@@ -65,9 +65,6 @@ t_object	*check_plane(char *arg)
 	plane->k_ratio[1] = 0.7;
 	plane->k_ratio[2] = 0.2;
 
-	printf("---------\n");
-	print_matrix(plane->transformation);
-
 	inverse_matrix(plane->transformation, plane->inv);
 	matrix_transpose(plane->inv, plane->inv_transp);
 	free_tab(ret);
