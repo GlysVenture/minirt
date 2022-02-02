@@ -136,9 +136,9 @@ t_light	*check_light(char *line)
 	if (isgreater(ft_atod(args[2]),1.0) || isless(ft_atod(args[2]),0.1) ||
 			hexcolor(args[3]) == -1)
 	{
-		free_tab(args);
 		if (hexcolor(args[3]) != -1)
 			printf("Error incorrect light value\n");
+		free_tab(args);
 		return (NULL);
 	}
 	light = init_light(temp, hexcolor(args[3]), ft_atod(args[2]));

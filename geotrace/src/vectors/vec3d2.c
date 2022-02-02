@@ -68,8 +68,3 @@ double	get_angle(const t_vec3d v, const t_vec3d u)
 	a /= (vec_norm(v) * vec_norm(u));
 	return (acos(a));
 }
-
-void	print_point(t_vec3d point)
-{
-	printf("point\n%f\n%f\n%f\n", point[0], point[1], point[2]);
-}

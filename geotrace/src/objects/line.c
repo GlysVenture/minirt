@@ -24,7 +24,8 @@ t_line	*init_line(const t_vec3d dir, const t_vec3d p)
 	return (new);
 }
 
-/// Computes line after being changed by transformation matrix and norms direction vector
+/// Computes line after being changed by transformation
+/// matrix and norms direction vector
 /// \param m transformation matrix
 /// \param translation vector
 /// \param ray to be changed (warning destructive!)
@@ -38,6 +39,8 @@ void	transform_ray(const t_matrix m, const t_vec3d translation, t_line *ray)
 
 void	print_line(t_line line)
 {
-	printf("-- Line:\npoint:\n%f\n%f\n%f\n", line.point[0], line.point[1], line.point[2]);
-	printf("direction:\n%f\n%f\n%f\n", line.direction[0], line.direction[1], line.direction[2]);
+	printf("-- Line:\npoint:\n%f\n%f\n%f\n",
+		line.point[0], line.point[1], line.point[2]);
+	printf("direction:\n%f\n%f\n%f\n",
+		line.direction[0], line.direction[1], line.direction[2]);
 }

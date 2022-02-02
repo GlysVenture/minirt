@@ -6,58 +6,12 @@
 #include <float.h>
 
 #include "geotrace.h"
+#include "cube.h"
 
-static int	get_x_int(double res[], t_line *ray)
+static void	upd_res(double res[], double temp[3][2], int n)
 {
-	if (fabs(ray->direction[0]) <= FLT_EPSILON)
-	{
-		if (islessequal(ray->point[0], 1) && isgreaterequal(ray->point[0], 0))
-			return (-1);
-		return (0);
-	}
-	res[0] = (1 - ray->point[0]) / ray->direction[0];
-	res[1] = - ray->point[0] / ray->direction[0];
-	if (isless(res[1], res[0]))
-		swap(res, res + 1);
-	return (1);
-}
-
-static int	get_y_int(double res[], t_line *ray)
-{
-	if (fabs(ray->direction[1]) <= FLT_EPSILON)
-	{
-		if (islessequal(ray->point[1], 1) && isgreaterequal(ray->point[1], 0))
-			return (-1);
-		return (0);
-	}
-	res[0] = (1 - ray->point[1]) / ray->direction[1];
-	res[1] = - ray->point[1] / ray->direction[1];
-	if (isless(res[1], res[0]))
-		swap(res, res + 1);
-	return (1);
-}
-
-static int	get_z_int(double res[], t_line *ray)
-{
-	if (fabs(ray->direction[2]) <= FLT_EPSILON)
-	{
-		if (islessequal(ray->point[2], 1) && isgreaterequal(ray->point[2], 0))
-			return (-1);
-		return (0);
-	}
-	res[0] = (1 - ray->point[2]) / ray->direction[2];
-	res[1] = - ray->point[2] / ray->direction[2];
-	if (isless(res[1], res[0]))
-		swap(res, res + 1);
-	return (1);
-}
-
-static void	add_bounds(double res[], double temp[])
-{
-	if (isless(res[0], temp[0]))
-		res[0] = temp[0];
-	if (isgreater(res[1], temp[1]))
-		res[1] = temp[1];
+	res[0] = temp[n][0];
+	res[1] = temp[n][1];
 }
 
 /// fills in 2 intersect points of 6 planes of a cube
@@ -78,18 +32,13 @@ static int	get_res(t_line *ray, double res[])
 	{
 		if (t[1] == -1)
 		{
-			res[0] = temp[2][0];
-			res[1] = temp[2][1];
+			upd_res(res, temp, 2);
 			return (1);
 		}
-		res[0] = temp[1][0];
-		res[1] = temp[1][1];
+		upd_res(res, temp, 1);
 	}
 	else
-	{
-		res[0] = temp[0][0];
-		res[1] = temp[0][1];
-	}
+		upd_res(res, temp, 0);
 	if (t[1] == 1)
 		add_bounds(res, temp[1]);
 	if (t[2] == 1)
@@ -109,9 +58,8 @@ static void	get_cube_normal(t_vec3d hit, t_vec3d normal)
 
 /// Computes if a cube intersects a certain ray and returns the closest
 ///// intersect distance. If it doesnt returns -1. sets hit and normal
-/// \warning hit is not translated, normal not yet transformed back yet
-/// and normal might be wrong direction.
-/// Both of those should be taken care of when intersected object
+/// \warning hit is vector from ray.point to hitpoint on item. normal
+/// not transformed yet. these should be dealt with when object
 /// is known to be the one
 /// \param cube cube
 /// \param ray
