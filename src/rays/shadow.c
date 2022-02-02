@@ -35,7 +35,7 @@ int	shadow_ray(t_line ray, t_list *obj)
 			t = cube_intersect2((t_object *)obj->content, ray, h, n);
 		if (obj_type == 'c')
 			t = cylinder_intersect2((t_object *)obj->content, ray, h, n);
-		if (isgreater(t, FLT_EPSILON) && (isless(dist, 0) || isless(t, dist)))
+		if (isgreater(t, FLT_EPSILON) && isless(t, dist))
 			return (-1);
 		obj = obj->next;
 	}

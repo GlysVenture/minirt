@@ -62,9 +62,9 @@ t_object	*check_plane(char *arg)
 		temp[2] = 0;
 		set_vec(p, 0, 1, 0);
 		ft_rotate('z', plane->transformation, (get_angle(temp,p) * -1));
+		set_vec(p, 0, 0, 1);
+		ft_rotate('y',plane->transformation,(get_angle(n,p) * -1));
 	}
-	set_vec(p, 0, 0, 1);
-	ft_rotate('y',plane->transformation,(get_angle(n,p) * -1));
 	plane->colors[0] = hexcolor(ret[3]);
 	if (plane->colors[0] == -1)
 	{
