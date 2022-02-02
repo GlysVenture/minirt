@@ -58,9 +58,10 @@ static void	fill_image(t_data *img, int x, int y, t_vars *v)
 static int	key_handler(int keycode, t_vars *v)
 {
 	printf("debug: key pressed: %d\n", keycode);
-	(void)v;
 	if (keycode == key_esc)
 	{
+		mlx_destroy_image(v->mu->mlx, v->mu->img.img);
+		mlx_destroy_window(v->mu->mlx, v->mu->win);
 		ft_lstclear(&v->obj, (void (*)(void *)) destroy_obj);
 		ft_lstclear(&v->lights, free);
 		exit(0);
@@ -77,6 +78,8 @@ void	launch_window(t_vars *v)
 	mu.img.img = mlx_new_image(mu.mlx, WIN_X, WIN_X);
 	mu.img.addr = mlx_get_data_addr(mu.img.img, &mu.img.bits_per_pixel, &mu.img.line_length,
 		&mu.img.endian);
+
+	v->mu = &mu;
 
 	fill_image(&mu.img, WIN_X, WIN_X, v);
 
