@@ -7,7 +7,7 @@
 #include "light/light.h"
 #include "debug/debug.h"
 #include <float.h>
-
+void	set_default(t_object *obj);
 int  hexcolor(char *line)
 {
 	int r, g, b;
@@ -54,6 +54,7 @@ t_object	*check_plane(char *arg)
 	}
 	free_tab (mem);
 	plane = init_object('p');
+	set_default(plane);
 	set_vec(plane->tr_vec, p[0], p[1], p[2]);
 	set_id_matrix(plane->transformation);
 	if (fabs(n[0]) > FLT_EPSILON || fabs(n[1]) > FLT_EPSILON)
@@ -71,50 +72,48 @@ t_object	*check_plane(char *arg)
 		free_tab(ret);
 		return (NULL);
 	}
-	plane->colors[1] = 0xFFFFFF;
-	plane->k_ratio[0] = 0.1;
-	plane->k_ratio[1] = 0.7;
-	plane->k_ratio[2] = 0.2;
 	inverse_matrix(plane->transformation, plane->inv);
 	matrix_transpose(plane->inv, plane->inv_transp);
 	free_tab(ret);
 	return (plane);
 }
-
+void	set_default(t_object *obj)
+{
+	obj->colors[1] = 0xFFFFFF;
+	obj->k_ratio[0] = 0.1;
+	obj->k_ratio[1] = 0.7;
+	obj->k_ratio[2] = 0.2;
+	set_id_matrix(obj->transformation);
+}	
 t_object	*check_sphere(char *arg)
 {
 	char **args;
 	char **nargs;
 	t_object	*sphere;
 
-
 	args = ft_split(arg, ' ');
-	if (isless(ft_atod(args[2]),0.1) || hexcolor(args[3]) == -1 || args == NULL)
+	nargs = ft_split(args[1],',');
+	if (isless(ft_atod(args[2]),0.1) || hexcolor(args[3]) == -1 || args == NULL ||
+			nargs == NULL)
 	{
-		free_tab(args);
-		return (NULL);
-	}
-	nargs = ft_split(args[1], ',');
-	if (!nargs)
-	{
-		free_tab(args);
+		if (args != NULL)
+			free_tab(args);
+		if (nargs != NULL)
+			free_tab(nargs);
 		return (NULL);
 	}
 	sphere = init_object('s');
+	set_default(sphere);
 	set_vec(sphere->tr_vec, ft_atod(nargs[0]), ft_atod(nargs[1]), ft_atod(nargs[2]));
-	set_id_matrix(sphere->transformation);
 	matrix_scalar_mult(sphere->transformation, ft_atod(args[2]), sphere->transformation);
 	sphere->colors[0] = hexcolor(args[3]);
-	sphere->colors[1] = 0xFFFFFF;
-	sphere->k_ratio[0] = 0.1;
-	sphere->k_ratio[1] = 0.7;
-	sphere->k_ratio[2] = 0.2;
 	inverse_matrix(sphere->transformation, sphere->inv);
 	matrix_transpose(sphere->inv, sphere->inv_transp);
 	free_tab(args);
 	free_tab(nargs);
 	return (sphere);
 }
+
 t_light	*check_light(char *line)
 {
 	char **args;
@@ -144,4 +143,3 @@ t_light	*check_light(char *line)
 	light = init_light(temp, hexcolor(args[3]), ft_atod(args[2]));
 	return (light);
 }
-
