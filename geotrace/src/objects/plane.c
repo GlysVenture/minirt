@@ -58,10 +58,10 @@ double	plane_intersect2(t_object *plane, t_line ray,
 		return (-1);
 	scalar_mult(ray.direction, -ray.point[2] / ray.direction[2], hit);
 	matrix_vect_prod(plane->transformation, hit, hit);
-	set_vec(normal, 1, 0, 0);
+	set_vec(normal, 0, 0, 1);
 	if (isless(get_angle(normal, ray.direction), M_PI_2))
 		scalar_mult(normal, -1, normal);
-	if (signbit(-ray.point[2] / ray.direction[2]))
+	if (isless(-ray.point[2] / ray.direction[2], 0))
 		return (-vec_norm(hit));
 	return (vec_norm(hit));
 }

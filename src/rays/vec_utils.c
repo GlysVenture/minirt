@@ -2,6 +2,8 @@
 // Created by Tadeusz Kondracki on 1/26/22.
 //
 
+#include <math.h>
+
 #include "vec_utils.h"
 #include "geotrace.h"
 
