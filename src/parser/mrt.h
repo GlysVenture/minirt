@@ -16,7 +16,9 @@ t_object	*check_plane(char *arg);
 t_light		*check_light(char *line);
 
 int	get_arg(char *filename, t_vars *v);
-
+int	inrange(t_vec3d v, double min, double max);
+int	nbrargs(char **args, int nbr);
+void	*error(char *mess, char **tf[2]);
 double get_coordinates(char **line);
 
 void	ft_sheer(char *dir, t_matrix m,double l);

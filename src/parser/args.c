@@ -83,7 +83,7 @@ int	check_arg(char *arg, t_vars *v)
 	else if (!ft_strncmp("pl ", arg, 3))
 		return (parse_plane(arg, v));
 	else if (!ft_strncmp("C ", arg, 2))
-		return (1);
+		return (parse_camera(arg, &v->cam));
 	else if (!ft_strncmp("cy ", arg, 3))
 		return (parse_cylinder(arg, v));
 	else
