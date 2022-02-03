@@ -57,7 +57,7 @@ t_object	*check_plane(char *arg)
 		return (NULL);
 	ret[1] = ft_split(ret[0][2], ',');
 	if (!ret[1] || !nbrargs(ret[0],5) || !nbrargs(ret[1],3))
-		return (error("Error fatal\0",ret));
+		return (error("\r",ret));
 	set_vec(n[0],ft_atod(ret[1][0]),ft_atod(ret[1][1]),ft_atod(ret[1][2]));
 	free_tab (ret[1]);
 	ret[1] = ft_split(ret[0][1], ',');

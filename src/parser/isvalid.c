@@ -11,8 +11,8 @@ int	nbrargs(char **args, int nbr)
 		i++;
 	if (i != nbr)
 	{
-		printf("Error,wrong number of arguments\n");
-		printf("have %i expected %i\n",i,nbr);
+		printf("Error,wrong number of arguments ");
+		printf("have %i expected %i",i,nbr);
 		return (0);
 	}
 	return (1);
@@ -24,9 +24,10 @@ void	*error(char *mess,char **tf[2])
 	i = 0;
 	write(2,mess,ft_strlen(mess));
 	write(2,"\n",1);
-	while (tf[i] != NULL)
-	{
-		free_tab(tf[1]);
+	while (i != 2)
+	{	
+		if (tf[i] != NULL)
+			free_tab(tf[i]);
 		i++;
 	}
 	return (NULL);
