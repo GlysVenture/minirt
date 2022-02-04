@@ -6,7 +6,7 @@
 /*   By: lgyger <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 17:16:54 by lgyger            #+#    #+#             */
-/*   Updated: 2022/02/04 17:32:11 by lgyger           ###   ########.fr       */
+/*   Updated: 2022/02/04 20:13:04 by lgyger           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,18 +51,6 @@ void	adjust_plane(t_vec3d n[3], t_object *plane)
 	ft_rotate('y', plane->transformation, (get_angle(n[0], n[1]) * -1));
 }
 
-void	tr_free(t_object *obj, char **tf[2])
-{
-	if (tf != NULL)
-	{
-		free_tab(tf[0]);
-		if (tf[1] != NULL)
-			free_tab(tf[1]);
-	}
-	inverse_matrix(obj->transformation, obj->inv);
-	matrix_transpose(obj->inv, obj->inv_transp);
-}
-
 t_object	*check_plane(char *arg)
 {
 	char		**ret[2];
@@ -90,16 +78,6 @@ t_object	*check_plane(char *arg)
 		return (error("Error plane colors", ret));
 	tr_free(plane, ret);
 	return (plane);
-}
-
-void	set_default(t_object **obj, char name)
-{
-	*obj = init_object(name);
-	(*obj)->colors[1] = 0xFFFFFF;
-	(*obj)->k_ratio[0] = 0.1;
-	(*obj)->k_ratio[1] = 0.7;
-	(*obj)->k_ratio[2] = 0.2;
-	set_id_matrix((*obj)->transformation);
 }
 
 t_object	*check_sphere(char *arg)

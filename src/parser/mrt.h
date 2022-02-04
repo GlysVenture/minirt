@@ -6,13 +6,14 @@
 /*   By: lgyger <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 18:57:02 by lgyger            #+#    #+#             */
-/*   Updated: 2022/02/04 18:58:32 by lgyger           ###   ########.fr       */
+/*   Updated: 2022/02/04 19:32:18 by lgyger           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MRT_H
 # define MRT_H
 
+# include "parse_obj.h"
 # include "libft.h"
 # include <math.h>
 # include <unistd.h>
