@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   isvalid.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lgyger <marvin@42lausanne.ch>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/04 18:51:33 by lgyger            #+#    #+#             */
+/*   Updated: 2022/02/04 18:56:53 by lgyger           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mrt.h"
 
 int	nbrargs(char **args, int nbr)
@@ -12,18 +24,22 @@ int	nbrargs(char **args, int nbr)
 	if (i != nbr)
 	{
 		printf("Error,wrong number of arguments ");
-		printf("have %i expected %i",i,nbr);
+		printf("have %i expected %i", i, nbr);
+		i = -1;
+		while (args[++i])
+			printf("%s\n", args[i]);
 		return (0);
 	}
 	return (1);
 }
-void	*error(char *mess,char **tf[2])
+
+void	*error(char *mess, char **tf[2])
 {
-	int i;
+	int	i;
 
 	i = 0;
-	write(2,mess,ft_strlen(mess));
-	write(2,"\n",1);
+	write(2, mess, ft_strlen(mess));
+	write(2, "\n", 1);
 	while (i != 2)
 	{	
 		if (tf[i] != NULL)
@@ -32,14 +48,15 @@ void	*error(char *mess,char **tf[2])
 	}
 	return (NULL);
 }
-int	inrange(t_vec3d v,double min, double max)
+
+int	inrange(t_vec3d v, double min, double max)
 {
 	int	i;
 
 	i = 0;
 	while (i != 3)
 	{
-		if (isless(v[i],min) || isgreater(v[i],max))
+		if (isless(v[i], min) || isgreater(v[i], max))
 			return (0);
 		i++;
 	}
