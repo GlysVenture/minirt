@@ -68,6 +68,15 @@ static int	key_handler(int keycode, t_vars *v)
 	return (0);
 }
 
+int	ftquit(t_vars *v)
+{	
+	mlx_destroy_image(v->mu->mlx, v->mu->img.img);
+	mlx_destroy_window(v->mu->mlx, v->mu->win);
+	ft_lstclear(&v->obj, (void (*)(void *)) destroy_obj);
+	ft_lstclear(&v->lights, free);
+	exit(0);
+}
+
 void	launch_window(t_vars *v)
 {
 	t_mlx_utils	mu;
@@ -84,6 +93,7 @@ void	launch_window(t_vars *v)
 
 	mlx_put_image_to_window(mu.mlx, mu.win, mu.img.img, 0, 0);
 	mlx_key_hook(mu.win, key_handler, v);
+	mlx_hook(mu.win, 17, 0, ftquit,v);
 	mlx_loop(mu.mlx);
 }
 
