@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ray.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tkondrac <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/07 20:05:15 by tkondrac          #+#    #+#             */
+/*   Updated: 2022/02/07 20:05:15 by tkondrac         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 //
 // Created by Tadeusz Kondracki on 1/26/22.
 //
@@ -17,34 +29,37 @@
 
 #include "debug/debug.h"
 
-static int shade(t_intersect *intersect, t_vars *v);
+static int	shade(t_intersect *in, t_vars *v);
+
+double	intersect_dist(t_line *ray, t_vec3d d[2], t_object *obj)
+{
+	if (obj->type == 's')
+		return (sphere_intersect2(obj, *ray, d[0], d[1]));
+	if (obj->type == 'p')
+		return (plane_intersect2(obj, *ray, d[0], d[1]));
+	if (obj->type == '#')
+		return (cube_intersect2(obj, *ray, d[0], d[1]));
+	if (obj->type == 'c')
+		return (cylinder_intersect2(obj, *ray, d[0], d[1]));
+	return (-2);
+}
 
 double	intersect_objects(t_line ray, t_list *obj, t_intersect *intersect)
 {
 	double	dist;
 	double	t;
-	char	obj_type;
-	t_vec3d	data[2];
+	t_vec3d	d[2];
 
 	dist = -1;
-	while(obj)
+	while (obj)
 	{
-		t = -2;
-		obj_type = ((t_object *)obj->content)->type;
-		if (obj_type == 's')
-			t = sphere_intersect2(((t_object *)obj->content), ray, data[0], data[1]);
-		if (obj_type == 'p')
-			t = plane_intersect2(((t_object *)obj->content), ray, data[0], data[1]);
-		if (obj_type == '#')
-			t = cube_intersect2(((t_object *)obj->content), ray, data[0], data[1]);
-		if (obj_type == 'c')
-			t = cylinder_intersect2(((t_object *)obj->content), ray, data[0], data[1]);
+		t = intersect_dist(&ray, d, ((t_object *)obj->content));
 		if (isgreater(t, FLT_EPSILON) && (dist < 0 || isless(t, dist)))
 		{
 			dist = t;
-			set_vec2(intersect->hit, data[0]);
-			set_vec2(intersect->normal, data[1]);
-			intersect->obj = *(t_object *)obj->content; //todo pass by pointer?
+			set_vec2(intersect->hit, d[0]);
+			set_vec2(intersect->normal, d[1]);
+			intersect->obj = *(t_object *)obj->content;
 		}
 		obj = obj->next;
 	}
@@ -61,37 +76,45 @@ int	send_ray(t_line *ray, t_vars *v)
 	if (isless(intersect.dist, 0))
 		return (0);
 	vec_sum(intersect.hit, intersect.in_ray.point, intersect.hit);
-	matrix_vect_prod(intersect.obj.inv_transp, intersect.normal, intersect.normal);
-
-//	return (intersect.obj.colors[0]);
+	matrix_vect_prod(intersect.obj.inv_transp,
+		intersect.normal, intersect.normal);
 	return (shade(&intersect, v));
 }
 
-static int shade(t_intersect *intersect, t_vars *v)
+void	ft_brdf(t_intersect *in, t_light light, t_vars *v, double color[3])
+{
+	double	ref_light[3];
+	t_line	s_ray;
+
+	unpack_color(ref_light, in->obj.colors[0],
+		in->obj.k_ratio[0]);
+	set_vec2(s_ray.point, in->hit);
+	vec_subtract(light.pos, in->hit, s_ray.direction);
+	if (shadow_ray(s_ray, v->obj) > 0)
+	{
+		color_sum2(ref_light, in->diff_l, diffuse_shade(in, s_ray));
+		color_sum2(ref_light, in->spec_l, specular_shade(in, s_ray));
+	}
+	color_mult2(ref_light, light.color,
+		150 * light.ratio / pow(vec_norm(s_ray.direction), 2));
+	color_sum(color, ref_light);
+	clamp(color, 0, 1);
+}
+
+static int	shade(t_intersect *in, t_vars *v)
 {
 	t_list	*pos;
-	t_line	s_ray;
 	double	color[3];
-	double	ref_light[3];
 
 	unpack_color(color, 0, 0);
-	unpack_color(intersect->diff_l, intersect->obj.colors[0], intersect->obj.k_ratio[1]);
-	unpack_color(intersect->spec_l, intersect->obj.colors[1], intersect->obj.k_ratio[2]);
+	unpack_color(in->diff_l, in->obj.colors[0], in->obj.k_ratio[1]);
+	unpack_color(in->spec_l, in->obj.colors[1], in->obj.k_ratio[2]);
 	pos = v->lights;
 	while (pos)
 	{
-		unpack_color(ref_light, intersect->obj.colors[0], intersect->obj.k_ratio[0]);
-		set_vec2(s_ray.point, intersect->hit);
-		vec_subtract(((t_light *)pos->content)->pos, intersect->hit, s_ray.direction);
-		if (shadow_ray(s_ray, v->obj) > 0) //todo multiple?
-		{
-			color_sum2(ref_light, intersect->diff_l, diffuse_shade(intersect, s_ray));
-			color_sum2(ref_light, intersect->spec_l, specular_shade(intersect, s_ray));
-		}
-		color_mult2(ref_light, ((t_light *)pos->content)->color, 150 * ((t_light *)pos->content)->ratio / pow(vec_norm(s_ray.direction), 2));
-		color_sum(color, ref_light);
-		clamp(color, 0, 1);
+		ft_brdf(in, *(t_light *)pos->content, v, color);
 		pos = pos->next;
 	}
-	return (create_color(0, (int)(255 * color[0]), (int)(255 * color[1]), (int)(255 * color[2])));
+	return (create_color(0, (int)(255 * color[0]),
+		(int)(255 * color[1]), (int)(255 * color[2])));
 }

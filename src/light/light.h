@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   light.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tkondrac <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/07 19:42:01 by tkondrac          #+#    #+#             */
+/*   Updated: 2022/02/07 19:42:01 by tkondrac         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 //
 // Created by Tadeusz Kondracki on 1/25/22.
 //
@@ -5,8 +17,8 @@
 #ifndef LIGHT_H
 # define LIGHT_H
 
-#include "geotrace.h"
-#include "libft.h"
+# include "geotrace.h"
+# include "libft.h"
 
 typedef struct s_light
 {

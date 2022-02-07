@@ -55,7 +55,7 @@ double	ft_atod(const char *arr)
 		else if (arr[i] != '.')
 			val = (val * 10) + (arr[i] - 48);
 		else
-			return (val = below_zero(val, arr + (i + 1), arr[0]));
+			return (below_zero(val, arr + (i + 1), arr[0]));
 		i++;
 	}
 	if (arr[0] == '-')
@@ -100,8 +100,7 @@ int	check_arg(char	*arg, t_vars	*v)
 		return (parse_plane(arg, v));
 	else if (!ft_strncmp("C ", arg, 2))
 	{
-		parse_camera(arg, &v->cam);
-		printf("%f\n", v->cam.angle);
+		parse_camera(arg, &v->cam.cam);
 		return (1);
 	}
 	else if (!ft_strncmp("cy ", arg, 3))

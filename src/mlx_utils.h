@@ -1,26 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cylinder.h                                         :+:      :+:    :+:   */
+/*   mlx_utils.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tkondrac <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/07 18:56:36 by tkondrac          #+#    #+#             */
-/*   Updated: 2022/02/07 18:56:36 by tkondrac         ###   ########.fr       */
+/*   Created: 2022/02/07 19:38:16 by tkondrac          #+#    #+#             */
+/*   Updated: 2022/02/07 19:38:16 by tkondrac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //
-// Created by tkondrac on 2/2/22.
+// Created by Tadeusz Kondracki on 2/7/22.
 //
 
-#ifndef CYLINDER_H
-# define CYLINDER_H
+#ifndef MLX_UTILS_H
+# define MLX_UTILS_H
 
-# include "geotrace.h"
+# include "minirt.h"
 
-double	plane_int0(t_object *cyl, t_line ray, t_vec3d hit, t_vec3d normal);
+void	ft_mlx_putpixel(t_data *img, int x, int y, int color);
 
-double	plane_int1(t_object *cyl, t_line ray, t_vec3d hit, t_vec3d normal);
-
-#endif //CYLINDER_H
+#endif //MLX_UTILS_H

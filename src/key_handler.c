@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   key_handler.h                                      :+:      :+:    :+:   */
+/*   key_handler.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tkondrac <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,33 +11,32 @@
 /* ************************************************************************** */
 
 //
-// Created by Tadeusz Kondracki on 1/25/22.
+// Created by Tadeusz Kondracki on 2/7/22.
 //
 
-#ifndef KEY_HANDLER_H
-# define KEY_HANDLER_H
+#include "key_handler.h"
+#include "mlx.h"
+#include "minirt.h"
+#include "object.h"
 
-# include "minirt.h"
-
-# ifdef __gnu_linux__
-
-enum e_key
+int	key_handler(int keycode, t_vars *v)
 {
-	key_esc = 65307
-};
+	if (keycode == key_esc)
+	{
+		mlx_destroy_image(v->mu->mlx, v->mu->img.img);
+		mlx_destroy_window(v->mu->mlx, v->mu->win);
+		ft_lstclear(&v->obj, (void (*)(void *)) destroy_obj);
+		ft_lstclear(&v->lights, free);
+		exit(0);
+	}
+	return (0);
+}
 
-# endif
-
-# ifdef __APPLE__
-
-enum e_key
+int	ftquit(t_vars *v)
 {
-	key_esc = 53
-};
-
-# endif
-
-int	key_handler(int keycode, t_vars *v);
-int	ftquit(t_vars *v);
-
-#endif //KEY_HANDLER_H
+	mlx_destroy_image(v->mu->mlx, v->mu->img.img);
+	mlx_destroy_window(v->mu->mlx, v->mu->win);
+	ft_lstclear(&v->obj, (void (*)(void *)) destroy_obj);
+	ft_lstclear(&v->lights, free);
+	exit(0);
+}

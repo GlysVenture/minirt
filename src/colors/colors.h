@@ -34,7 +34,10 @@ void	color_mult2(double color[], int color2, double scalar);
 void	color_scalar(double color[], double scalar);
 void	color_sum(double color[], const double color2[]);
 void	color_sum2(double color[], const double color2[], double scalar);
+void	color_sum3(double color[], const int color2);
 void	clamp(double color[], double min, double max);
+void	set_color(double color[], double r, double g, double b);
+void	set_color2(double color[], const double color2[]);
 
 //void	set_colors(int *colors, int iter, int seed);
 

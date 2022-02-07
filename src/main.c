@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tkondrac <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/07 19:38:16 by tkondrac          #+#    #+#             */
+/*   Updated: 2022/02/07 19:38:16 by tkondrac         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <math.h>
 #include <float.h>
@@ -14,67 +26,38 @@
 #include "colors/colors.h"
 #include "minirt.h"
 #include "rays/ray.h"
+#include "mlx_utils.h"
 
 #include "debug/debug.h"
 
 #define WIN_X 1000
 
-static void	ft_mlx_putpixel(t_data *img, int x, int y, int color)
+static void	fill_xline(t_data *img, t_line ray, t_vars *v, int j)
 {
-	char	*dst;
+	int	i;
 
-	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
-	*(unsigned int *)dst = color;
+	i = 0;
+	while (i < WIN_X)
+	{
+		vec_sum(ray.direction, v->cam.horizontal, ray.direction);
+		ft_mlx_putpixel(img, i, j, send_ray(&ray, v));
+		i++;
+	}
 }
 
-static void	fill_image(t_data *img, int x, int y, t_vars *v)
+static void	fill_image(t_data *img, t_vars *v)
 {
-	int			i;
-	int			j;
-	t_line		ray;
-	t_adv_camera	*cam_adv;
-	t_vec3d		temp;
+	int				j;
+	t_line			ray;
 
-	cam_adv = set_advanced_camera(&v->cam, x, y, &ray);
-	i = 0;
+	set_advanced_camera(&v->cam, WIN_X, WIN_X, &ray);
 	j = 0;
-	while(j < y)
+	while (j < WIN_X)
 	{
-		set_vec2(temp, ray.direction);
-		while (i < x)
-		{
-			vec_sum(ray.direction, cam_adv->horizontal, ray.direction);
-			ft_mlx_putpixel(img, i, j, send_ray(&ray, v));
-			i++;
-		}
-		vec_sum(temp, cam_adv->vertical, ray.direction);
-		i = 0;
+		fill_xline(img, ray, v, j);
+		vec_sum(ray.direction, v->cam.vertical, ray.direction);
 		j++;
 	}
-	free(cam_adv);
-}
-
-static int	key_handler(int keycode, t_vars *v)
-{
-	printf("debug: key pressed: %d\n", keycode);
-	if (keycode == key_esc)
-	{
-		mlx_destroy_image(v->mu->mlx, v->mu->img.img);
-		mlx_destroy_window(v->mu->mlx, v->mu->win);
-		ft_lstclear(&v->obj, (void (*)(void *)) destroy_obj);
-		ft_lstclear(&v->lights, free);
-		exit(0);
-	}
-	return (0);
-}
-
-int	ftquit(t_vars *v)
-{	
-	mlx_destroy_image(v->mu->mlx, v->mu->img.img);
-	mlx_destroy_window(v->mu->mlx, v->mu->win);
-	ft_lstclear(&v->obj, (void (*)(void *)) destroy_obj);
-	ft_lstclear(&v->lights, free);
-	exit(0);
 }
 
 void	launch_window(t_vars *v)
@@ -84,16 +67,13 @@ void	launch_window(t_vars *v)
 	mu.mlx = mlx_init();
 	mu.win = mlx_new_window(mu.mlx, WIN_X, WIN_X, "raytracer");
 	mu.img.img = mlx_new_image(mu.mlx, WIN_X, WIN_X);
-	mu.img.addr = mlx_get_data_addr(mu.img.img, &mu.img.bits_per_pixel, &mu.img.line_length,
-		&mu.img.endian);
-
+	mu.img.addr = mlx_get_data_addr(mu.img.img, &mu.img.bits_per_pixel,
+			&mu.img.line_length, &mu.img.endian);
 	v->mu = &mu;
-
-	fill_image(&mu.img, WIN_X, WIN_X, v);
-
+	fill_image(&mu.img, v);
 	mlx_put_image_to_window(mu.mlx, mu.win, mu.img.img, 0, 0);
 	mlx_key_hook(mu.win, key_handler, v);
-	mlx_hook(mu.win, 17, 0, ftquit,v);
+	mlx_hook(mu.win, 17, 0, ftquit, v);
 	mlx_loop(mu.mlx);
 }
 
@@ -103,7 +83,7 @@ static void	init_vars(t_vars *v)
 	v->obj = NULL;
 }
 
-int main(int argc, char *argv[]) 
+int	main(int argc, char *argv[])
 {
 	t_vars	vars;
 
@@ -115,11 +95,6 @@ int main(int argc, char *argv[])
 	init_vars(&vars);
 	if (get_arg(argv[1], &vars) == 0)
 		return (0);
-
-	print_lights(vars.lights);
-	print_objlst(vars.obj);
-
-
 	launch_window(&vars);
-	return (0); 
+	return (0);
 }

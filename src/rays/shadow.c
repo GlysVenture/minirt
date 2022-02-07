@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shadow.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tkondrac <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/07 20:05:16 by tkondrac          #+#    #+#             */
+/*   Updated: 2022/02/07 20:05:16 by tkondrac         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 //
 // Created by Tadeusz Kondracki on 1/26/22.
 //
@@ -18,23 +30,13 @@ int	shadow_ray(t_line ray, t_list *obj)
 {
 	double	dist;
 	double	t;
-	char	obj_type;
-	t_vec3d	h, n;
+	t_vec3d	dummy[2];
 
 	dist = vec_norm(ray.direction);
 	unit_vector(ray.direction, ray.direction);
-	while(obj)
+	while (obj)
 	{
-		t = -2;
-		obj_type = ((t_object *)obj->content)->type;
-		if (obj_type == 's')
-			t = sphere_intersect2((t_object *)obj->content, ray, h, n); // todo fix with other intersect
-		if (obj_type == 'p')
-			t = plane_intersect2((t_object *)obj->content, ray, h, n);
-		if (obj_type == '#')
-			t = cube_intersect2((t_object *)obj->content, ray, h, n);
-		if (obj_type == 'c')
-			t = cylinder_intersect2((t_object *)obj->content, ray, h, n);
+		t = intersect_dist(&ray, dummy, (t_object *)obj->content);
 		if (isgreater(t, FLT_EPSILON) && isless(t, dist))
 			return (-1);
 		obj = obj->next;

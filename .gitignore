@@ -4,3 +4,4 @@ raytracer
 .idea
 build
 *.a
+add_header.sh
