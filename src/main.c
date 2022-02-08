@@ -6,7 +6,7 @@
 /*   By: tkondrac <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 19:38:16 by tkondrac          #+#    #+#             */
-/*   Updated: 2022/02/07 19:38:16 by tkondrac         ###   ########.fr       */
+/*   Updated: 2022/02/08 18:04:50 by lgyger           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,11 @@ int	main(int argc, char *argv[])
 	init_vars(&vars);
 	if (get_arg(argv[1], &vars) == 0)
 		return (0);
+	if (!vars.lights || !vars.obj || !vars.ambient.ratio || !vars.cam.cam.angle)
+	{
+		printf("Error critical objects missing\n");
+		return (0);
+	}
 	launch_window(&vars);
 	return (0);
 }

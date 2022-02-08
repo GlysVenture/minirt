@@ -6,7 +6,7 @@
 /*   By: tkondrac <tkondrac@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 13:53:07 by tkondrac          #+#    #+#             */
-/*   Updated: 2021/10/14 13:53:09 by tkondrac         ###   ########.fr       */
+/*   Updated: 2022/02/08 18:20:48 by lgyger           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ int	ft_atoi(const char *str)
 	i = 0;
 	numb = 0;
 	sign = 1;
+	if (!str)
+		return (-1);
 	while (str[i] == '\t' || str[i] == '\r' || str[i] == '\v' || str[i] == '\f'
 		|| str[i] == '\n' || str[i] == ' ')
 		i++;

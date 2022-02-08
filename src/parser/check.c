@@ -6,7 +6,7 @@
 /*   By: lgyger <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 17:16:54 by lgyger            #+#    #+#             */
-/*   Updated: 2022/02/04 20:13:04 by lgyger           ###   ########.fr       */
+/*   Updated: 2022/02/08 18:43:52 by lgyger           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ t_object	*check_plane(char *arg)
 	set_default(&plane, 'p');
 	set_vec(plane->tr_vec, ft_atod(ret[1][0]),
 		ft_atod(ret[1][1]), ft_atod(ret[1][2]));
-	if (!inrange(plane->tr_vec, -1.0, 1.0))
+	if (!inrange(plane->tr_vec, -1.1, 1.1))
 		return (error("", ret));
 	if (fabs(n[0][0]) > FLT_EPSILON || fabs(n[0][1]) > FLT_EPSILON)
 		adjust_plane(n, plane);
 	plane->colors[0] = hexcolor(ret[0][3]);
 	if (plane->colors[0] == -1)
-		return (error("Error plane colors", ret));
+		return (error("", ret));
 	tr_free(plane, ret);
 	return (plane);
 }

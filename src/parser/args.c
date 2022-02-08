@@ -6,7 +6,7 @@
 /*   By: lgyger <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 17:05:47 by lgyger            #+#    #+#             */
-/*   Updated: 2022/02/04 17:15:22 by lgyger           ###   ########.fr       */
+/*   Updated: 2022/02/08 17:42:28 by lgyger           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,9 +115,9 @@ int	get_arg(char *filename, t_vars *v)
 	char	*ret;
 
 	fd = open(filename, O_RDONLY);
-	if (fd <= 0)
+	if (fd <= 0 || !(ft_strnstr(filename, ".rt", ft_strlen(filename))))
 	{
-		printf("ERROR can't open file\n");
+		printf("ERROR invalid file\n");
 		return (0);
 	}
 	ret = get_next_line(fd);
