@@ -1,3 +1,8 @@
+
+SHELL = /bin/sh
+
+CFLAGS := ${CFLAGS}
+
 SRCS	= ft_memchr.c ft_memcmp.c ft_split.c ft_striteri.c \
 		ft_strtrim.c ft_substr.c ft_isalpha.c ft_isdigit.c \
 		ft_isalnum.c ft_isascii.c ft_isprint.c ft_memmove.c \
@@ -19,7 +24,7 @@ NAME	= libft.a
 
 CC		= gcc
 
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	+= -Wall -Wextra -Werror
 
 RM		= rm -f
 

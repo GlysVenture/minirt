@@ -58,6 +58,7 @@ static void	fill_image(t_data *img, t_vars *v)
 		vec_sum(ray.direction, v->cam.vertical, ray.direction);
 		j++;
 	}
+	exit(0);
 }
 
 void	launch_window(t_vars *v)

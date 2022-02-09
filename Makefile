@@ -45,6 +45,10 @@ $(BUILD_DIR)/%.c.o: %.c
 all:	library
 	@$(MAKE) $(NAME)
 
+release: CFLAGS += -O3 -march=native
+release: fclean
+release: all
+
 $(NAME):	$(GEO)/lib$(GEO_LIB).a $(MLX)/lib$(MLX_LIB).a $(LIBFT)/lib$(LIBFT_LIB).a $(OBJS)
 	@echo Linking $@
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -g3 -o $(NAME)
