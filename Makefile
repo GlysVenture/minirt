@@ -59,13 +59,13 @@ library:
 	@$(MAKE) -C ${MLX} 2> /dev/null
 
 $(GEO)/lib$(GEO_LIB).a:
-	@$(MAKE) -C ${GEO}
+	@$(MAKE) -e CFLAGS="${CFLAGS}" -C ${GEO}
 
 $(MLX)/lib$(MLX_LIB).a:
 	@$(MAKE) -C ${MLX}
 
 $(LIBFT)/lib$(LIBFT_LIB).a:
-	@$(MAKE) -C ${LIBFT} bonus
+	@$(MAKE) -e CFLAGS="${CFLAGS}" -C ${LIBFT}
 
 clean:
 	@rm -rf $(BUILD_DIR)
