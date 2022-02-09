@@ -54,9 +54,9 @@ $(NAME):	$(GEO)/lib$(GEO_LIB).a $(MLX)/lib$(MLX_LIB).a $(LIBFT)/lib$(LIBFT_LIB).
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -g3 -o $(NAME)
 
 library:
-	@$(MAKE) -C ${LIBFT}
-	@$(MAKE) -C ${GEO}
-	@$(MAKE) -C ${MLX}
+	@$(MAKE) -e CFLAGS="${CFLAGS}" -C ${LIBFT}
+	@$(MAKE) -e CFLAGS="${CFLAGS}" -C ${GEO}
+	@$(MAKE) -C ${MLX} 2> /dev/null
 
 $(GEO)/lib$(GEO_LIB).a:
 	@$(MAKE) -C ${GEO}

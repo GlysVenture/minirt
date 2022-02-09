@@ -34,6 +34,7 @@ all:		${NAME}
 			@${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 ${NAME}:	${OBJS} ${OBJSBONUS}
+			echo ${CFLAGS}
 			@echo Linking "libft"
 			@ar rcs ${NAME} ${OBJS} ${OBJSBONUS}
 

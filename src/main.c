@@ -102,9 +102,9 @@ int	main(int argc, char *argv[])
 		//todo free
 		return (0);
 	}
-	print_lights(vars.lights);
-	printf("--- objects ---\n");
-	print_objlst(vars.obj);
+//	print_lights(vars.lights);
+//	printf("--- objects ---\n");
+//	print_objlst(vars.obj);
 	launch_window(&vars);
 	return (0);
 }
