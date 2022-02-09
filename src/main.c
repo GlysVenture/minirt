@@ -98,8 +98,12 @@ int	main(int argc, char *argv[])
 	if (!vars.lights || !vars.obj || !vars.ambient.ratio || !vars.cam.cam.angle)
 	{
 		printf("Error critical objects missing\n");
+		//todo free
 		return (0);
 	}
+	print_lights(vars.lights);
+	printf("--- objects ---\n");
+	print_objlst(vars.obj);
 	launch_window(&vars);
 	return (0);
 }
