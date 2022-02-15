@@ -56,7 +56,7 @@ int	inrange(t_vec3d v, double min, double max)
 	i = 0;
 	while (i != 3)
 	{
-		if (isless(v[i], min) || isgreater(v[i], max))
+		if (isless(v[i], min) != 0 || isgreater(v[i], max) != 0)
 			return (0);
 		i++;
 	}

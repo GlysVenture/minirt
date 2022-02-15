@@ -67,10 +67,11 @@ t_object	*check_plane(char *arg)
 	free_tab (ret[1]);
 	ret[1] = ft_split(ret[0][1], ',');
 	set_default(&plane, 'p');
-	set_vec(plane->tr_vec, ft_atod(ret[1][0]),
-		ft_atod(ret[1][1]), ft_atod(ret[1][2]));
-//	if (!inrange(plane->tr_vec, -1.1, 1.1))
-//		return (error("", ret));
+	if (!(set_vec(plane->tr_vec, ft_atod(ret[1][0]),
+		ft_atod(ret[1][1]), ft_atod(ret[1][2]))))
+		return (error("", ret));
+	if (inrange(plane->tr_vec, -1.1, 1.1) == 0)
+		return (error("a", ret));
 	if (fabs(n[0][0]) > FLT_EPSILON || fabs(n[0][1]) > FLT_EPSILON)
 		adjust_plane(n, plane);
 	plane->colors[0] = hexcolor(ret[0][3]);
@@ -121,15 +122,16 @@ t_light	*check_light(char *line)
 		return (error("Fatal malloc error", args));
 	set_vec(temp, ft_atod(args[1][0]),
 		ft_atod(args[1][1]), ft_atod(args[1][2]));
-	free_tab(args[1]);
 	if (isgreater(ft_atod(args[0][2]), 1.0) || isless(
 		ft_atod(args[0][2]), 0.1) ||
-			hexcolor(args[0][3]) == -1 || inrange(temp, 0.0, 1))
+			hexcolor(args[0][3]) == -1)
 	{
 		if (hexcolor(args[0][3]) != -1)
 			return (error("Error incorrect light value", args));
 		return (error("Incorrect ratio", args));
 	}
+	free_tab(args[1]);
+	free_tab(args[0]);
 	light = init_light(temp, hexcolor(args[0][3]), ft_atod(args[0][2]));
 	return (light);
 }
