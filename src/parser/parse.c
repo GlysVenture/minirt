@@ -6,7 +6,7 @@
 /*   By: lgyger <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 17:47:12 by lgyger            #+#    #+#             */
-/*   Updated: 2022/02/04 19:33:06 by lgyger           ###   ########.fr       */
+/*   Updated: 2022/02/16 18:01:57 by lgyger           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,23 @@ int	parse_camera(char *line, t_camera *cam)
 
 	args[0] = ft_split(line, ' ');
 	args[1] = ft_split(args[0][1], ',');
-	if (!nbrargs(args[1], 3))
-	{
-		free_tab(args[1]);
-		return (free_tab(args[0]));
-	}
 	set_vec(cam->origin, ft_atod(args[1][0]), ft_atod(
 			args[1][1]), ft_atod(args[1][2]));
 	free_tab(args[1]);
 	args[1] = ft_split(args[0][2], ',');
-	if (!nbrargs(args[1], 3))
-	{
-		free_tab(args[1]);
-		return (free_tab(args[0]));
-	}
 	set_vec(cam->direction, ft_atod(args[1][0]), ft_atod(args[1][1]), ft_atod(
 			args[1][2]));
+	if (inrange(cam->direction, -1.0, 1.0) == 0)
+	{
+		error("invalid values",args);
+		return (0);
+	}
 	cam->angle = radians(ft_atod(args[0][3]));
+	if (isless(ft_atod(args[0][3]), 0.0) || isgreater(ft_atod(args[0][3]), 180.0))
+	{
+		error("invalid values",args);
+		return (0);
+	}
 	free_tab(args[0]);
 	free_tab(args[1]);
 	return (1);

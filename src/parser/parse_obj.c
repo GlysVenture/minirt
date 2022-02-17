@@ -6,7 +6,7 @@
 /*   By: lgyger <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 19:26:10 by lgyger            #+#    #+#             */
-/*   Updated: 2022/02/04 19:37:23 by lgyger           ###   ########.fr       */
+/*   Updated: 2022/02/16 18:03:09 by lgyger           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	parse_matrix(t_object *obj, char **args)
 		parse_int_matrix(obj->transformation, args[i], args[i + 1]);
 		i += 2;
 	}
-	if (args[i] == NULL)
+	if (args[i] == NULL || inrange(tr-)
 		return (free_tab(nargs));
 	tr_free(obj, NULL);
 	free_tab(nargs);

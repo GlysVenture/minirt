@@ -6,7 +6,7 @@
 /*   By: lgyger <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 17:05:47 by lgyger            #+#    #+#             */
-/*   Updated: 2022/02/08 17:42:28 by lgyger           ###   ########.fr       */
+/*   Updated: 2022/02/16 17:24:32 by lgyger           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,7 @@ int	check_arg(char	*arg, t_vars	*v)
 	else if (!ft_strncmp("pl ", arg, 3))
 		return (parse_plane(arg, v));
 	else if (!ft_strncmp("C ", arg, 2))
-	{
-		parse_camera(arg, &v->cam.cam);
-		return (1);
-	}
+		return (parse_camera(arg, &v->cam.cam));
 	else if (!ft_strncmp("cy ", arg, 3))
 		return (parse_cylinder(arg, v));
 	else

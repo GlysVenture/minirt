@@ -6,7 +6,7 @@
 /*   By: lgyger <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 17:16:54 by lgyger            #+#    #+#             */
-/*   Updated: 2022/02/08 18:43:52 by lgyger           ###   ########.fr       */
+/*   Updated: 2022/02/16 18:01:07 by lgyger           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ t_object	*check_plane(char *arg)
 	t_vec3d		n[3];
 
 	ret[0] = ft_split(arg, ' ');
-	if (!ret[0])
-		return (NULL);
 	ret[1] = ft_split(ret[0][2], ',');
 	if (!ret[1] || !nbrargs(ret[0], 5) || !nbrargs(ret[1], 3))
 		return (error("", ret));
@@ -68,10 +66,10 @@ t_object	*check_plane(char *arg)
 	ret[1] = ft_split(ret[0][1], ',');
 	set_default(&plane, 'p');
 	if (!(set_vec(plane->tr_vec, ft_atod(ret[1][0]),
-		ft_atod(ret[1][1]), ft_atod(ret[1][2]))))
+			ft_atod(ret[1][1]), ft_atod(ret[1][2]))))
 		return (error("", ret));
-	if (inrange(plane->tr_vec, -1.1, 1.1) == 0)
-		return (error("a", ret));
+	if (inrange(plane->tr_vec, -1.1, 1.1) == 0 || inrange(n[0], -1.1, 1.1) == 0)
+		return (error("incorrect plane values", ret));
 	if (fabs(n[0][0]) > FLT_EPSILON || fabs(n[0][1]) > FLT_EPSILON)
 		adjust_plane(n, plane);
 	plane->colors[0] = hexcolor(ret[0][3]);
@@ -123,15 +121,12 @@ t_light	*check_light(char *line)
 	set_vec(temp, ft_atod(args[1][0]),
 		ft_atod(args[1][1]), ft_atod(args[1][2]));
 	if (isgreater(ft_atod(args[0][2]), 1.0) || isless(
-		ft_atod(args[0][2]), 0.1) ||
-			hexcolor(args[0][3]) == -1)
-	{
-		if (hexcolor(args[0][3]) != -1)
-			return (error("Error incorrect light value", args));
+		ft_atod(args[0][2]), 0.1))
 		return (error("Incorrect ratio", args));
-	}
+	if (hexcolor(args[0][3]) == -1)
+		return (error("", args));
 	free_tab(args[1]);
-	free_tab(args[0]);
 	light = init_light(temp, hexcolor(args[0][3]), ft_atod(args[0][2]));
+	free_tab(args[0]);
 	return (light);
 }
