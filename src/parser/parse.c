@@ -33,13 +33,14 @@ int	parse_camera(char *line, t_camera *cam)
 			args[1][2]));
 	if (inrange(cam->direction, -1.0, 1.0) == 0)
 	{
-		error("invalid values",args);
+		error("invalid values", args);
 		return (0);
 	}
 	cam->angle = radians(ft_atod(args[0][3]));
-	if (isless(ft_atod(args[0][3]), 0.0) || isgreater(ft_atod(args[0][3]), 180.0))
+	if (isless(ft_atod(args[0][3]), 0.0) ||
+			isgreater(ft_atod(args[0][3]), 180.0))
 	{
-		error("invalid values",args);
+		error("invalid values", args);
 		return (0);
 	}
 	free_tab(args[0]);

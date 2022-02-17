@@ -73,14 +73,12 @@ int	parse_matrix(t_object *obj, char **args)
 			nargs[1]), ft_atod(nargs[2]));
 	i += 2;
 	set_id_matrix(obj->transformation);
-	while (args[i])
+	while (args[i] && ft_strncmp(args[i], "colors", 8))
 	{
-		if (!ft_strncmp(args[i], "colors", 8))
-			break ;
 		parse_int_matrix(obj->transformation, args[i], args[i + 1]);
 		i += 2;
 	}
-	if (args[i] == NULL || inrange(tr-)
+	if (args[i] == NULL || inrange(obj->tr_vec, -1, 1) == 0)
 		return (free_tab(nargs));
 	tr_free(obj, NULL);
 	free_tab(nargs);
@@ -104,6 +102,7 @@ int	parse_object(char *line, t_vars *v)
 	if (!new || parse_matrix(obj, args + 1) == 0 || obj->colors[0]
 		== -1 || obj->colors[1] == -1)
 	{
+		write(2, "Error\n", 6);
 		destroy_obj(obj);
 		return (free_tab(args));
 	}
