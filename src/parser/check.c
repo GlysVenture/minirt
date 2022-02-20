@@ -6,7 +6,7 @@
 /*   By: lgyger <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 17:16:54 by lgyger            #+#    #+#             */
-/*   Updated: 2022/02/16 18:01:07 by lgyger           ###   ########.fr       */
+/*   Updated: 2022/02/20 17:34:22 by lgyger           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,17 @@ t_object	*check_plane(char *arg)
 	t_vec3d		n[3];
 
 	ret[0] = ft_split(arg, ' ');
-	ret[1] = ft_split(ret[0][2], ',');
+	ret[1] = ft_split(ret[0][1], ',');
 	if (!ret[1] || !nbrargs(ret[0], 5) || !nbrargs(ret[1], 3))
 		return (error("", ret));
 	set_vec(n[0], ft_atod(ret[1][0]), ft_atod(ret[1][1]), ft_atod(ret[1][2]));
 	free_tab (ret[1]);
-	ret[1] = ft_split(ret[0][1], ',');
+	ret[1] = ft_split(ret[0][2], ',');
 	set_default(&plane, 'p');
 	if (!(set_vec(plane->tr_vec, ft_atod(ret[1][0]),
 			ft_atod(ret[1][1]), ft_atod(ret[1][2]))))
 		return (error("", ret));
-	if (inrange(plane->tr_vec, -1.1, 1.1) == 0 || inrange(n[0], -1.1, 1.1) == 0)
+	if (inrange(n[0], -1.1, 1.1) == 0)
 		return (error("incorrect plane values", ret));
 	if (fabs(n[0][0]) > FLT_EPSILON || fabs(n[0][1]) > FLT_EPSILON)
 		adjust_plane(n, plane);
