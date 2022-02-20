@@ -6,7 +6,7 @@
 /*   By: lgyger <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 17:16:54 by lgyger            #+#    #+#             */
-/*   Updated: 2022/02/20 17:34:22 by lgyger           ###   ########.fr       */
+/*   Updated: 2022/02/20 18:29:58 by lgyger           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,13 @@ t_object	*check_plane(char *arg)
 
 	ret[0] = ft_split(arg, ' ');
 	ret[1] = ft_split(ret[0][1], ',');
+	set_default(&plane, 'p');
 	if (!ret[1] || !nbrargs(ret[0], 5) || !nbrargs(ret[1], 3))
 		return (error("", ret));
-	set_vec(n[0], ft_atod(ret[1][0]), ft_atod(ret[1][1]), ft_atod(ret[1][2]));
+	set_vec(plane->tr_vec, ft_atod(ret[1][0]), ft_atod(ret[1][1]), ft_atod(ret[1][2]));
 	free_tab (ret[1]);
 	ret[1] = ft_split(ret[0][2], ',');
-	set_default(&plane, 'p');
-	if (!(set_vec(plane->tr_vec, ft_atod(ret[1][0]),
+	if (!(set_vec(n[0], ft_atod(ret[1][0]),
 			ft_atod(ret[1][1]), ft_atod(ret[1][2]))))
 		return (error("", ret));
 	if (inrange(n[0], -1.1, 1.1) == 0)
