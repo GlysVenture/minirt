@@ -6,7 +6,7 @@
 /*   By: tkondrac <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 19:38:16 by tkondrac          #+#    #+#             */
-/*   Updated: 2022/02/21 15:27:06 by lgyger           ###   ########.fr       */
+/*   Updated: 2022/02/21 17:23:08 by lgyger           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,8 @@ int	main(int argc, char *argv[])
 	if (!vars.lights || !vars.obj || !vars.ambient.ratio || !vars.cam.cam.angle)
 	{
 		printf("Error critical objects missing\n");
-		ft_lstclear(vars.obj, (void (*)(void *)) destroy_obj);
-		ft_lstclear(vars.lights, free);
+		ft_lstclear(&vars.obj, (void (*)(void *)) destroy_obj);
+		ft_lstclear(&vars.lights, free);
 		return (0);
 	}
 	launch_window(&vars);
