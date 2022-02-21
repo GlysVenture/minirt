@@ -6,7 +6,7 @@
 /*   By: tkondrac <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 19:38:16 by tkondrac          #+#    #+#             */
-/*   Updated: 2022/02/08 18:04:50 by lgyger           ###   ########.fr       */
+/*   Updated: 2022/02/21 15:27:06 by lgyger           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ static void	fill_image(t_data *img, t_vars *v)
 		vec_sum(ray.direction, v->cam.vertical, ray.direction);
 		j++;
 	}
-//	exit(0);
 }
 
 void	launch_window(t_vars *v)
@@ -99,12 +98,10 @@ int	main(int argc, char *argv[])
 	if (!vars.lights || !vars.obj || !vars.ambient.ratio || !vars.cam.cam.angle)
 	{
 		printf("Error critical objects missing\n");
-		//todo free
+		ft_lstclear(vars.obj, (void (*)(void *)) destroy_obj);
+		ft_lstclear(vars.lights, free);
 		return (0);
 	}
-//	print_lights(vars.lights);
-//	printf("--- objects ---\n");
-//	print_objlst(vars.obj);
 	launch_window(&vars);
 	return (0);
 }
