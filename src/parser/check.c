@@ -27,6 +27,11 @@ int	hexcolor(char *line)
 	int		rgb[3];
 	char	**ret;
 
+	if (!line)
+	{
+		printf("Error\n");
+		return (-1);
+	}
 	ret = ft_split(line, ',');
 	rgb[0] = ft_atoi(ret[0]);
 	rgb[1] = ft_atoi(ret[1]);
